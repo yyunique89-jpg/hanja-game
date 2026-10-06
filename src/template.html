@@ -210,6 +210,19 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
 .node i{position:absolute;right:-4px;top:-4px;background:var(--leaf);color:#fff;border-radius:50%;width:30px;height:30px;font-size:17px;display:grid;place-items:center;font-style:normal}
 .node:disabled{opacity:.55;cursor:default}
 
+.mapwrap{max-width:560px;margin:16px auto 0;border-radius:28px;overflow:hidden;box-shadow:0 6px 0 rgba(29,42,72,.2);border:4px solid #FFFFFF}
+.mapsvg{display:block;width:100%;height:auto}
+.mtext{font-family:var(--f-display);fill:#1D2A48}
+.mnode{cursor:pointer}
+.mnode.lock{cursor:default}
+.mnode .pulse{transform-box:fill-box;transform-origin:center;animation:ring 1.4s ease-out infinite}
+.mh-bob{animation:hop 1.1s ease-in-out infinite}
+.mapbar{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--ink);color:#fff;border-radius:24px;padding:12px 14px 12px 20px;margin:14px auto 0;max-width:560px;z-index:6;box-shadow:0 6px 18px rgba(20,30,55,.35)}
+.mb-txt{flex:1;min-width:0;display:grid;gap:2px}
+.mb-txt b{font-family:var(--f-display);font-weight:400;font-size:22px}
+.mb-txt span{font-size:15px;opacity:.8}
+@keyframes ring{from{transform:scale(1);opacity:.95}to{transform:scale(1.9);opacity:0}}
+@keyframes hop{50%{transform:translateY(-5px)}}
 /* 한자 모험: 전투 */
 .field{position:relative;border-radius:30px;min-height:300px;background:linear-gradient(180deg,var(--w1),var(--w2));overflow:hidden;box-shadow:0 6px 0 rgba(29,42,72,.18)}
 .field.shake{animation:shake .4s}
@@ -1020,17 +1033,135 @@ function worldChars(w){
   return cs;
 }
 
+/* ---- 모험 지도: 아래 출발 → 위 마왕성, 구불구불한 길 ---- */
+const MAP_W=400, REG_H=340;
+function mapLayout(){
+  const H=REG_H*WORLDS.length+60, pts=[{x:200,y:H-26}];
+  WORLDS.forEach((W,w)=>{ const base=H-60-w*REG_H, flip=w%2===1, last=w===WORLDS.length-1;
+    const xs=[110,290,115,last?200:255], dys=[60,140,215,last?272:292];
+    xs.forEach((x,i)=>pts.push({x:flip&&!(last&&i===3)?MAP_W-x:x,y:base-dys[i]})); });
+  return {H,pts};
+}
+function segCtrl(P,i){ const p0=P[i-1]||P[i], p1=P[i], p2=P[i+1], p3=P[i+2]||p2;
+  return [p1,{x:p1.x+(p2.x-p0.x)/6,y:p1.y+(p2.y-p0.y)/6},{x:p2.x-(p3.x-p1.x)/6,y:p2.y-(p3.y-p1.y)/6},p2]; }
+function bez(s,t){ const u=1-t, a=u*u*u, b=3*u*u*t, c=3*u*t*t, d=t*t*t; return {x:a*s[0].x+b*s[1].x+c*s[2].x+d*s[3].x,y:a*s[0].y+b*s[1].y+c*s[2].y+d*s[3].y}; }
+const segD=s=>`M${s[0].x.toFixed(1)},${s[0].y.toFixed(1)} C${s[1].x.toFixed(1)},${s[1].y.toFixed(1)} ${s[2].x.toFixed(1)},${s[2].y.toFixed(1)} ${s[3].x.toFixed(1)},${s[3].y.toFixed(1)}`;
+function rng(seed){ return ()=>{ seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const DECO={
+  tree:(s)=>`<rect x="-4" y="-2" width="8" height="16" rx="2" fill="#7A5230"/><circle cx="0" cy="-14" r="14" fill="#2F8A3E"/><circle cx="-9" cy="-6" r="10" fill="#45A852"/><circle cx="9" cy="-8" r="10" fill="#45A852"/><circle cx="-3" cy="-18" r="5" fill="#6BC46F"/>`,
+  pine:()=>`<rect x="-3" y="4" width="6" height="10" fill="#6B4A2B"/><path d="M0 -30 L14 -8 L7 -8 L17 6 L-17 6 L-7 -8 L-14 -8Z" fill="#256B3A" stroke="#1B4F2B" stroke-width="1.5" stroke-linejoin="round"/>`,
+  bush:()=>`<circle cx="-8" cy="0" r="8" fill="#3E9A48"/><circle cx="6" cy="-2" r="10" fill="#4FB357"/><circle cx="0" cy="3" r="7" fill="#3E9A48"/>`,
+  rock:()=>`<path d="M-14 6 Q-16 -6 -4 -9 Q10 -12 14 0 Q16 8 0 8Z" fill="#8E97A8" stroke="#5F6878" stroke-width="1.5"/><path d="M-6 -5 Q0 -8 6 -5" stroke="#C5CCD8" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+  flower:()=>`<path d="M0 8 V-2" stroke="#3E9A48" stroke-width="2"/><circle cx="0" cy="-5" r="4" fill="#FF7FA8"/><circle cx="0" cy="-5" r="1.6" fill="#FFE45C"/><path d="M8 8 V0" stroke="#3E9A48" stroke-width="2"/><circle cx="8" cy="-2" r="3.4" fill="#FFF"/><circle cx="8" cy="-2" r="1.3" fill="#FFC12E"/>`,
+  mountain:()=>`<path d="M-42 18 L-4 -38 L34 18Z" fill="#7C8AA5" stroke="#5B6884" stroke-width="2" stroke-linejoin="round"/><path d="M-15 -22 L-4 -38 L8 -21 L2 -17 L-4 -24 L-10 -17Z" fill="#FFFFFF"/><path d="M10 18 L28 -14 L50 18Z" fill="#94A1BA" stroke="#5B6884" stroke-width="2" stroke-linejoin="round"/>`,
+  house:()=>`<rect x="-15" y="-10" width="30" height="22" rx="2" fill="#F4DDB6" stroke="#8A5A2B" stroke-width="2"/><path d="M-20 -8 L0 -27 L20 -8Z" fill="#B5442E" stroke="#7E2C1E" stroke-width="2" stroke-linejoin="round"/><rect x="-4" y="1" width="8" height="11" rx="1" fill="#8A5A2B"/><rect x="6" y="-5" width="6" height="6" fill="#FFE07A" stroke="#8A5A2B" stroke-width="1"/>`,
+  lantern:()=>`<path d="M0 -26 V-16" stroke="#5A3A22" stroke-width="2"/><ellipse cx="0" cy="-8" rx="8" ry="10" fill="#E8453C" stroke="#8E1F1A" stroke-width="1.5"/><path d="M-8 -8 H8" stroke="#FFC12E" stroke-width="1.5"/><path d="M0 2 V8" stroke="#5A3A22" stroke-width="2"/>`,
+  fence:()=>`<path d="M-18 4 H18 M-18 -4 H18" stroke="#8A5A2B" stroke-width="3"/><path d="M-14 8 V-10 M0 8 V-10 M14 8 V-10" stroke="#A6713C" stroke-width="4" stroke-linecap="round"/>`,
+  wave:()=>`<path d="M-18 0 q4.5 -6 9 0 t9 0 t9 0 t9 0" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".85"/>`,
+  fish:()=>`<path d="M-8 0 Q0 -7 8 0 Q0 7 -8 0Z M8 0 L14 -5 L14 5Z" fill="#FFB13B" opacity=".85"/>`,
+  deadtree:()=>`<path d="M0 14 V-12 M0 -2 L-10 -14 M0 -8 L9 -20 M-5 -8 L-12 -6" stroke="#3B2F4F" stroke-width="4" stroke-linecap="round" fill="none"/>`,
+  spike:()=>`<path d="M-14 8 L-8 -14 L-2 8Z M0 8 L6 -20 L12 8Z" fill="#3B2F4F" stroke="#241B33" stroke-width="1.5" stroke-linejoin="round"/>`,
+  bones:()=>`<path d="M-10 4 L10 -4" stroke="#EDE6D6" stroke-width="4" stroke-linecap="round"/><circle cx="-11" cy="5" r="3" fill="#EDE6D6"/><circle cx="11" cy="-5" r="3" fill="#EDE6D6"/>`,
+};
+const REGION_DECO=[['tree','tree','tree','pine','bush','rock','flower'],['mountain','pine','flower','flower','rock','bush'],['house','house','tree','lantern','fence','bush'],['wave','wave','wave','fish','rock'],['deadtree','spike','rock','bones','spike']];
+const REGION_BG=[['#BFE6A8','#8ACF7B'],['#C7EBC0','#9BD6C6'],['#F3DDB8','#E2B984'],['#9ED3F5','#4E95DB'],['#8B7BB8','#4A3C78']];
+function castleSVG(){ return `<g transform="translate(200,58)">
+  <path d="M-150 30 Q-120 -10 -80 10 Q-60 -30 -20 -6 Q20 -40 60 -8 Q100 -26 150 30Z" fill="#2E2450" opacity=".55"/>
+  <rect x="-70" y="-20" width="140" height="58" fill="#3D2F63" stroke="#211839" stroke-width="3"/>
+  <path d="M-70 -20 v-10 h12 v10 h12 v-10 h12 v10 h12 v-10 h12 v10 h12 v-10 h12 v10 h12 v-10 h12 v10 h12 v-10 h12 v10 h10 v-10" fill="none" stroke="#211839" stroke-width="3"/>
+  <rect x="-92" y="-52" width="34" height="90" fill="#463870" stroke="#211839" stroke-width="3"/><path d="M-98 -52 L-75 -86 L-52 -52Z" fill="#7A2E52" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="58" y="-52" width="34" height="90" fill="#463870" stroke="#211839" stroke-width="3"/><path d="M52 -52 L75 -86 L98 -52Z" fill="#7A2E52" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="-20" y="-62" width="40" height="44" fill="#4F4080" stroke="#211839" stroke-width="3"/><path d="M-26 -62 L0 -98 L26 -62Z" fill="#8C2F4E" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M0 -98 V-118" stroke="#211839" stroke-width="2.5"/><path d="M0 -118 L18 -112 L0 -106Z" fill="#E8453C"/>
+  <rect x="-81" y="-36" width="8" height="12" rx="4" fill="#FFD34D"/><rect x="69" y="-36" width="8" height="12" rx="4" fill="#FFD34D"/><rect x="-4" y="-50" width="8" height="12" rx="4" fill="#FFD34D"/>
+  <path d="M-22 38 V14 Q0 -8 22 14 V38Z" fill="#1A1230"/></g>`; }
+function curNode(){ const A=adv(); for(let k=0;k<WORLDS.length*4;k++){ const w=Math.floor(k/4), s=k%4; if(!A.cleared[skey(w,s)]&&unlocked(w,s))return k; } return WORLDS.length*4-1; }
+function mapSVG(L,cur){
+  const {H,pts}=L, A=adv(), segs=pts.slice(0,-1).map((_,i)=>segCtrl(pts,i));
+  const samples=segs.flatMap(s=>Array.from({length:12},(_,j)=>bez(s,j/11)));
+  let g=`<svg class="mapsvg" viewBox="0 0 ${MAP_W} ${H}" role="img" aria-label="모험 지도"><defs>`;
+  REGION_BG.forEach((c,w)=>g+=`<linearGradient id="rg${w}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient>`);
+  g+=`</defs><rect width="${MAP_W}" height="${H}" fill="${REGION_BG[0][0]}"/>`;
+  WORLDS.forEach((W,w)=>{ const top=H-60-(w+1)*REG_H; g+=`<rect x="0" y="${top}" width="${MAP_W}" height="${REG_H+(w===0?60:2)}" fill="url(#rg${w})"/>`; });
+  // 자연 계곡의 강
+  { const top=H-60-2*REG_H, y=top+175; g+=`<path d="M-10 ${y} C 80 ${y-40}, 150 ${y+40}, 220 ${y} S 360 ${y-30}, 410 ${y+10}" stroke="#5AB3E6" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M-10 ${y} C 80 ${y-40}, 150 ${y+40}, 220 ${y} S 360 ${y-30}, 410 ${y+10}" stroke="#9FD8FF" stroke-width="6" fill="none" stroke-dasharray="14 22" stroke-linecap="round"/>`; }
+  // 바다의 섬
+  pts.slice(1).forEach((p,k)=>{ if(Math.floor(k/4)===3)g+=`<ellipse cx="${p.x}" cy="${p.y+8}" rx="44" ry="26" fill="#F3E2A9" stroke="#D8BE78" stroke-width="2"/><path d="M${p.x-30} ${p.y+2} q6 -10 12 0 M${p.x+20} ${p.y+4} q5 -9 10 0" stroke="#3E9A48" stroke-width="4" fill="none" stroke-linecap="round"/>`; });
+  // 장식
+  WORLDS.forEach((W,w)=>{ const r=rng(w*97+13), top=H-60-(w+1)*REG_H, kinds=REGION_DECO[w]; let placed=[];
+    for(let i=0;i<60&&placed.length<16;i++){ const x=18+r()*(MAP_W-36), y=top+30+r()*(REG_H-40);
+      if(w===WORLDS.length-1&&y<top+125)continue;
+      if(samples.some(p=>Math.hypot(p.x-x,p.y-y)<44))continue; if(placed.some(p=>Math.hypot(p.x-x,p.y-y)<38))continue;
+      placed.push({x,y,k:kinds[Math.floor(r()*kinds.length)],s:.8+r()*.5}); }
+    placed.sort((a,b)=>a.y-b.y).forEach(d=>g+=`<g transform="translate(${d.x.toFixed(0)},${d.y.toFixed(0)}) scale(${d.s.toFixed(2)})">${DECO[d.k]()}</g>`);
+  });
+  g+=castleSVG();
+  // 길: 바깥 테두리 → 흙길 → 지나온 길(금색) / 남은 길(점선)
+  const full=segs.map(segD).join(' ');
+  g+=`<path d="${full}" stroke="#A88A55" stroke-width="27" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${full}" stroke="#F1DFB4" stroke-width="21" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  segs.forEach((s,i)=>{ g+= i<=cur ? `<path d="${segD(s)}" stroke="#FFC12E" stroke-width="9" fill="none" stroke-linecap="round"/>` : `<path d="${segD(s)}" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-dasharray="2 12" stroke-linecap="round"/>`; });
+  // 출발
+  g+=`<g transform="translate(${pts[0].x},${pts[0].y-4})"><rect x="-30" y="-14" width="60" height="26" rx="13" fill="#FFFFFF" stroke="#1D2A48" stroke-width="2.5"/><text y="5" text-anchor="middle" class="mtext" font-size="15">출발</text></g>`;
+  // 땅 이름표
+  WORLDS.forEach((W,w)=>{ const top=H-60-(w+1)*REG_H, left=w%2===0, last=w===WORLDS.length-1; const x=last?20:left?14:MAP_W-14, y=last?top+150:top+22;
+    const tw=W.name.length*15+40; const rx=last||left?x:x-tw;
+    g+=`<g><rect x="${rx}" y="${y-17}" width="${tw}" height="32" rx="16" fill="rgba(255,255,255,.92)" stroke="#1D2A48" stroke-width="2"/><text x="${rx+tw/2}" y="${y+5}" text-anchor="middle" class="mtext" font-size="17">${w+1}. ${W.name}</text></g>`; });
+  // 칸(노드)
+  pts.slice(1).forEach((p,k)=>{ const w=Math.floor(k/4), s=k%4, boss=s===3, done=!!A.cleared[skey(w,s)], can=unlocked(w,s), isCur=k===cur&&!done;
+    const r=boss?27:20, fill=done?'#FFC12E':can?'#FFFFFF':'#C9D2DE', stroke=boss?'#B3261E':'#1D2A48';
+    g+=`<g class="mnode ${can?'':'lock'}" ${can?`data-node="${w},${s}"`:''} transform="translate(${p.x},${p.y})">`;
+    if(isCur)g+=`<circle r="${r}" fill="none" stroke="#FFC12E" stroke-width="6" class="pulse"/>`;
+    g+=`<circle r="${r+14}" fill="transparent"/>`;
+    if(boss)g+=`<path d="M${-r*.75} ${-r*.55} L${-r*1.05} ${-r*1.35} L${-r*.25} ${-r*.9}Z M${r*.75} ${-r*.55} L${r*1.05} ${-r*1.35} L${r*.25} ${-r*.9}Z" fill="${can?'#B3261E':'#8C96A6'}" stroke="#1D2A48" stroke-width="2" stroke-linejoin="round"/>`;
+    g+=`<circle r="${r}" fill="${fill}" stroke="${can?stroke:'#7E8899'}" stroke-width="${boss?4:3}"/>`;
+    g+= done?`<path d="M-8 0 L-2 7 L9 -7" stroke="#1D2A48" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
+        : `<text y="${boss?6:6}" text-anchor="middle" class="mtext" font-size="${boss?15:17}" fill="${can?(boss?'#B3261E':'#1D2A48'):'#7E8899'}">${boss?'보스':s+1}</text>`;
+    g+=`</g>`; });
+  // 잠긴 땅: 구름
+  WORLDS.forEach((W,w)=>{ if(unlocked(w,0))return; const top=H-60-(w+1)*REG_H, r=rng(w*31+7);
+    g+=`<g class="fog"><rect x="0" y="${top}" width="${MAP_W}" height="${REG_H}" fill="rgba(236,241,248,.82)"/>`;
+    for(let i=0;i<9;i++){ const x=r()*MAP_W, y=top+20+r()*(REG_H-40), s=28+r()*30; g+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${s.toFixed(0)}" fill="#FFFFFF" opacity=".75"/>`; }
+    g+=`<text x="200" y="${top+REG_H/2-4}" text-anchor="middle" class="mtext" font-size="22" fill="#56658A">${w+1}. ${W.name}</text><text x="200" y="${top+REG_H/2+24}" text-anchor="middle" class="mtext" font-size="15" fill="#56658A">${WORLDS[w-1].boss[1]}${josa(WORLDS[w-1].boss[1])} 이기면 열려요</text></g>`; });
+  // 용사
+  const hp=pts[cur+1];
+  g+=`<g id="mapHero" transform="translate(${hp.x},${hp.y})"><g class="mh-bob">${heroSVG().replace('<svg class="hero-svg"','<svg class="hero-svg" x="-30" y="-78" width="60" height="64"')}</g></g>`;
+  return g+'</svg>';
+}
 function renderAdv(){
-  const A=adv();
+  const A=adv(), L=mapLayout(), cur=curNode(), w=Math.floor(cur/4), s=cur%4, W=WORLDS[w], m=s===3?W.boss:W.mons[s];
+  const allDone=!!A.cleared[skey(WORLDS.length-1,3)];
+  const from=(typeof A.pos==='number'&&A.pos<cur)?A.pos:cur;
+  const toBoss=(WORLDS.length*4-1)-cur;
   $('#advBody').innerHTML=`<div class="panel advtop">
       <div class="hero2">${heroSVG()}<span class="geared">${A.gear.map(id=>gearInfo(id).e).join('')}</span></div>
       <div><div class="t">용사 ${esc(heroName())}</div><div class="small">하트 ${maxHearts()}개 · 공격력 ${1+swordBonus()}</div>
-      <div class="inv">${Object.entries(ITEMS).map(([k,it])=>`<span>${it.e} ${A.items[k]||0}</span>`).join('')}</div></div></div>`
-    + WORLDS.map((W,w)=>{ const open=unlocked(w,0);
-      return `<div class="world ${open?'':'locked'}" style="--w1:${W.bg[0]};--w2:${W.bg[1]}">
-        <div class="wname">${open?'':'🔒 '}${w+1}. ${W.name}<span>보스 보상 ${W.gear.e} ${W.gear.n}</span></div>
-        <div class="path">${[0,1,2,3].map(s=>{ const done=A.cleared[skey(w,s)], can=unlocked(w,s), m=s===3?W.boss:W.mons[s];
-          return `<button class="node ${s===3?'boss':''} ${can&&!done?'next':''}" ${can?`data-battle="${w},${s}"`:'disabled'} aria-label="${m[1]}">${can?m[0]:'❔'}${done?'<i>✓</i>':''}</button>`; }).join('')}</div></div>`; }).join('');
+      <div class="inv">${Object.entries(ITEMS).map(([k,it])=>`<span>${it.e} ${A.items[k]||0}</span>`).join('')}</div></div></div>
+    <div class="mapwrap" id="mapWrap">${mapSVG(L,from)}</div>
+    <div class="mapbar"><div class="mb-txt">${allDone?'<b>👑 한자 마왕을 물리쳤어요!</b><span>아무 칸이나 눌러 다시 싸울 수 있어요</span>'
+      :`<b>다음 목표: ${m[1]}</b><span>${W.name} · ${s===3?'보스':(s+1)+'단계'}${toBoss?` · 마왕까지 ${toBoss}칸`:''}</span>`}</div>
+      ${allDone?'':`<button class="btn grape" data-battle="${w},${s}">싸우러 가기 ⚔️</button>`}</div>`;
+  requestAnimationFrame(()=>{ scrollToHero(false); if(from<cur)setTimeout(()=>walkHero(L,from,cur),500); else { A.pos=cur; save(); } });
+}
+function scrollToHero(smooth){ const h=$('#mapHero'); if(!h)return; const r=h.getBoundingClientRect(); window.scrollTo({top:Math.max(0,window.scrollY+r.top-window.innerHeight*.45),behavior:smooth?'smooth':'auto'}); }
+async function walkHero(L,from,to){
+  const g=$('#mapHero'); if(!g)return; const A=adv();
+  for(let i=from+1;i<=to;i++){
+    const seg=segCtrl(L.pts,i), t0=performance.now(), dur=900; let lastStep=0;
+    await new Promise(res=>{ const f=now=>{ if(!document.body.contains(g))return res();
+      const t=Math.min(1,(now-t0)/dur), e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2, p=bez(seg,e);
+      g.setAttribute('transform',`translate(${p.x.toFixed(1)},${p.y.toFixed(1)})`);
+      if(now-lastStep>180){ lastStep=now; sfx(Math.random()<.5?'step1':'step2',{vol:.4}); }
+      t<1?requestAnimationFrame(f):res(); }; requestAnimationFrame(f); });
+  }
+  A.pos=to; save();
+  if(document.body.contains(g)){ sparkle(); renderAdv(); }
+}
+function openNode(w,s){
+  const W=WORLDS[w], m=s===3?W.boss:W.mons[s], done=adv().cleared[skey(w,s)];
+  sfx('open',{vol:.5});
+  openModal(`<div class="result-big">${m[0]}</div><div class="small">${w+1}. ${W.name} · ${s===3?'보스':(s+1)+'단계'}</div><div class="result-title">${m[1]}</div>
+    <p class="story">${s===3?`이기면 ${W.gear.e} ${W.gear.n}${josa(W.gear.n)} 얻고 ${w<WORLDS.length-1?'다음 땅이 열려요!':'한자 나라를 구해요!'}`:done?'이미 이긴 몬스터예요. 또 싸워도 좋아요!':'이기면 보물 상자가 나와요!'}</p>
+    <div class="row"><button class="btn grape" data-battle="${w},${s}">⚔️ 싸우기!</button><button class="btn" data-close="1">지도 보기</button></div>`);
 }
 
 let B=null, rafId=0, spWriter=null;
@@ -1348,7 +1479,9 @@ function doReset(btn){
 
 /* ================= 이벤트 ================= */
 document.addEventListener('click',e=>{
+  const nd=e.target.closest('[data-node]'); if(nd&&!e.target.closest('button')){ const [w,s]=nd.dataset.node.split(',').map(Number); openNode(w,s); return; }
   const t=e.target.closest('button'); if(!t)return;
+  if(t.dataset.close){ closeModal(); return; }
   if(t.dataset.say!==undefined){ say(t.dataset.say); return; }
   if(t.dataset.go){ go(t.dataset.go); return; }
   if(t.dataset.write){ go('write',t.dataset.write); return; }
