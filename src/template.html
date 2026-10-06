@@ -782,10 +782,43 @@ const rankOf=n=>RANKS.filter(r=>n>=r[0]).pop();
 /* ================= 화면 이동 ================= */
 const TITLES={adv:'한자 모험',battle:'전투',home:'한자 탐험대',learn:'한자 카드',quiz:'몬스터 퀴즈',match:'짝 맞추기',write:'따라 쓰기',exam:'시험 연습',parent:'부모님 화면'};
 let cur='home', cleanup=null;
-function go(name,arg){
+/* 뒤로가기: 브라우저 기록에 화면을 쌓아서 기기의 뒤로 버튼이 앱 안에서 한 단계씩 돌아가게 함
+   깊이 d: 홈 0 → 놀이 화면 1 → 전투·따라 쓰기 2, 동화책·지도 칸 창은 그 위에 한 칸 */
+const NAV={d:0,ov:false};
+function navOverlay(){ try{ history.pushState({scr:cur,arg:history.state&&history.state.arg,d:NAV.d+1,ov:true},''); NAV.d++; NAV.ov=true; }catch(e){} }
+function navCloseOverlay(){ if(NAV.ov){ NAV.ov=false; try{history.back()}catch(e){} } }
+function navTo(name,arg){
+  try{
+    const st={scr:name,arg:arg??null};
+    if(name==='home'){ if(NAV.d>0){ history.go(-NAV.d); return false; } return true; }
+    if(NAV.ov){ st.d=NAV.d; NAV.ov=false; history.replaceState(st,''); }
+    else if(cur==='home'){ if(history.state&&history.state.base)history.pushState({scr:'home',d:0},''); st.d=1; history.pushState(st,''); }
+    else if((name==='battle'&&cur==='adv')||(name==='write'&&cur==='learn')){ st.d=NAV.d+1; history.pushState(st,''); }
+    else if(name==='adv'&&cur==='battle'&&NAV.d>=2){ history.back(); return false; }
+    else { st.d=NAV.d; history.replaceState(st,''); }
+    NAV.d=st.d;
+  }catch(e){}
+  return true;
+}
+function navBack(){ if(NAV.d>0)history.back(); else go('home'); }
+let exitArmed=false;
+window.addEventListener('popstate',e=>{
+  const st=e.state||{scr:'home',d:0};
+  NAV.d=st.d||0; NAV.ov=!!st.ov;
+  if(BK)closeBook(true);
+  if(!$('#modal').hidden){ $('#modal').hidden=true; stopVoice(); if(cur==='battle'&&B&&!B.over&&B.paused&&st.scr==='battle'){ if(spWriter){try{spWriter.cancelQuiz()}catch(e){} spWriter=null;} resumeBattle(); } }
+  if(st.base&&cur==='home'){
+    toast('한 번 더 누르면 나가요'); exitArmed=true;
+    setTimeout(()=>{ if(exitArmed&&cur==='home'&&history.state&&history.state.base){ try{history.pushState({scr:'home',d:0},'')}catch(e){} } exitArmed=false; },2000);
+    return;
+  }
+  if(st.scr!==cur||st.scr==='battle')go(st.scr||'home',st.arg,true);
+});
+function go(name,arg,fromPop){
+  if(!fromPop&&!navTo(name,arg))return;
   if(cleanup){cleanup();cleanup=null}
   stopVoice();
-  closeModal(true); if(BK)closeBook();
+  closeModal(true); if(BK)closeBook(true);
   document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!=='scr-'+name);
   cur=name; $('#backBtn').hidden=name==='home';
   $('#barTitle').textContent = name==='home'?`${heroName()}의 한자 탐험대`:`${TITLES[name]} · ${lvName()}`;
@@ -833,7 +866,7 @@ function openCard(c){
 }
 function openModal(html){ $('#modalBody').innerHTML=html; $('#modal').hidden=false; }
 function closeModal(silent){ $('#modal').hidden=true; if(silent)return;
-  stopVoice();
+  stopVoice(); navCloseOverlay();
   if(cur==='battle'&&B){ if(spWriter){try{spWriter.cancelQuiz()}catch(e){} spWriter=null;} if(B.over)go('adv'); else if(B.paused)resumeBattle(); } }
 
 /* ================= 한자 동화책 =================
@@ -876,7 +909,7 @@ function glyphSVG(c,cls){ const d=STROKES[c]; if(!d)return ''; return `<g class=
 let BK=null, bkWriter=null;
 function openBook(c){
   const o=BY[c]; if(!o.book)return openCard(c);
-  BK={c,p:0,tok:0,auto:true};
+  BK={c,p:0,tok:0,auto:true}; navOverlay();
   loadPack('s'+o.lv);
   $('#bkTitle').textContent=`${o.he} 이야기`;
   $('#book').hidden=false; document.body.style.overflow='hidden';
@@ -884,7 +917,7 @@ function openBook(c){
   bump('cards'); save();
   showPage(0);
 }
-function closeBook(){ if(!BK)return; BK.tok++; BK=null; stopVoice(); if(bkWriter){try{bkWriter.cancelQuiz?.()}catch(e){} bkWriter=null;} $('#book').hidden=true; document.body.style.overflow=''; if(cur==='learn')renderLearn(); }
+function closeBook(fromNav){ if(!BK)return; if(!fromNav)navCloseOverlay(); BK.tok++; BK=null; stopVoice(); if(bkWriter){try{bkWriter.cancelQuiz?.()}catch(e){} bkWriter=null;} $('#book').hidden=true; document.body.style.overflow=''; if(cur==='learn')renderLearn(); }
 function showPage(p){
   if(!BK)return; const o=BY[BK.c], B4=o.book, tok=++BK.tok; BK.p=p; stopVoice(); bkWriter=null;
   const art=$('#bkArt'), txt=$('#bkText');
@@ -1303,7 +1336,7 @@ async function walkHero(L,from,to){
 }
 function openNode(w,s){
   const W=WORLDS[w], m=s===3?W.boss:W.mons[s], done=adv().cleared[skey(w,s)];
-  sfx('open',{vol:.5});
+  sfx('open',{vol:.5}); navOverlay();
   openModal(`<div class="result-big">${m[0]}</div><div class="small">${w+1}. ${W.name} · ${s===3?'보스':(s+1)+'단계'}</div><div class="result-title">${m[1]}</div>
     <p class="story">${s===3?`이기면 ${W.gear.e} ${W.gear.n}${josa(W.gear.n)} 얻고 ${w<WORLDS.length-1?'다음 땅이 열려요!':'한자 나라를 구해요!'}`:done?'이미 이긴 몬스터예요. 또 싸워도 좋아요!':'이기면 보물 상자가 나와요!'}</p>
     <div class="row"><button class="btn grape" data-battle="${w},${s}">⚔️ 싸우기!</button><button class="btn" data-close="1">지도 보기</button></div>`);
@@ -1647,7 +1680,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.battle){ go('battle',t.dataset.battle.split(',').map(Number)); return; }
   if(t.dataset.item){ useItem(t.dataset.item); return; }
   if(t.id==='bSpecial'){ startSpecial(); return; }
-  if(t.id==='backBtn'){ go(cur==='battle'?'adv':'home'); return; }
+  if(t.id==='backBtn'){ navBack(); return; }
   if(t.id==='mClose'){ closeModal(); return; }
   if(t.id==='wAnim'&&writer){ writer.cancelQuiz(); writer.animateCharacter({onComplete:()=>{ setTimeout(()=>{writer.hideCharacter();quizW()},500) }}); return; }
   if(t.id==='wRetry'&&W.c){ loadWriter(W.c); return; }
@@ -1668,5 +1701,6 @@ $('#modal').addEventListener('click',e=>{ if(e.target.id==='modal')closeModal();
 })();
 
 if(!LEVELS.find(L=>L.id===S.level&&L.ready))S.level='8';
+try{ history.replaceState({scr:'home',d:0,base:true},''); history.pushState({scr:'home',d:0},''); }catch(e){}
 loadVoices(); renderTop(); go('home'); if(!S.name)askName(true);
 </script>
