@@ -9,10 +9,10 @@ ROOT = Path(__file__).resolve().parent.parent
 VOICE = 'ko-KR-SunHiNeural'
 
 def lines():
-    html = (ROOT / 'src/template.html').read_text(encoding='utf-8')
+    html = (ROOT / 'artifact.html').read_text(encoding='utf-8')   # build.py 먼저 실행
     main = re.findall(r'<script>([\s\S]*?)</script>', html)[-1].split('/* ================= 이벤트')[0]
     js = ("global.localStorage={getItem:()=>null,setItem:()=>{}};"
-          "global.document={querySelector:()=>({textContent:'',classList:{add(){},remove(){}}}),addEventListener(){}};"
+          "global.document={querySelector:()=>({textContent:'',classList:{add(){},remove(){}}}),addEventListener(){},getElementById:()=>({addEventListener(){}})};"
           "global.speechSynthesis={getVoices:()=>[],cancel(){},speak(){}};global.STROKES={};"
           + main + ";process.stdout.write(JSON.stringify(voiceLines()))")
     tmp = ROOT / 'tools' / '_lines.js'; tmp.write_text(js, encoding='utf-8')

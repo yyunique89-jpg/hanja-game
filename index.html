@@ -10,7 +10,7 @@
 <title>한자 탐험대</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Noto+Serif+KR:wght@700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Gowun+Batang:wght@400;700&family=Noto+Serif+KR:wght@700;900&display=swap">
 <style>
 /* 레이아웃: 태블릿 한 화면 = 한 가지 놀이. 큼직한 버튼, 위에서 아래로 한 줄 흐름 */
 :root{
@@ -109,6 +109,56 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
 #nameIn:focus{outline:none;border-color:var(--grape)}
 .result-big{font-size:80px;line-height:1.1}
 .result-title{font-family:var(--f-display);font-size:34px;margin:6px 0}
+
+/* 한자 동화책 */
+#book{position:fixed;inset:0;z-index:55;background:rgba(20,30,55,.6);display:grid;place-items:center;padding:12px;padding-top:calc(12px + env(safe-area-inset-top,0px));padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.bk-inner{width:min(720px,100%);max-height:100%;display:flex;flex-direction:column;gap:10px}
+.bk-top{display:flex;align-items:center;gap:10px}
+.bk-title{flex:1;font-family:var(--f-display);font-size:26px;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.bk-top .mclose{position:static;flex:none}
+.bk-page{background:#FFFCF3;border-radius:22px 22px 26px 26px;padding:14px;box-shadow:0 10px 0 #E7DCC2,0 14px 30px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:12px;overflow:auto;min-height:0;touch-action:pan-y;
+  background-image:linear-gradient(90deg,rgba(160,120,60,.06),transparent 6%,transparent 94%,rgba(160,120,60,.06))}
+.bk-art{position:relative;border-radius:16px;overflow:hidden;border:3px solid #E7DCC2;aspect-ratio:5/3;flex:none;background:#fff}
+.bk-svg{display:block;width:100%;height:100%;transition:filter .6s}
+.bk-svg.dim{filter:saturate(.7) brightness(.75) blur(1.5px)}
+.bk-ghost path{fill:rgba(255,255,255,.88);stroke:#1D2A48;stroke-width:16;stroke-linejoin:round}
+.bk-ghost{animation:ghost 2.2s .4s ease-out both}
+.bk-reveal{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.bk-wr{width:min(44%,190px);aspect-ratio:1/1;background:#FFFFFF;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.25);
+  background-image:linear-gradient(#F0D9D6,#F0D9D6),linear-gradient(#F0D9D6,#F0D9D6);background-size:100% 1.5px,1.5px 100%;background-position:center;background-repeat:no-repeat}
+.bk-he{font-family:var(--f-display);font-size:clamp(26px,5vw,36px);color:#fff;background:var(--seal);padding:4px 18px;border-radius:99px;opacity:0;transform:scale(.6);transition:all .4s cubic-bezier(.2,1.4,.4,1)}
+.bk-he.on{opacity:1;transform:none}
+.bk-card{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,#FFFFFF,#FFF3DA)}
+.bk-text{padding:0 6px 4px;display:grid;gap:10px}
+.bk-step{justify-self:start;font-family:var(--f-display);font-size:16px;color:#8A5A2B;background:#F6E7CF;border-radius:99px;padding:3px 12px}
+.bk-text p{margin:0;font-family:'Gowun Batang',var(--f-han);font-size:clamp(20px,3.4vw,25px);line-height:1.75;color:#2A2A35;word-break:keep-all}
+.bk-text p.drop::first-letter{font-family:var(--f-display);font-size:2.1em;float:left;line-height:1;margin:4px 8px 0 0;color:var(--seal)}
+.bk-nav{display:flex;align-items:center;gap:10px}
+.bk-nav .btn{min-width:64px;font-size:26px;padding:10px 16px}
+.bk-nav .btn:disabled{opacity:.35}
+.bk-dots{flex:1;display:flex;justify-content:center;gap:10px}
+.bk-dots i{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.5)}
+.bk-dots i.on{background:#fff;transform:scale(1.25)}
+.sc-drift{animation:drift 14s ease-in-out infinite alternate}
+.sc-twinkle{animation:twinkle 1.6s ease-in-out infinite alternate}
+.sc-glow{animation:twinkle 2.4s ease-in-out infinite alternate}
+.sc-flow{stroke-dasharray:12 20;animation:flow 1.6s linear infinite}
+.sc-wave{animation:wave 3s ease-in-out infinite alternate}
+.sc-bob{animation:hop 2.4s ease-in-out infinite}
+.sc-flame{transform-box:fill-box;transform-origin:50% 100%;animation:flicker .45s ease-in-out infinite alternate}
+.sc-rain{animation:rain .7s linear infinite}
+.sc-bolt{animation:bolt 3.2s infinite}
+.sc-spin{transform-box:fill-box;transform-origin:center;animation:spin 14s linear infinite}
+.sc-flag{transform-box:fill-box;transform-origin:left center;animation:cape 1.2s ease-in-out infinite}
+@keyframes ghost{from{opacity:0}to{opacity:1}}
+@keyframes drift{from{transform:translateX(-22px)}to{transform:translateX(22px)}}
+@keyframes twinkle{from{opacity:.25}to{opacity:1}}
+@keyframes flow{to{stroke-dashoffset:-64}}
+@keyframes wave{from{transform:translateX(-16px)}to{transform:translateX(16px)}}
+@keyframes flicker{from{transform:scale(1,1)}to{transform:scale(.88,1.12)}}
+@keyframes rain{from{transform:translate(0,-20px)}to{transform:translate(-6px,20px)}}
+@keyframes bolt{0%,62%,70%,100%{opacity:0}64%,68%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* 퀴즈 */
 .arena{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#3B2F86,var(--grape));color:#fff;border-radius:28px;padding:14px 20px;box-shadow:0 6px 0 #2A2163}
@@ -423,6 +473,13 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
   </main>
 
   <div id="modal" hidden><div class="mbox"><button class="mclose" id="mClose" aria-label="닫기">✕</button><div id="modalBody"></div></div></div>
+  <div id="book" hidden>
+    <div class="bk-inner">
+      <div class="bk-top"><span class="bk-title" id="bkTitle"></span><button class="mclose" id="bkClose" aria-label="닫기">✕</button></div>
+      <div class="bk-page" id="bkPage"><div class="bk-art" id="bkArt"></div><div class="bk-text" id="bkText"></div></div>
+      <div class="bk-nav"><button class="btn" id="bkPrev" aria-label="앞 장">◀</button><div class="bk-dots" id="bkDots"></div><button class="btn sun" id="bkSay" aria-label="다시 듣기">🔊</button><button class="btn grape" id="bkNext" aria-label="다음 장">▶</button></div>
+    </div>
+  </div>
   <div id="toast"></div>
 </div>
 
@@ -685,17 +742,18 @@ function clip(t){ for(const k in VO.packs){ const v=VO.packs[k][t]; if(v)return 
 let sayTok=0, voSrc=null, voice=null;
 function pickVoice(){ try{ const vs=speechSynthesis.getVoices().filter(v=>/^ko/i.test(v.lang)); voice=vs.find(v=>/premium|enhanced|natural|neural|online/i.test(v.name))||vs[0]||null; }catch(e){} }
 try{ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }catch(e){}
-function tts(t){ try{ const u=new SpeechSynthesisUtterance(t); u.lang='ko-KR'; u.rate=.95; if(voice)u.voice=voice; speechSynthesis.speak(u);}catch(e){} }
+function tts(t){ return new Promise(res=>{ try{ const u=new SpeechSynthesisUtterance(t); u.lang='ko-KR'; u.rate=.95; if(voice)u.voice=voice; u.onend=()=>res(true); u.onerror=()=>res(false); speechSynthesis.speak(u); setTimeout(()=>res(true),1500+t.length*180);}catch(e){res(false)} }); }
 function stopVoice(){ sayTok++; try{voSrc&&voSrc.stop()}catch(e){} voSrc=null; try{speechSynthesis.cancel()}catch(e){} }
-function say(...parts){ parts=parts.flat().filter(Boolean).map(String); stopVoice(); playLines(parts,sayTok); }
+function say(...parts){ parts=parts.flat().filter(Boolean).map(String); stopVoice(); return playLines(parts,sayTok); }
 async function playLines(parts,tok){
   for(let i=0;i<parts.length;i++){
-    if(tok!==sayTok)return; const t=parts[i], b=clip(t), a=AC();
-    if(!b||!a){ tts(parts.slice(i).join(' ')); return; }
+    if(tok!==sayTok)return false; const t=parts[i], b=clip(t), a=AC();
+    if(!b||!a){ const r=await tts(parts.slice(i).join(' ')); return r&&tok===sayTok; }
     let buf=VO.cache.get(t); if(!buf){ buf=await decode(b); if(buf){ VO.cache.set(t,buf); if(VO.cache.size>80)VO.cache.delete(VO.cache.keys().next().value); } }
-    if(tok!==sayTok)return; if(!buf){ tts(parts.slice(i).join(' ')); return; }
+    if(tok!==sayTok)return false; if(!buf){ const r=await tts(parts.slice(i).join(' ')); return r&&tok===sayTok; }
     await new Promise(res=>{ const s=a.createBufferSource(), g=a.createGain(); s.buffer=buf; g.gain.value=1.2; s.connect(g); g.connect(a.destination); s.onended=res; voSrc=s; s.start(); });
   }
+  return tok===sayTok;
 }
 /* 첫 터치 때 소리 준비 (태블릿은 터치 후에만 소리가 남) */
 document.addEventListener('pointerdown',function warm(){ AC(); if(typeof SFX!=='undefined')Object.keys(SFX).forEach(sfxBuffer); document.removeEventListener('pointerdown',warm); });
@@ -716,7 +774,7 @@ function voiceLines(){
   names.forEach(n=>{ out.core.add(`${n}${josaIG(n)} 나타났다!`); out.core.add(`야호! ${n}${josa(n)} 물리쳤어!`); });
   WORLDS.forEach(W=>out.core.add(`보스를 물리쳤다! ${W.gear.n}${josa(W.gear.n)} 얻었어!`));
   Object.values(ITEMS).forEach(it=>out.core.add(it.n+'!'));
-  CH.forEach(o=>{ out[o.lv].add(o.he); out[o.lv].add(storyLine(o.story)); });
+  CH.forEach(o=>{ out[o.lv].add(o.he); if(o.book){ const k='s'+o.lv; (out[k]=out[k]||new Set()); o.book.pages.forEach(t=>out[k].add(storyLine(t))); } });
   WORDS.forEach(w=>{ const lv=[...w.w].map(c=>BY[c].lv).sort((a,b)=>LV_INDEX[b]-LV_INDEX[a])[0]; out[lv].add(w.r); });
   return Object.fromEntries(Object.entries(out).map(([k,v])=>[k,[...v]]));
 }
@@ -738,7 +796,7 @@ let cur='home', cleanup=null;
 function go(name,arg){
   if(cleanup){cleanup();cleanup=null}
   stopVoice();
-  closeModal(true);
+  closeModal(true); if(BK)closeBook();
   document.querySelectorAll('main>section').forEach(s=>s.hidden=s.id!=='scr-'+name);
   cur=name; $('#backBtn').hidden=name==='home';
   $('#barTitle').textContent = name==='home'?`${heroName()}의 한자 탐험대`:`${TITLES[name]} · ${lvName()}`;
@@ -767,6 +825,7 @@ function renderHome(){
 
 /* ================= 카드 탐험 ================= */
 function renderLearn(){
+  loadPack('s'+S.level);
   const li=LV_INDEX[S.level];
   $('#learnBody').innerHTML=LEVELS.filter((L,i)=>L.ready&&i<=li).map(L=>{
     const cs=CH.filter(o=>o.lv===L.id), n=cs.filter(o=>S.seen[o.c]).length;
@@ -787,6 +846,241 @@ function openModal(html){ $('#modalBody').innerHTML=html; $('#modal').hidden=fal
 function closeModal(silent){ $('#modal').hidden=true; if(silent)return;
   stopVoice();
   if(cur==='battle'&&B){ if(spWriter){try{spWriter.cancelQuiz()}catch(e){} spWriter=null;} if(B.over)go('adv'); else if(B.paused)resumeBattle(); } }
+
+/* ================= 한자 동화책 =================
+   한 한자 = 동화 3장(옛날 이야기 → 모양 찾기 → 한자 탄생) + 한자 카드 1장 */
+const BOOK=`校|forest|옛날 어느 마을에 커다란 나무가 있었어요. 아이들은 매일 그 나무 아래에 모여 글을 배웠지요.|나무(木) 옆에 사귈 교(交)를 붙였더니, 친구들이 모여 함께 배우는 곳이 되었어요.|친구를 사귀며 배우는 곳, '학교 교'! 나무 옆에 모여 공부해요!
+敎|school|옛날에 훌륭한 선생님이 계셨어요. 선생님은 아이 손을 잡고 하나하나 정성껏 가르쳐 주셨지요.|왼쪽에는 공부하는 아이(子)가 있고, 오른쪽에는 회초리를 든 손(攵)이 있어요. 바르게 이끌어 주는 모습이에요.|아이를 바르게 이끌어요, '가르칠 교'!
+九|numbers|숫자 나라에 팔이 긴 친구가 살았어요. 그 친구는 팔을 쭉 뻗었다가 휙 구부렸어요.|팔을 길게 뻗었다가 구부린 모양이 바로 이 글자예요. 한 자리 숫자 중에서 가장 큰 수랍니다.|팔을 구부려 아홉! '아홉 구'!
+國|palace|옛날에 사람들은 나라를 지키려고 땅 둘레에 커다란 울타리를 쳤어요.|큰 네모 울타리(口) 안에 창(戈)을 든 병사와 땅이 있어요. 울타리 안을 지키는 모습이에요.|울타리 안을 창으로 지켜요, '나라 국'!
+軍|palace|둥둥 북소리가 울리자 수레들이 줄지어 달려 나왔어요.|수레(車) 위에 덮개(冖)를 씌운 모양이에요. 수레를 둘러싸고 함께 움직이는 군대를 나타내요.|덮개 씌운 수레 부대, '군사 군'!
+金|field|땅속 깊은 곳에서 반짝반짝 빛나는 것이 있었어요. 광부 아저씨가 캐 보니 금덩이였지요!|흙(土) 속에 반짝이는 알갱이 두 개가 박혀 있고, 위에는 지붕처럼 덮여 있어요.|땅속에서 반짝반짝, '쇠 금'! 성씨로 쓸 때는 '김'이에요.
+南|compass|추운 겨울, 새들이 따뜻한 곳을 찾아 날아갔어요. 해님이 가장 오래 비추는 쪽이었지요.|옛날 사람들은 따뜻한 남쪽을 향해 집을 지었어요. 이 글자는 남쪽을 가리키는 표시가 되었답니다.|따뜻한 해님 쪽, '남녘 남'!
+女|people|옛날 옛적, 한 여인이 두 손을 모으고 다소곳이 무릎을 꿇고 앉아 있었어요.|두 팔을 모으고 무릎 꿇고 앉은 여자의 모습을 본떠 만든 글자예요.|다소곳이 앉은 모습, '계집 녀'! 여자를 뜻해요.
+年|field|봄에 심은 벼가 누렇게 익었어요. 농부 아저씨는 볏단을 짊어지고 웃으며 집으로 갔지요.|사람이 볏단을 등에 진 모습이에요. 벼를 한 번 거두면 한 해가 지나가요.|벼를 거두면 한 살 더, '해 년'!
+大|people|키 큰 거인이 기지개를 켜며 팔과 다리를 쫙 벌렸어요. "나는 정말 커!"|사람(人)이 두 팔을 활짝 벌리고 서 있는 모습이에요.|팔 벌리면 커다래요, '큰 대'!
+東|sky|아침이 되자 숲속 나무 사이로 해님이 방긋 떠올랐어요.|나무(木) 사이에 해(日)가 걸려 있는 모양이에요. 해가 뜨는 쪽이지요.|나무 사이로 해가 떠요, '동녘 동'!
+六|numbers|숫자 친구 여섯이 모여 작은 지붕 집을 지었어요.|지붕 아래 두 다리를 벌리고 선 모양이에요. 손가락 다섯에 하나를 더하면 이 숫자가 돼요.|지붕 아래 여섯 친구, '여섯 륙'!
+萬|numbers|사막에 꼬리가 긴 전갈이 살았어요. 전갈은 알을 아주아주 많이 낳았대요.|이 글자는 전갈 모양에서 왔어요. 셀 수 없이 많다는 뜻으로 쓰이게 되었지요.|전갈 알처럼 많아요, '일만 만'! 만은 숫자 10000이에요.
+母|people|엄마가 아기를 꼭 안고 젖을 먹이고 있어요. 아기는 새근새근 잠이 들었지요.|여자(女) 가슴에 점 두 개를 찍었어요. 아기를 먹여 키우는 엄마를 나타내요.|아기를 품는 엄마, '어미 모'!
+木|forest|숲속에 커다란 나무 한 그루가 있었어요. 위로는 가지를 뻗고 아래로는 뿌리를 내렸지요.|가운데 줄기, 위로 뻗은 가지, 아래로 내린 뿌리를 그린 모양이에요.|가지랑 뿌리랑, '나무 목'!
+門|house|대궐 앞에 커다란 대문이 있었어요. 삐걱 소리를 내며 양쪽 문이 활짝 열렸지요.|왼쪽 문짝과 오른쪽 문짝이 마주 보고 서 있는 모양이에요.|양쪽으로 열려요, '문 문'!
+民|people|넓은 들판에 많은 사람들이 모여 농사를 지으며 살았어요.|나라를 이루는 수많은 보통 사람들을 나타내는 글자예요.|나라의 많은 사람들, '백성 민'!
+白|sky|새벽이 되자 하늘이 하얗게 밝아왔어요. 햇살이 하얗게 반짝였지요.|해(日) 위로 햇살 한 줄기가 삐죽 나온 모양이에요. 햇빛처럼 하얗다는 뜻이에요.|햇살처럼 하얘요, '흰 백'!
+父|people|아빠는 커다란 도끼를 들고 숲에서 장작을 패 오셨어요. "우리 가족은 내가 지킬게!"|도끼를 손에 든 모습이에요. 힘든 일을 하며 가족을 지키는 아빠를 나타내요.|도끼 든 든든한 아빠, '아비 부'!
+北|compass|두 친구가 다투고 휙 등을 돌렸어요. 차가운 바람이 쌩쌩 불어왔지요.|두 사람이 서로 등을 맞대고 있는 모양이에요. 해를 등진 추운 쪽이 북쪽이에요.|등 돌리면 추운 쪽, '북녘 북'!
+四|numbers|숫자 나라에 네모난 창문이 있었어요. 창문 안에는 다리 두 개가 보였지요.|네모(口) 안에 두 줄이 들어 있는 모양이에요. 네모의 모서리처럼 넷을 뜻해요.|네모 창문, '넉 사'! 넉은 넷이에요.
+山|mountain|옛날 사람들이 멀리 바라보니 뾰족한 봉우리 세 개가 우뚝 솟아 있었어요.|가운데 높은 봉우리와 양옆의 낮은 봉우리를 그린 모양이에요.|봉우리 셋이 솟았어요, '메 산'! 메는 산의 옛말이에요.
+三|numbers|막대기 하나, 둘, 셋! 아이가 바닥에 막대기를 차곡차곡 놓았어요.|가로 막대 세 개를 나란히 놓은 모양이에요.|막대가 셋, '석 삼'!
+生|field|봄비가 내리자 땅에서 작은 새싹이 쏙 올라왔어요.|땅(土) 위로 새싹이 돋아나는 모양이에요. 생명이 태어난다는 뜻이에요.|새싹이 쏙, '날 생'!
+西|sky|저녁이 되자 새들이 둥지로 돌아갔어요. 해님도 산 너머로 넘어갔지요.|새 둥지 모양이에요. 새들이 둥지로 돌아갈 때 해가 지는 쪽이 서쪽이에요.|새가 둥지로 갈 때 해 지는 쪽, '서녘 서'!
+先|people|달리기 시합에서 한 아이가 맨 앞으로 쌩 달려 나갔어요.|앞으로 나아가는 발 아래에 사람(儿)이 있어요. 남보다 앞서 간다는 뜻이에요.|맨 앞에 가요, '먼저 선'!
+小|people|개미 세 마리가 작은 빵 부스러기를 나누고 있어요.|작은 점 세 개가 모인 모양이에요. 아주 작은 것을 나타내요.|점이 콕콕 작아요, '작을 소'!
+水|water|산골짜기에서 시냇물이 졸졸졸 흘러 내려왔어요.|가운데 큰 물줄기와 양옆의 작은 물방울이 흐르는 모양이에요.|졸졸 흐르는 물, '물 수'!
+室|house|지붕 아래 따뜻한 방이 있었어요. 식구들은 그 방에 모여 이야기를 나누었지요.|지붕(宀) 아래 사람이 이르러(至) 머무는 곳이에요.|지붕 아래 방, '집 실'!
+十|numbers|손가락을 하나, 둘, 열까지 다 펴니 두 손이 꽉 찼어요.|가로 막대와 세로 막대가 열 십자로 만났어요. 모든 것이 다 갖춰진 수예요.|열 십자, '열 십'!
+五|numbers|하늘과 땅 사이에서 다섯 친구가 엇갈려 춤을 추었어요.|위아래 가로줄 사이에 엇갈린 모양이 있어요. 한 손 손가락 수와 같아요.|한 손 가득, '다섯 오'!
+王|palace|옛날에 하늘과 땅과 사람을 모두 잘 다스리는 훌륭한 임금님이 계셨어요.|가로줄 세 개는 하늘, 사람, 땅이에요. 세로줄이 셋을 하나로 이어 주지요.|하늘과 사람과 땅을 잇는, '임금 왕'!
+外|night|저녁이 되었는데도 점쟁이 할아버지는 집 밖에서 점을 치고 계셨어요.|저녁(夕)에 점(卜)을 치는 모습이에요. 점은 보통 아침에 치는데 저녁에 치니 바깥일이래요.|저녁에 밖에서, '바깥 외'!
+月|night|깜깜한 밤하늘에 손톱 같은 초승달이 떴어요.|초승달 모양 안에 줄 두 개를 그었어요.|초승달 모양, '달 월'!
+二|numbers|막대기 두 개가 위아래로 나란히 누워 있어요.|가로 막대 두 개를 나란히 놓은 모양이에요.|막대가 둘, '두 이'!
+人|people|한 사람이 들판을 성큼성큼 걸어가고 있었어요.|옆에서 본 사람이 팔을 내리고 걸어가는 모양이에요.|걸어가는 사람, '사람 인'!
+日|sky|하늘에 동그란 해님이 방긋 웃고 있어요.|동그란 해 가운데 점을 찍었더니 네모난 모양이 되었어요.|동그란 해님, '날 일'!
+一|numbers|아기가 처음으로 막대기 하나를 바닥에 놓았어요. "하나!"|막대 하나를 가로로 놓은 모양이에요. 모든 수의 시작이에요.|막대 하나, '한 일'!
+長|people|마을에 머리카락이 아주 긴 할아버지가 지팡이를 짚고 계셨어요.|긴 머리를 늘어뜨린 어른의 모습이에요. 길다, 어른이라는 뜻이 되었어요.|머리가 길어요, '긴 장'!
+弟|people|형이 막대에 끈을 차례차례 감았어요. 나중에 감은 끈은 아래에 있었지요.|막대에 끈을 차례로 감은 모양이에요. 차례에서 나중인 동생을 뜻하게 되었어요.|차례에서 나중, '아우 제'! 아우는 동생이에요.
+中|palace|활쏘기 대회에서 화살이 과녁 한가운데에 쿵 꽂혔어요!|네모난 과녁 가운데를 화살이 꿰뚫은 모양이에요.|한가운데 명중, '가운데 중'!
+靑|field|봄이 되자 들판의 새싹이 파릇파릇 푸르게 자랐어요.|위쪽은 새싹(生), 아래쪽은 우물이에요. 우물가 새싹처럼 푸른 빛이에요.|새싹처럼 파릇파릇, '푸를 청'!
+寸|people|한의사 할아버지가 손목에 손가락을 대고 맥을 짚었어요.|손(又)에 점을 찍어 손목에서 맥 짚는 곳을 나타내요. 손가락 한 마디쯤 되는 길이예요.|손목 한 마디, '마디 촌'!
+七|numbers|막대를 가로로 놓고 세로 막대로 뚝 자른 다음 꼬리를 휘었어요.|가로줄을 세로줄이 자르고 끝이 구부러진 모양이에요.|자르고 휘어서, '일곱 칠'!
+土|field|농부 아저씨가 땅을 일구자 흙이 소복이 쌓였어요.|땅 위에 흙덩이가 쌓여 있는 모양이에요.|땅 위에 흙, '흙 토'!
+八|numbers|떡 하나를 양쪽으로 쭉 나누었어요.|양쪽으로 나뉘어 갈라지는 모양이에요.|쫙 나뉘어요, '여덟 팔'!
+學|school|지붕 아래 서당에서 아이가 두 손으로 책을 받아 열심히 배웠어요.|지붕 아래 아이(子)가 있고, 위에는 배움을 주고받는 두 손이 있어요.|지붕 아래 아이가 배워요, '배울 학'!
+韓|palace|아침 해가 떠오르는 동쪽 나라, 우리나라 이야기예요.|우리나라 대한민국의 '한'이에요. 해가 빛나는 큰 나라를 뜻해요.|우리나라 대한민국, '나라 한'!
+兄|people|형이 동생 앞에서 입을 크게 벌려 "나를 따라와!" 하고 외쳤어요.|입(口) 아래 사람(儿)이 있어요. 말로 동생을 이끄는 형이에요.|입으로 이끄는 형, '형 형'!
+火|fire|캄캄한 밤, 모닥불이 활활 타올라 불똥이 톡톡 튀었어요.|가운데 불꽃이 치솟고 양옆으로 불똥이 튀는 모양이에요.|활활 타는 불꽃, '불 화'!
+家|house|옛날에는 집 안에서 돼지를 길렀어요. 돼지가 있으면 넉넉한 집이었대요.|지붕(宀) 아래 돼지(豕)가 있는 모양이에요. 가족이 함께 사는 집이에요.|지붕 아래 돼지, '집 가'!
+間|house|아침에 문틈 사이로 햇살이 살금살금 들어왔어요.|문(門) 사이로 해(日)가 보이는 모양이에요.|문 사이로 햇빛, '사이 간'!
+江|water|커다란 강물이 출렁출렁 바다로 흘러갔어요.|물(氵) 옆에 장인 공(工)을 붙였어요. 크게 흐르는 강이에요.|물이 크게 흘러요, '강 강'!
+車|workshop|덜컹덜컹 바퀴 굴러가는 소리! 수레가 마을 길을 지나갔어요.|위에서 내려다본 수레 모양이에요. 가운데 몸통과 위아래 바퀴가 있지요.|바퀴 달린 수레, '수레 거'! 자동차에서는 '차'로 읽어요.
+工|workshop|목수 아저씨가 곱자를 들고 반듯하게 선을 그었어요.|물건을 만들 때 쓰는 연장 모양이에요.|연장으로 만들어요, '장인 공'!
+空|sky|동굴 구멍 속은 텅 비어 있었어요. 하늘처럼 아무것도 없었지요.|구멍(穴) 아래 장인 공(工)이 있어요. 구멍처럼 텅 빈 하늘이에요.|텅 빈 하늘, '빌 공'!
+記|school|선비가 오늘 들은 이야기를 잊지 않으려고 붓으로 적었어요.|말씀 언(言) 옆에 몸 기(己)를 붙였어요. 말을 적어 두는 거예요.|말을 적어 둬요, '기록할 기'!
+氣|fire|밥솥에서 하얀 김이 모락모락 올라왔어요.|쌀(米) 위로 김이 피어오르는 모양이에요. 눈에 안 보이는 힘, 기운이에요.|모락모락 김, '기운 기'!
+男|field|씩씩한 청년이 밭에서 쟁기를 끌며 힘껏 일했어요.|밭(田) 아래 힘(力)이 있어요. 밭에서 힘쓰는 사람이에요.|밭에서 힘써요, '사내 남'!
+內|house|비가 오자 아이가 문 안으로 쏙 들어갔어요.|집 모양 안으로 사람이 들어가는 모습이에요.|안으로 쏙, '안 내'!
+農|field|농부들이 새벽부터 논밭에 나가 농사를 지었어요.|밭에서 조개껍데기 낫으로 곡식을 거두던 모양에서 왔어요.|논밭에서 하는 일, '농사 농'!
+答|school|선생님이 질문하자 아이가 "저요!" 하고 손을 번쩍 들었어요.|대나무(竹) 아래 합할 합(合)이 있어요. 묻는 말에 꼭 맞게 대답해요.|딱 맞는 말, '대답 답'!
+道|mountain|나그네가 고개를 숙이고 산길을 따라 걸어갔어요.|머리 수(首)와 걸어가는 모양(辶)이 합쳐졌어요. 사람이 걸어가는 길이에요.|머리 숙이고 걷는 길, '길 도'!
+動|workshop|무거운 바위를 영차영차 힘을 주어 움직였어요.|무거울 중(重) 옆에 힘 력(力)이 있어요. 무거운 걸 힘써 움직이는 거예요.|힘으로 움직여요, '움직일 동'!
+力|workshop|힘센 장사가 팔에 힘을 꽉 주자 근육이 불끈 솟았어요.|힘줄이 불끈 솟은 팔 모양이에요. 땅을 가는 쟁기 모양이라고도 해요.|불끈불끈, '힘 력'!
+立|people|아침 조회 시간, 아이가 땅 위에 똑바로 섰어요.|땅 위에 사람이 두 팔 벌리고 서 있는 모양이에요.|땅 위에 우뚝, '설 립'!
+每|people|엄마는 날마다 머리에 비녀를 꽂고 부지런히 일하셨어요.|머리 장식을 한 엄마(母) 모양이에요. 날마다, 늘이라는 뜻이 되었어요.|날마다 늘, '매양 매'!
+名|night|깜깜한 저녁, 얼굴이 안 보여서 엄마가 큰 소리로 이름을 불렀어요.|저녁 석(夕) 아래 입 구(口)가 있어요. 어두워서 입으로 이름을 불러요.|저녁에 부르는, '이름 명'!
+物|field|넓은 들판에 소가 여러 마리 있었어요. 소는 아주 귀한 물건이었지요.|소 우(牛) 옆에 말 물(勿)을 붙였어요. 여러 가지 물건을 뜻해요.|소처럼 귀한 것, '물건 물'!
+方|compass|배 두 척을 나란히 묶었더니 네모난 모양이 되었어요.|나란히 묶은 배 모양에서 네모난 모와 방향이라는 뜻이 생겼어요.|네모난 모와 방향, '모 방'!
+不|sky|새 한 마리가 하늘로 높이 날아가더니 돌아오지 않았어요.|새가 하늘로 날아올라 내려오지 않는 모양이에요. 아니다라는 뜻이에요.|날아가서 안 와요, '아닐 불'!
+事|workshop|관리가 손에 붓과 깃대를 들고 바쁘게 일했어요.|손으로 깃발 달린 막대를 잡은 모양이에요. 일을 하는 모습이에요.|손에 들고 일해요, '일 사'!
+上|mountain|산꼭대기에 새 한 마리가 앉아 있었어요.|기준선 위에 점이 올라가 있는 모양이에요.|선 위에 있어요, '윗 상'!
+姓|people|아기가 엄마에게서 태어나면 집안의 성을 물려받아요.|여자 녀(女)와 날 생(生)이 합쳐졌어요. 태어날 때 받는 성씨예요.|태어나며 받는, '성 성'!
+世|people|할아버지, 아버지, 그리고 나. 세대가 이어지며 세상이 계속돼요.|열 십(十) 세 개를 이은 모양이에요. 삼십 년, 한 세대를 뜻해요.|세대가 이어지는, '인간 세'! 세상을 뜻해요.
+手|people|아이가 친구에게 손을 쫙 펴서 흔들었어요. "안녕!"|다섯 손가락을 펼친 손 모양이에요.|다섯 손가락, '손 수'!
+時|sky|옛날에는 절에서 해의 위치를 보고 때를 알려 주었어요.|해 일(日)과 절 사(寺)가 합쳐졌어요. 해를 보고 때를 알아요.|해를 보면 알아요, '때 시'!
+市|palace|장날이 되자 사람들이 깃발 아래로 모여 물건을 사고팔았어요.|시장을 알리는 깃발 모양에서 왔어요.|깃발 아래 장터, '저자 시'! 시장을 뜻해요.
+食|house|엄마가 뚜껑 덮인 밥그릇을 상에 올려 주셨어요. 고소한 냄새!|뚜껑을 덮은 밥그릇 모양이에요.|뚜껑 덮은 밥그릇, '밥 식'!
+安|house|비바람이 몰아쳐도 지붕 아래 엄마가 있으면 마음이 편안했어요.|지붕(宀) 아래 여자(女)가 있어요. 집 안이 평화로워요.|지붕 아래 엄마, '편안 안'!
+午|sky|해님이 하늘 꼭대기에 올라 그림자가 가장 짧아졌어요.|절굿공이 모양에서 왔는데, 해가 가장 높은 한낮을 뜻하게 되었어요.|해가 꼭대기, '낮 오'!
+右|people|아이가 오른손으로 숟가락을 들고 밥을 냠냠 먹었어요.|손 모양 아래 입(口)이 있어요. 밥을 먹는 오른손이에요.|밥 먹는 손, '오른 우'!
+子|people|요람 속 아기가 두 팔을 버둥버둥 흔들었어요.|머리가 크고 두 팔을 벌린 아기 모양이에요.|두 팔 벌린 아기, '아들 자'!
+自|people|"누구야?" 하고 묻자 아이가 자기 코를 손가락으로 가리켰어요. "나!"|코 모양이에요. 나를 가리킬 때 코를 가리켜서 스스로라는 뜻이 되었어요.|코를 가리키며 나, '스스로 자'!
+場|palace|넓은 흙마당에 햇볕이 쨍쨍 비추었어요. 아이들이 뛰어놀았지요.|흙 토(土) 옆에 볕 양(昜)이 있어요. 햇볕 드는 넓은 땅이에요.|햇볕 드는 마당, '마당 장'!
+電|storm|먹구름 사이로 번쩍! 번개가 내리쳤어요.|비 우(雨) 아래 번쩍이는 번개가 꿈틀거리는 모양이에요.|비 올 때 번쩍, '번개 전'!
+前|compass|배가 앞으로 쭉쭉 나아갔어요.|배 위에 발을 올려 앞으로 나아가는 모양에서 왔어요.|앞으로 나아가요, '앞 전'!
+全|workshop|보석 장인이 귀한 옥을 흠 하나 없이 다듬었어요.|들 입(入) 아래 구슬 옥이 있어요. 빠짐없이 온전해요.|흠 없는 구슬, '온전 전'!
+正|compass|성을 향해 발걸음을 똑바로 옮겼어요.|목표를 향해 곧게 가는 발(止) 모양이에요.|똑바로 가요, '바를 정'!
+足|people|아이가 무릎을 굽혔다 폈다 하며 뛰어놀았어요.|무릎과 발 모양을 그렸어요.|무릎과 발, '발 족'!
+左|workshop|목수가 왼손으로 연장을 잡고 오른손을 도왔어요.|손 모양 아래 장인 공(工)이 있어요. 연장을 잡는 왼손이에요.|연장 잡는 손, '왼 좌'!
+直|people|활 쏘는 사람이 눈을 크게 뜨고 과녁을 똑바로 바라보았어요.|눈 목(目) 위에 곧은 선이 있어요. 눈으로 곧게 봐요.|눈으로 똑바로, '곧을 직'!
+平|water|바람이 멎자 호수의 물결이 잔잔하고 평평해졌어요.|물 위에 평평하게 뜬 풀 모양이에요.|잔잔하고 고른, '평평할 평'!
+下|mountain|높은 산 아래에 작은 마을이 있었어요.|기준선 아래에 점이 내려가 있는 모양이에요.|선 아래 있어요, '아래 하'!
+漢|water|옛날 중국에 한수라는 큰 강이 흐르고, 그 강 이름을 딴 한나라가 있었어요.|물(氵)이 붙은 강 이름이에요. 한나라에서 쓰던 글자를 한자라고 불러요.|한자의 '한', '한수 한'!
+海|sea|강물들이 모두 모여 넓고 푸른 바다가 되었어요.|물(氵)과 매양 매(每)가 합쳐졌어요. 모든 물이 늘 모이는 곳이에요.|물이 모두 모이는, '바다 해'!
+話|school|아이들이 둘러앉아 재미있게 이야기를 나누었어요.|말씀 언(言) 옆에 혀 설(舌)이 있어요. 혀로 말을 해요.|혀로 하는 말, '말씀 화'!
+活|water|맑은 시냇물 속에서 물고기가 펄떡펄떡 살아 움직였어요.|물(氵)과 혀 설(舌)이 합쳐졌어요. 물이 콸콸 흐르듯 살아 있어요.|물처럼 살아 움직여요, '살 활'!
+孝|people|아이가 늙으신 할아버지를 등에 업고 산책을 했어요.|늙을 로(老) 아래 아들 자(子)가 있어요. 자식이 어른을 업어 드려요.|어른을 업어 드려요, '효도 효'!
+後|compass|어린 동생이 형들 뒤를 아장아장 늦게 따라왔어요.|걸음(彳)과 작은 발이 늦게 따라오는 모양이에요.|뒤처져 와요, '뒤 후'!
+歌|school|아이들이 입을 크게 벌리고 즐겁게 노래를 불렀어요. 랄랄라!|노랫소리(哥)와 입 벌린 사람(欠)이 합쳐졌어요.|입 크게 벌려, '노래 가'!
+口|people|아기가 "아!" 하고 입을 동그랗게 벌렸어요.|벌린 입 모양을 네모나게 그렸어요.|벌린 입, '입 구'!
+旗|palace|성 위에서 커다란 깃발이 바람에 펄럭펄럭 날렸어요.|깃대에 달린 깃발과 그 기(其)가 합쳐졌어요.|펄럭이는 깃발, '기 기'!
+冬|night|하얀 눈이 펑펑 내리고 시냇물이 꽁꽁 얼었어요.|얼음(冫) 위에 끝을 묶은 실 모양이 있어요. 한 해의 끝, 겨울이에요.|꽁꽁 언 겨울, '겨울 동'!
+同|people|친구들이 둘러앉아 한목소리로 "같이 하자!" 외쳤어요.|덮개 아래 입(口)이 모여 있어요. 모두 같은 말을 해요.|모두 같아요, '한가지 동'!
+洞|water|시냇물이 흐르는 골짜기에 작은 동네가 생겼어요.|물(氵)과 한가지 동(同)이 합쳐졌어요. 물을 함께 쓰는 동네예요.|물가 동네, '골 동'!
+登|mountain|아이가 두 발로 한 걸음 한 걸음 산에 올라갔어요.|두 발(癶)이 받침대 위로 올라가는 모양이에요.|두 발로 올라가요, '오를 등'!
+來|field|하늘에서 보리 씨앗이 내려왔다는 옛이야기가 있어요.|보리 이삭 모양이에요. 보리가 왔다고 해서 오다라는 뜻이 되었어요.|보리가 와요, '올 래'!
+老|people|허리가 굽은 할아버지가 지팡이를 짚고 천천히 걸으셨어요.|머리가 긴 노인이 지팡이를 짚은 모양이에요.|지팡이 짚은 할아버지, '늙을 로'!
+里|field|밭과 흙이 있는 곳에 사람들이 모여 마을을 이뤘어요.|밭 전(田) 아래 흙 토(土)가 있어요.|밭과 흙이 있는, '마을 리'!
+林|forest|나무 한 그루 옆에 또 한 그루, 나무들이 모여 숲이 되었어요.|나무 목(木) 두 개가 나란히 있어요.|나무 둘이면 숲, '수풀 림'!
+面|people|거울 속에 동그란 얼굴이 웃고 있었어요.|얼굴 둘레 안에 눈이 있는 모양이에요.|얼굴 모양, '낯 면'! 낯은 얼굴이에요.
+命|palace|임금님이 입으로 명령을 내렸어요. 목숨처럼 소중한 명령이었지요.|모인 사람들, 입(口), 무릎 꿇은 사람이 합쳐졌어요.|소중한 목숨, '목숨 명'!
+文|school|옛날 사람들은 가슴에 멋진 무늬를 새겼어요.|사람 가슴에 무늬를 새긴 모양이에요. 무늬가 글이 되었어요.|무늬에서 글로, '글월 문'!
+問|house|손님이 대문 앞에서 "계세요?" 하고 물었어요.|문 문(門) 안에 입 구(口)가 있어요. 문 앞에서 물어봐요.|문 앞에서 물어요, '물을 문'!
+百|numbers|흰 쌀알을 하나씩 세어 보니 백 개나 되었어요!|한 일(一) 아래 흰 백(白)이 있어요.|하나에 하얀, '일백 백'! 백은 숫자 100이에요.
+夫|people|어른이 된 남자가 머리에 상투를 틀고 비녀를 꽂았어요.|큰 대(大)에 비녀를 꽂은 모양이에요.|비녀 꽂은 어른, '지아비 부'!
+算|numbers|대나무 막대를 두 손으로 늘어놓으며 셈을 했어요.|대나무(竹), 눈(目), 두 손이 합쳐졌어요.|대나무로 세요, '셈 산'!
+色|people|사람들의 얼굴빛은 기쁠 때와 슬플 때 다 달랐어요.|사람 위에 사람이 있는 모양에서 얼굴빛, 빛깔이라는 뜻이 되었어요.|여러 가지 빛깔, '빛 색'!
+夕|night|해가 지고 하늘에 반달이 살며시 떠올랐어요.|달이 반쯤 떠오른 모양이에요.|반달 뜨는 저녁, '저녁 석'!
+少|people|사탕이 조금밖에 없는데 동생과 나누니 더 적어졌어요.|작을 소(小) 아래 한 획을 더했어요. 작은 것이 더 줄어요.|작은 게 더 줄어, '적을 소'!
+所|house|나무꾼이 도끼를 놓아두는 곳이 따로 있었어요.|문짝(戶)과 도끼(斤)가 합쳐졌어요. 물건을 두는 곳이에요.|도끼 두는 곳, '바 소'! 곳을 뜻해요.
+數|numbers|아이가 손가락으로 구슬을 하나, 둘 세었어요.|여러 물건을 손으로 톡톡 치며 세는 모양이에요.|하나 둘 세요, '셈 수'!
+植|forest|아이가 작은 나무를 땅에 곧게 세우고 흙을 꼭꼭 눌렀어요.|나무 목(木)과 곧을 직(直)이 합쳐졌어요. 나무를 곧게 심어요.|나무를 곧게, '심을 식'!
+心|people|가슴에 손을 대니 심장이 콩닥콩닥 뛰었어요.|심장 모양을 그린 글자예요.|콩닥콩닥 심장, '마음 심'!
+語|school|두 친구가 서로 말을 주고받으며 이야기했어요.|말씀 언(言)과 나 오(吾)가 합쳐졌어요. 내가 하는 말이에요.|내가 하는 말, '말씀 어'!
+然|fire|고기를 불에 구우니 당연히 지글지글 익었어요.|고기를 불(灬)에 굽는 모양이에요. 그렇다라는 뜻이 되었어요.|불에 익는 건 당연해, '그럴 연'!
+有|house|손에 맛있는 고기를 쥐고 있었어요. "나한테 있지!"|손과 고기(月)가 합쳐졌어요.|손에 고기가 있어요, '있을 유'!
+育|house|엄마가 아기를 낳아 젖을 먹이며 정성껏 키웠어요.|아기가 태어나는 모양과 몸(月)이 합쳐졌어요.|아기를 키워요, '기를 육'!
+邑|palace|성벽으로 둘러싸인 곳에 사람들이 모여 살았어요.|울타리(口) 아래 무릎 꿇은 사람이 있어요.|사람이 모인, '고을 읍'!
+入|house|아이가 동굴 입구로 쏙 들어갔어요.|뾰족하게 안으로 들어가는 모양이에요.|안으로 쏙, '들 입'!
+字|school|지붕 아래 아이가 앉아 한 글자 한 글자 익혔어요.|지붕(宀) 아래 아들 자(子)가 있어요.|집에서 아이가 배우는, '글자 자'!
+祖|palace|설날에 가족들이 모여 조상님께 차례를 지냈어요.|제사상(示) 옆에 또 차(且)가 있어요. 조상을 모셔요.|조상님, '할아비 조'!
+主|fire|어두운 방에 촛불 하나가 가운데에서 환히 빛났어요.|등잔 위에 불꽃이 타는 모양이에요. 가운데 중심이 되는 주인이에요.|가운데 불꽃, '주인 주'!
+住|house|사람이 집의 주인이 되어 오래오래 살았어요.|사람(亻)과 주인 주(主)가 합쳐졌어요.|사람이 머물러요, '살 주'!
+重|workshop|짐꾼이 무거운 짐을 등에 지고 끙끙 걸었어요.|사람이 무거운 짐을 진 모양이에요.|끙끙 무거워요, '무거울 중'!
+地|field|비가 내리자 흙땅이 촉촉하게 젖었어요.|흙 토(土)와 어조사 야(也)가 합쳐졌어요.|흙으로 된 땅, '따 지'! 따는 땅의 옛말이에요.
+紙|school|옛날 사람들은 나무껍질과 실을 풀어 종이를 만들었어요.|실 사(糸)와 각시 씨(氏)가 합쳐졌어요.|실로 만든, '종이 지'!
+千|numbers|사람들이 줄을 서니 천 명이나 되었어요!|사람(亻) 위에 한 획을 더한 모양이에요.|사람이 아주 많이, '일천 천'! 천은 숫자 1000이에요.
+天|sky|사람이 하늘을 올려다보니 머리 위로 끝없이 넓은 하늘이 펼쳐졌어요.|큰 대(大) 위에 한 일(一)이 있어요. 사람 머리 위가 하늘이에요.|머리 위 하늘, '하늘 천'!
+川|water|산에서 시냇물이 세 갈래로 졸졸 흘러내렸어요.|물이 흐르는 줄기 세 개를 그렸어요.|졸졸 시냇물, '내 천'! 내는 시냇물이에요.
+草|field|봄이 오자 들판에 풀이 쑥쑥 자랐어요.|풀(艹) 아래 이를 조(早)가 있어요.|쑥쑥 자라는, '풀 초'!
+村|forest|나무가 많은 곳에 작은 시골 마을이 있었어요.|나무 목(木)과 마디 촌(寸)이 합쳐졌어요.|나무 있는 시골, '마을 촌'!
+秋|field|가을이 되자 벼가 누렇게 익어 들판이 불처럼 물들었어요.|벼 화(禾) 옆에 불 화(火)가 있어요.|벼가 불처럼 누렇게, '가을 추'!
+春|sky|따뜻한 햇볕을 받아 땅속 새싹이 기지개를 켰어요.|풀과 해(日)가 합쳐진 모양이에요.|햇볕에 새싹이, '봄 춘'!
+出|house|아이가 동굴 밖으로 발을 쑥 내밀고 나갔어요.|움푹한 곳에서 발이 밖으로 나가는 모양이에요.|밖으로 나가요, '날 출'!
+便|people|불편한 것을 사람이 고쳐서 편리하게 만들었어요.|사람(亻)과 고칠 경(更)이 합쳐졌어요.|고쳐서 편하게, '편할 편'! '변'으로도 읽어요.
+夏|sky|해님이 쨍쨍, 사람들은 시원한 그늘을 찾아다녔어요.|머리와 손발이 큰 사람 모양이에요. 크게 움직이는 계절이에요.|쨍쨍 더운, '여름 하'!
+花|field|풀이 변해서 알록달록 예쁜 꽃이 피었어요.|풀(艹) 아래 될 화(化)가 있어요.|풀이 변해 꽃, '꽃 화'!
+休|forest|나무꾼이 일을 하다 커다란 나무 그늘 아래에서 쉬었어요.|사람(亻)이 나무(木)에 기대어 있는 모양이에요.|나무 아래서 쉬어요, '쉴 휴'!`;
+BOOK.split('\n').filter(Boolean).forEach(l=>{ const [c,scene,a,b,d]=l.split('|'); if(BY[c])BY[c].book={scene,pages:[a,b,d]}; });
+
+/* 배경 그림 (400×240) */
+const SC={
+  sky:(a,b)=>`<defs><linearGradient id="bkSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="400" height="240" fill="url(#bkSky)"/>`,
+  sun:(x,y,r=24)=>`<circle class="sc-glow" cx="${x}" cy="${y}" r="${r+16}" fill="#FFF0A8" opacity=".55"/><circle cx="${x}" cy="${y}" r="${r}" fill="#FFD34D" stroke="#F2B630" stroke-width="2"/>`,
+  cloud:(x,y,s=1,d=0)=>`<g class="sc-drift" style="animation-delay:${d}s"><g transform="translate(${x},${y}) scale(${s})"><ellipse cx="0" cy="0" rx="36" ry="13" fill="#FFFFFF"/><circle cx="-13" cy="-7" r="14" fill="#FFFFFF"/><circle cx="10" cy="-11" r="17" fill="#FFFFFF"/></g></g>`,
+  hills:(a,b)=>`<path d="M0 168 Q80 128 170 160 T400 148 V240 H0Z" fill="${a}"/><path d="M0 200 Q120 166 240 194 T400 184 V240 H0Z" fill="${b}"/>`,
+  tree:(x,y,s=1)=>`<g transform="translate(${x},${y}) scale(${s})"><rect x="-5" y="-4" width="10" height="24" rx="3" fill="#7A5230"/><circle cx="0" cy="-22" r="20" fill="#2F8A3E"/><circle cx="-14" cy="-10" r="13" fill="#45A852"/><circle cx="13" cy="-13" r="14" fill="#45A852"/><circle cx="-4" cy="-30" r="7" fill="#6BC46F"/></g>`,
+  pine:(x,y,s=1)=>`<g transform="translate(${x},${y}) scale(${s})"><rect x="-4" y="4" width="8" height="14" fill="#6B4A2B"/><path d="M0 -44 L20 -14 L10 -14 L24 6 L-24 6 L-10 -14 L-20 -14Z" fill="#256B3A" stroke="#1B4F2B" stroke-width="2" stroke-linejoin="round"/></g>`,
+  house:(x,y,s=1)=>`<g transform="translate(${x},${y}) scale(${s})"><rect x="-30" y="-20" width="60" height="38" rx="3" fill="#F4DDB6" stroke="#8A5A2B" stroke-width="2.5"/><path d="M-40 -16 Q0 -52 40 -16 Q0 -26 -40 -16Z" fill="#C9A15A" stroke="#8A6A2B" stroke-width="2.5" stroke-linejoin="round"/><rect x="-8" y="-2" width="16" height="20" rx="2" fill="#8A5A2B"/><rect x="14" y="-12" width="11" height="11" fill="#FFE07A" stroke="#8A5A2B" stroke-width="1.5"/></g>`,
+  flowers:()=>[[60,214,'#FF7FA8'],[96,224,'#FFFFFF'],[300,218,'#FFB13B'],[340,228,'#FF7FA8'],[250,230,'#FFFFFF']].map(([x,y,c])=>`<path d="M${x} ${y+8} V${y}" stroke="#3E9A48" stroke-width="2"/><circle cx="${x}" cy="${y}" r="4.5" fill="${c}"/><circle cx="${x}" cy="${y}" r="1.6" fill="#FFC12E"/>`).join(''),
+  stars:()=>[[40,30],[90,60],[150,24],[210,50],[250,20],[340,90],[370,40],[120,96],[300,120],[60,120]].map(([x,y],i)=>`<circle class="sc-twinkle" style="animation-delay:${i*.23}s" cx="${x}" cy="${y}" r="${i%3?1.8:2.8}" fill="#FFF6C9"/>`).join(''),
+};
+const SCENES={
+  sky:()=>SC.sky('#8FD3FF','#E2F4FF')+SC.sun(320,58)+SC.cloud(90,50,1,0)+SC.cloud(220,80,.75,-4)+SC.hills('#8DD17E','#5DB866')+SC.tree(70,186,.8)+SC.flowers(),
+  night:()=>SC.sky('#18204A','#3B4C8E')+SC.stars()+`<path d="M318 34 a34 34 0 1 0 26 58 a28 28 0 1 1 -26 -58z" fill="#FFF3B0"/>`+SC.hills('#2C3A6B','#202C58')+SC.house(110,182,.8)+`<rect x="114" y="167" width="9" height="9" fill="#FFD34D"/>`+SC.pine(300,186,.8),
+  mountain:()=>SC.sky('#9AD8FF','#E6F6FF')+SC.sun(70,52,20)+SC.cloud(250,40,.8,-2)+`<path d="M-20 196 L100 66 L220 196Z" fill="#7C8AA5" stroke="#5B6884" stroke-width="2.5" stroke-linejoin="round"/><path d="M130 196 L240 44 L350 196Z" fill="#6A7895" stroke="#4E5A75" stroke-width="2.5" stroke-linejoin="round"/><path d="M270 196 L350 100 L430 196Z" fill="#8E9BB4" stroke="#5B6884" stroke-width="2.5" stroke-linejoin="round"/><path d="M84 84 L100 66 L116 84 L108 90 L100 82 L92 90Z M222 68 L240 44 L258 68 L249 74 L240 64 L231 74Z" fill="#FFFFFF"/>`+SC.hills('#8DD17E','#5DB866')+SC.pine(60,200,.6)+SC.pine(350,206,.7),
+  water:()=>SC.sky('#9AD8FF','#E6F6FF')+SC.sun(330,50,20)+SC.cloud(100,46,.9)+SC.hills('#9AD88A','#6BC072')+`<path d="M210 240 C200 205 130 190 170 165 S 250 140 220 110" stroke="#3E9BD6" stroke-width="46" fill="none" stroke-linecap="round"/><path class="sc-flow" d="M210 240 C200 205 130 190 170 165 S 250 140 220 110" stroke="#BDE6FF" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="120" cy="214" rx="16" ry="9" fill="#9AA3B2"/><ellipse cx="290" cy="196" rx="12" ry="7" fill="#9AA3B2"/>`+SC.tree(330,190,.7)+SC.tree(70,176,.7),
+  sea:()=>SC.sky('#9AD8FF','#FFE8C2')+SC.sun(200,120,30)+SC.cloud(70,50,.9)+SC.cloud(320,40,.7,-3)+`<rect y="130" width="400" height="110" fill="#3F8FD8"/><rect y="130" width="400" height="20" fill="#68ADE6"/>`+[150,175,200,222].map((y,i)=>`<path class="sc-wave" style="animation-delay:${i*.4}s" d="M-20 ${y} q20 -9 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#FFFFFF" stroke-width="3" opacity=".7"/>`).join('')+`<g class="sc-bob"><path d="M300 150 h50 l-8 12 h-34Z" fill="#8A5A2B"/><path d="M324 150 V114 L346 146Z" fill="#FFFFFF" stroke="#C9D2DE" stroke-width="1.5"/></g><ellipse cx="80" cy="150" rx="46" ry="12" fill="#F3E2A9"/>`+SC.tree(80,140,.55),
+  forest:()=>SC.sky('#A8E0FF','#E9F8FF')+SC.sun(340,46,18)+SC.hills('#7CC46E','#4FA858')+SC.pine(40,170,1)+SC.tree(110,180,1.1)+SC.pine(180,160,.8)+SC.tree(250,186,1.2)+SC.pine(320,176,1)+SC.tree(380,170,.9)+SC.flowers(),
+  field:()=>SC.sky('#9AD8FF','#FFF4D6')+SC.sun(70,50,22)+SC.cloud(270,44,.8,-1)+`<path d="M0 150 Q200 130 400 150 V240 H0Z" fill="#E9C46A"/>`+[160,178,198,220].map((y,i)=>`<path d="M0 ${y} Q200 ${y-14} 400 ${y}" stroke="${i%2?'#C99A3B':'#D9AE4F'}" stroke-width="7" fill="none"/>`).join('')+SC.house(320,146,.7)+`<g transform="translate(140,170)"><path d="M0 0 V40" stroke="#7A5230" stroke-width="4"/><path d="M-18 8 H18" stroke="#7A5230" stroke-width="4"/><circle cy="-8" r="9" fill="#F4DDB6" stroke="#8A6A2B" stroke-width="2"/><path d="M-13 -12 L0 -24 L13 -12Z" fill="#C9A15A"/></g>`,
+  house:()=>SC.sky('#A8E0FF','#EAF7FF')+SC.sun(340,50,18)+SC.cloud(110,40,.8)+SC.hills('#9AD88A','#79C47A')+SC.house(200,170,1.7)+`<path d="M40 214 H140 M40 202 H140" stroke="#A6713C" stroke-width="3"/>`+[50,75,100,125].map(x=>`<path d="M${x} 222 V194" stroke="#A6713C" stroke-width="5" stroke-linecap="round"/>`).join('')+SC.tree(340,196,.9),
+  people:()=>SC.sky('#9AD8FF','#E9F8FF')+SC.sun(60,48,20)+SC.cloud(300,46,.9,-2)+SC.hills('#9AD88A','#6BC072')+SC.house(90,170,.7)+SC.house(300,160,.6)+SC.house(350,180,.55)+`<path d="M170 240 Q190 200 200 170" stroke="#EBD9B0" stroke-width="26" fill="none" stroke-linecap="round"/>`+SC.tree(240,190,.8)+SC.flowers(),
+  numbers:()=>`<rect width="400" height="240" fill="#FCEFD9"/><rect y="0" width="400" height="150" fill="#F6E3C2"/>`+[30,90,150].map(y=>`<path d="M0 ${y} H400" stroke="#EAD1A6" stroke-width="2"/>`).join('')+`<rect x="0" y="150" width="400" height="90" fill="#C98B4A"/><rect x="0" y="150" width="400" height="10" fill="#A6713C"/>`+[0,1,2,3,4].map(i=>`<rect x="${60+i*20}" y="176" width="8" height="46" rx="3" fill="#E9C46A" stroke="#B88A1E" stroke-width="1.5" transform="rotate(${i*4-8} ${64+i*20} 200)"/>`).join('')+`<g transform="translate(270,186)"><rect x="-70" y="-38" width="140" height="70" rx="6" fill="#8A5A2B" stroke="#5A3A22" stroke-width="3"/>`+[-22,0,22].map(y=>`<path d="M-62 ${y} H62" stroke="#5A3A22" stroke-width="2"/>`+[-48,-24,0,24,48].map((x,i)=>`<circle cx="${x+(i%2?6:-6)}" cy="${y}" r="7" fill="${i%2?'#E8453C':'#FFD34D'}" stroke="#5A3A22" stroke-width="1.2"/>`).join('')).join('')+`</g>`,
+  palace:()=>SC.sky('#9AD8FF','#E9F8FF')+SC.sun(340,46,18)+SC.cloud(80,40,.8)+`<rect y="186" width="400" height="54" fill="#D9C7A1"/><rect x="60" y="150" width="280" height="40" fill="#E9DCC0" stroke="#8C7B5A" stroke-width="2"/>`+[90,140,200,260,310].map(x=>`<rect x="${x-6}" y="112" width="12" height="40" fill="#B5442E"/>`).join('')+`<path d="M40 116 Q200 80 360 116 Q380 118 392 104 Q380 128 360 124 H40 Q20 128 8 104 Q20 118 40 116Z" fill="#2F5D62" stroke="#1E3F43" stroke-width="2.5" stroke-linejoin="round"/><path d="M90 92 Q200 62 310 92 Q200 82 90 92Z" fill="#3E7378" stroke="#1E3F43" stroke-width="2"/><rect x="176" y="150" width="48" height="40" fill="#7A2E2A"/>`+[30,370].map(x=>`<path d="M${x} 186 V96" stroke="#5A3A22" stroke-width="3"/><path class="sc-flag" d="M${x} 98 h26 l-6 9 l6 9 h-26Z" fill="#E8453C"/>`).join(''),
+  compass:()=>`<rect width="400" height="240" fill="#F3E2B9"/><rect x="10" y="10" width="380" height="220" rx="10" fill="none" stroke="#C9A866" stroke-width="3" stroke-dasharray="8 6"/><path d="M40 190 Q120 150 160 180 T300 160" stroke="#7FB8E0" stroke-width="10" fill="none" opacity=".6" stroke-linecap="round"/><path d="M50 60 l20 -26 l20 26Z M300 70 l22 -30 l22 30Z" fill="#B8A57A" opacity=".7"/>`+`<g transform="translate(200,120)"><g class="sc-spin"><circle r="64" fill="#FFF8E6" stroke="#8A6A2B" stroke-width="3"/><path d="M0 -58 L10 0 L0 58 L-10 0Z" fill="#C2302A"/><path d="M-58 0 L0 -10 L58 0 L0 10Z" fill="#2F5D62"/><circle r="6" fill="#F2C14E" stroke="#8A6A2B" stroke-width="2"/></g>`+[['북',0,-76],['남',0,88],['동',84,6],['서',-84,6]].map(([t,x,y])=>`<text x="${x}" y="${y}" text-anchor="middle" font-family="Jua,sans-serif" font-size="20" fill="#5A3A22">${t}</text>`).join('')+`</g>`,
+  school:()=>`<rect width="400" height="240" fill="#F6E7CF"/><rect x="0" y="170" width="400" height="70" fill="#D9B98A"/>`+[0,40,80,120,160,200,240,280,320,360].map(x=>`<path d="M${x} 170 V240" stroke="#C9A570" stroke-width="2"/>`).join('')+`<rect x="40" y="30" width="120" height="96" rx="4" fill="#BDE6FF" stroke="#8A5A2B" stroke-width="6"/><path d="M100 30 V126 M40 78 H160" stroke="#8A5A2B" stroke-width="4"/><circle cx="130" cy="56" r="10" fill="#FFD34D"/><rect x="220" y="40" width="130" height="80" rx="4" fill="#FFFDF4" stroke="#8A6A2B" stroke-width="3"/><text x="285" y="94" text-anchor="middle" font-family="'Noto Serif KR',serif" font-weight="900" font-size="40" fill="#1D2A48">學文</text><rect x="210" y="34" width="150" height="8" rx="4" fill="#8A5A2B"/><rect x="140" y="160" width="140" height="22" rx="4" fill="#8A5A2B"/><rect x="152" y="182" width="10" height="30" fill="#6B4A2B"/><rect x="258" y="182" width="10" height="30" fill="#6B4A2B"/><rect x="170" y="150" width="50" height="10" fill="#FFFFFF" stroke="#C9D2DE"/><path d="M240 156 L262 140" stroke="#5A3A22" stroke-width="4" stroke-linecap="round"/>`,
+  fire:()=>SC.sky('#1B2350','#33407A')+SC.stars()+`<path d="M0 190 Q200 170 400 190 V240 H0Z" fill="#2A3560"/>`+SC.pine(60,190,.9)+SC.pine(350,196,1)+`<g transform="translate(200,200)"><circle class="sc-glow" r="70" fill="#FFB13B" opacity=".22"/><rect x="-40" y="4" width="80" height="12" rx="6" fill="#7A5230" transform="rotate(12)"/><rect x="-40" y="4" width="80" height="12" rx="6" fill="#8A5A2B" transform="rotate(-12)"/><path class="sc-flame" d="M0 6 C-30 -10 -22 -40 -6 -66 C-4 -46 10 -44 8 -60 C26 -36 30 -8 0 6Z" fill="#FF7A2E"/><path class="sc-flame" style="animation-delay:.2s" d="M0 6 C-16 -6 -12 -26 -2 -40 C2 -28 10 -30 8 -38 C18 -22 16 -4 0 6Z" fill="#FFD34D"/></g>`,
+  storm:()=>SC.sky('#3C4766','#6F7C9C')+`<g class="sc-bolt"><path d="M210 40 L176 120 H206 L186 196 L250 100 H218 L240 40Z" fill="#FFE45C" stroke="#FFF7C2" stroke-width="3" stroke-linejoin="round"/></g>`+[[80,50,1.3],[200,36,1.5],[330,56,1.2]].map(([x,y,s])=>`<g transform="translate(${x},${y}) scale(${s})"><ellipse rx="40" ry="15" fill="#4B5675"/><circle cx="-14" cy="-8" r="16" fill="#4B5675"/><circle cx="12" cy="-12" r="19" fill="#566282"/></g>`).join('')+`<g class="sc-rain">`+Array.from({length:22},(_,i)=>`<path d="M${(i*37)%400} ${80+(i*53)%120} l-6 16" stroke="#BFD6F2" stroke-width="2.5" stroke-linecap="round"/>`).join('')+`</g><path d="M0 206 Q200 190 400 206 V240 H0Z" fill="#3E5A4A"/>`,
+  workshop:()=>`<rect width="400" height="240" fill="#E9CFA6"/>`+[0,40,80,120,160].map(y=>`<path d="M0 ${y} H400" stroke="#D2B285" stroke-width="3"/>`).join('')+`<rect y="176" width="400" height="64" fill="#A6713C"/><rect y="176" width="400" height="8" fill="#8A5A2B"/><g transform="translate(70,80)"><rect x="-6" y="-30" width="12" height="60" rx="3" fill="#8A5A2B"/><rect x="-22" y="-40" width="44" height="18" rx="4" fill="#7C8AA5" stroke="#4E5A75" stroke-width="2"/></g><g transform="translate(150,70)"><path d="M-40 0 L40 0 L40 22 L-40 22Z" fill="#C9D2DE" stroke="#6F7E96" stroke-width="2"/>`+Array.from({length:9},(_,i)=>`<path d="M${-38+i*9} 22 l4 7 l4 -7" fill="#C9D2DE" stroke="#6F7E96" stroke-width="1.2"/>`).join('')+`<rect x="40" y="-4" width="22" height="30" rx="6" fill="#8A5A2B"/></g><g transform="translate(290,150)"><g class="sc-spin"><circle r="52" fill="none" stroke="#5A3A22" stroke-width="10"/>`+[0,45,90,135].map(a=>`<path d="M0 0 L0 -50" stroke="#7A5230" stroke-width="6" transform="rotate(${a})"/><path d="M0 0 L0 50" stroke="#7A5230" stroke-width="6" transform="rotate(${a})"/>`).join('')+`<circle r="10" fill="#5A3A22"/></g></g>`,
+};
+function glyphSVG(c,cls){ const d=STROKES[c]; if(!d)return ''; return `<g class="${cls}" transform="translate(200,124) scale(.19) translate(-512,-512)"><g transform="scale(1,-1) translate(0,-900)">${d.strokes.map(p=>`<path d="${p}"/>`).join('')}</g></g>`; }
+
+let BK=null, bkWriter=null;
+function openBook(c){
+  const o=BY[c]; if(!o.book)return openCard(c);
+  BK={c,p:0,tok:0,auto:true};
+  loadPack('s'+o.lv);
+  $('#bkTitle').textContent=`${o.he} 이야기`;
+  $('#book').hidden=false; document.body.style.overflow='hidden';
+  if(!S.seen[c]){ S.seen[c]=1; addStars(1); toast('새 스티커! ⭐ +1'); sparkle(); }
+  bump('cards'); save();
+  showPage(0);
+}
+function closeBook(){ if(!BK)return; BK.tok++; BK=null; stopVoice(); if(bkWriter){try{bkWriter.cancelQuiz?.()}catch(e){} bkWriter=null;} $('#book').hidden=true; document.body.style.overflow=''; if(cur==='learn')renderLearn(); }
+function showPage(p){
+  if(!BK)return; const o=BY[BK.c], B4=o.book, tok=++BK.tok; BK.p=p; stopVoice(); bkWriter=null;
+  const art=$('#bkArt'), txt=$('#bkText');
+  $('#bkDots').innerHTML=[0,1,2,3].map(i=>`<i class="${i===p?'on':''}"></i>`).join('');
+  $('#bkPrev').disabled=p===0; $('#bkNext').disabled=p===3;
+  if(p<3){
+    const scene=(SCENES[B4.scene]||SCENES.sky)();
+    art.innerHTML=`<svg class="bk-svg ${p===2?'dim':''}" viewBox="0 0 400 240">${scene}${p===1?glyphSVG(BK.c,'bk-ghost'):''}</svg>${p===2?`<div class="bk-reveal"><div class="bk-wr" id="bkWr"></div><div class="bk-he">${o.he}</div></div>`:''}`;
+    txt.innerHTML=`<span class="bk-step">${['옛날 옛적에','모양을 찾아봐요','한자가 태어났어요'][p]}</span><p class="${p===0?'drop':''}">${B4.pages[p]}</p>`;
+    if(p===2&&typeof HanziWriter!=='undefined'){ const box=$('#bkWr'), size=Math.floor(box.clientWidth||170);
+      bkWriter=HanziWriter.create(box,BK.c,{width:size,height:size,padding:6,showCharacter:false,showOutline:true,strokeColor:'#1D2A48',outlineColor:'#E4E9F0',strokeAnimationSpeed:.9,delayBetweenStrokes:260,charDataLoader:(ch,done)=>done(STROKES[ch])});
+      setTimeout(()=>{ if(BK&&tok===BK.tok&&bkWriter)bkWriter.animateCharacter({onComplete:()=>{ if(BK&&tok===BK.tok){ sparkle(); $('#bkArt .bk-he')?.classList.add('on'); } }}); },500); }
+  }else{
+    const ws=WORDS.filter(w=>w.w.includes(BK.c)).slice(0,5);
+    art.innerHTML=`<div class="bk-card"><div class="bighan">${BK.c}</div><div class="mhe">${o.he}</div></div>`;
+    txt.innerHTML=`<span class="bk-step">한자 카드</span>${ws.length?`<div class="words">${ws.map(w=>`<button class="wchip" data-say="${w.r}"><b>${w.w}</b>${w.r}</button>`).join('')}</div>`:''}
+      <div class="row"><button class="btn sun" data-say="${o.he}">🔊 듣기</button><button class="btn leaf" data-write="${BK.c}">✍️ 써 보기</button><button class="btn" id="bkAgain">📖 처음부터</button></div>`;
+  }
+  const pg=$('#bkPage'); pg.getAnimations?.().forEach(a=>a.cancel());
+  pg.animate?.([{transform:'perspective(900px) rotateY(-14deg) translateX(24px)',opacity:.2},{transform:'none',opacity:1}],{duration:380,easing:'cubic-bezier(.2,.8,.3,1)'});
+  if(p>0)sfx('flip',{vol:.6});
+  narrate(tok);
+}
+async function narrate(tok){
+  if(!BK)return; const o=BY[BK.c], p=BK.p;
+  await Promise.race([loadPack('s'+o.lv),sleep(3000)]);
+  if(!BK||tok!==BK.tok)return;
+  const ok = p<3 ? await say(storyLine(o.book.pages[p])) : await say(o.he);
+  if(!BK||tok!==BK.tok||!ok)return;
+  if(BK.auto&&p<2){ await sleep(p===1?1200:900); if(BK&&tok===BK.tok)showPage(p+1); }
+}
+(()=>{ // 넘기기: 버튼 + 손가락으로 밀기
+  let x0=null; const pg=document.getElementById('bkPage');
+  pg.addEventListener('pointerdown',e=>{ if(e.target.closest('button'))return; x0=e.clientX; });
+  pg.addEventListener('pointerup',e=>{ if(x0==null||!BK)return; const dx=e.clientX-x0; x0=null; if(dx<-60&&BK.p<3)showPage(BK.p+1); else if(dx>60&&BK.p>0)showPage(BK.p-1); });
+})();
 
 /* ================= 문제 만들기 ================= */
 function readOpts(w){
@@ -1496,7 +1790,12 @@ document.addEventListener('click',e=>{
   if(t.dataset.say!==undefined){ say(t.dataset.say); return; }
   if(t.dataset.go){ go(t.dataset.go); return; }
   if(t.dataset.write){ go('write',t.dataset.write); return; }
-  if(t.dataset.card){ openCard(t.dataset.card); return; }
+  if(t.dataset.card){ openBook(t.dataset.card); return; }
+  if(t.id==='bkClose'){ closeBook(); return; }
+  if(t.id==='bkPrev'&&BK&&BK.p>0){ BK.auto=false; showPage(BK.p-1); return; }
+  if(t.id==='bkNext'&&BK&&BK.p<3){ showPage(BK.p+1); return; }
+  if(t.id==='bkSay'&&BK){ narrate(++BK.tok); return; }
+  if(t.id==='bkAgain'&&BK){ BK.auto=true; showPage(0); return; }
   if(t.dataset.qk!==undefined){ answerQuiz(t); return; }
   if(t.dataset.mi!==undefined){ flipMatch(t); return; }
   if(t.dataset.wc){ renderStrip(t.dataset.wc); loadWriter(t.dataset.wc); return; }
