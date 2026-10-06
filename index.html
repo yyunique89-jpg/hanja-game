@@ -867,11 +867,12 @@ function renderLearn(){
   }).reverse().join('');
 }
 function openCard(c){
+  navOverlay();
   const o=BY[c], ws=WORDS.filter(w=>w.w.includes(c)).slice(0,5);
   openModal(`<div class="mpic">${o.pic}</div><div class="bighan">${c}</div><div class="mhe">${o.he}</div><p class="story">${o.story}</p>
     ${ws.length?`<div class="words">${ws.map(w=>`<button class="wchip" data-say="${w.r}"><b>${w.w}</b>${w.r}</button>`).join('')}</div>`:''}
-    <div class="row"><button class="btn sun" data-say="${o.he}">🔊 듣기</button><button class="btn" data-say="${storyLine(o.story)}">📖 이야기</button><button class="btn leaf" data-write="${c}">✍️ 써 보기</button></div>`);
-  say(o.he,storyLine(o.story)); sfx('open',{vol:.6});
+    <div class="row"><button class="btn sun" data-say="${o.he}">🔊 듣기</button>${o.book?`<button class="btn grape" data-book="${c}">📖 이야기 보기</button>`:''}<button class="btn leaf" data-write="${c}">✍️ 써 보기</button></div>`);
+  say(o.he); sfx('open',{vol:.6}); loadPack('s'+o.lv);
   if(!S.seen[c]){ S.seen[c]=1; addStars(1); toast('새 스티커! ⭐ +1'); sparkle(); }
   bump('cards'); save(); if(cur==='learn')renderLearn();
 }
@@ -1067,14 +1068,13 @@ const SCENES={
 function glyphSVG(c,cls){ const d=STROKES[c]; if(!d)return ''; return `<g class="${cls}" transform="translate(200,124) scale(.19) translate(-512,-512)"><g transform="scale(1,-1) translate(0,-900)">${d.strokes.map(p=>`<path d="${p}"/>`).join('')}</g></g>`; }
 
 let BK=null, bkWriter=null;
-function openBook(c){
-  const o=BY[c]; if(!o.book)return openCard(c);
-  BK={c,p:0,tok:0,auto:true}; navOverlay();
+function openBook(c,fromCard){
+  const o=BY[c]; if(!o.book)return;
+  BK={c,p:0,tok:0,auto:true}; if(!fromCard||!NAV.ov)navOverlay();
   loadPack('s'+o.lv);
   $('#bkTitle').textContent=`${o.he} 이야기`;
   $('#book').hidden=false; document.body.style.overflow='hidden';
-  if(!S.seen[c]){ S.seen[c]=1; addStars(1); toast('새 스티커! ⭐ +1'); sparkle(); }
-  bump('cards'); save();
+  if(!fromCard){ if(!S.seen[c]){ S.seen[c]=1; addStars(1); toast('새 스티커! ⭐ +1'); sparkle(); } bump('cards'); save(); }
   showPage(0);
 }
 function closeBook(fromNav){ if(!BK)return; if(!fromNav)navCloseOverlay(); BK.tok++; BK=null; stopVoice(); if(bkWriter){try{bkWriter.cancelQuiz?.()}catch(e){} bkWriter=null;} $('#book').hidden=true; document.body.style.overflow=''; if(cur==='learn')renderLearn(); }
@@ -1823,7 +1823,8 @@ document.addEventListener('click',e=>{
   if(t.dataset.say!==undefined){ say(t.dataset.say); return; }
   if(t.dataset.go){ go(t.dataset.go); return; }
   if(t.dataset.write){ go('write',t.dataset.write); return; }
-  if(t.dataset.card){ openBook(t.dataset.card); return; }
+  if(t.dataset.card){ openCard(t.dataset.card); return; }
+  if(t.dataset.book){ $('#modal').hidden=true; openBook(t.dataset.book,true); return; }
   if(t.id==='bkClose'){ closeBook(); return; }
   if(t.id==='bkPrev'&&BK&&BK.p>0){ BK.auto=false; showPage(BK.p-1); return; }
   if(t.id==='bkNext'&&BK&&BK.p<3){ showPage(BK.p+1); return; }
