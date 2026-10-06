@@ -1647,7 +1647,10 @@ const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${Str
 const today=()=>ymd(new Date());
 const addDays=(s,n)=>{ const d=new Date(s+'T00:00:00'); d.setDate(d.getDate()+n); return ymd(d); };
 const daysBetween=(a,b)=>Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5);
-function exam(){ if(!S.exam)S.exam={date:'2026-11-28',level:S.level}; return S.exam; }
+function exam(){
+  if(!S.exam)S.exam={date:'2026-11-28',level:'7'};
+  if(!S.exam.user&&S.exam.level!=='7'){ S.exam.level='7'; S.plan=null; }   // 11월 28일 시험은 7급 (부모님이 직접 바꾸면 그대로 둠)
+  return S.exam; }
 function srs(){
   if(!S.srs){ S.srs={}; Object.entries(S.stat).forEach(([c,s])=>{ if(BY[c]&&s.r>=2&&s.w===0)S.srs[c]={box:2,due:addDays(today(),1)}; }); }
   return S.srs;
@@ -1813,7 +1816,7 @@ document.addEventListener('click',e=>{
   if(t.id==='dNext'&&DY){ DY.i++; if(DY.i>=S.plan.fresh.length)buildQueue(); renderDaily(); return; }
   if(t.dataset.book2){ openBook(t.dataset.book2); return; }
   if(t.id==='exSave'){ const d=$('#exDate').value, lv=$('#exLv').value; if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){ toast('날짜를 골라 주세요'); return; }
-    S.exam={date:d,level:lv}; S.plan=null; save(); toast('시험 날짜를 저장했어요'); renderParent(); return; }
+    S.exam={date:d,level:lv,user:true}; S.plan=null; save(); toast('시험 날짜를 저장했어요'); renderParent(); return; }
   if(t.id==='renameBtn'){ askName(false); return; }
 });
 document.addEventListener('submit',e=>{ if(e.target.id!=='nameForm')return; e.preventDefault();
