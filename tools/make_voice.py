@@ -13,7 +13,7 @@ def lines():
     main = re.findall(r'<script>([\s\S]*?)</script>', html)[-1].split('/* ================= 이벤트')[0]
     js = ("global.localStorage={getItem:()=>null,setItem:()=>{}};"
           "global.document={querySelector:()=>({textContent:'',classList:{add(){},remove(){}}}),addEventListener(){},getElementById:()=>({addEventListener(){}})};"
-          "global.speechSynthesis={getVoices:()=>[],cancel(){},speak(){}};global.STROKES={};"
+          "global.speechSynthesis={getVoices:()=>[],cancel(){},speak(){}};global.STROKES={};global.window={addEventListener(){}};global.history={state:null,replaceState(){},pushState(){}};"
           + main + ";process.stdout.write(JSON.stringify(voiceLines()))")
     tmp = ROOT / 'tools' / '_lines.js'; tmp.write_text(js, encoding='utf-8')
     r = subprocess.run(['node', str(tmp)], capture_output=True, text=True, encoding='utf-8'); tmp.unlink()
