@@ -110,6 +110,22 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
 .result-big{font-size:80px;line-height:1.1}
 .result-title{font-family:var(--f-display);font-size:34px;margin:6px 0}
 
+.dday{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.dd-num{font-family:var(--f-display);font-size:44px;color:var(--grape);line-height:1;min-width:110px;text-align:center}
+.dd-num.hot{color:var(--seal)}
+.dd-info{flex:1;min-width:200px;display:grid;gap:6px}
+.dd-info b{font-family:var(--f-display);font-weight:400;font-size:22px}
+.dd-go{display:flex;flex-direction:column;align-items:center;line-height:1.2}
+.dd-go small{font-family:var(--f-body);font-size:14px;opacity:.85}
+.dprog{display:flex;align-items:center;gap:12px;font-family:var(--f-display);font-size:20px;margin-bottom:12px}
+.dprog .eprog{flex:1;margin:0}
+.dcard{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:16px}
+.dleft{flex:1;min-width:240px;text-align:center}
+.dright{display:grid;gap:8px;justify-items:center;width:min(320px,100%)}
+.dright .st{font-size:22px;min-height:30px}
+.dnext{font-size:28px;padding:16px 34px}
+.exrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.exrow input,.exrow select{font:inherit;font-size:20px;padding:10px 14px;border-radius:14px;border:3px solid var(--mist);background:var(--soft);color:var(--ink)}
 /* 한자 동화책 */
 #book{position:fixed;inset:0;z-index:55;background:rgba(20,30,55,.6);display:grid;place-items:center;padding:12px;padding-top:calc(12px + env(safe-area-inset-top,0px));padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
 .bk-inner{width:min(720px,100%);max-height:100%;display:flex;flex-direction:column;gap:10px}
@@ -399,6 +415,7 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
           <p class="small" id="stickerTxt">스티커 0 / 50</p>
         </div>
       </div>
+      <div class="panel dday" id="dday"></div>
       <div class="levels" id="levels"></div>
       <div class="panel mission"><h2>오늘의 미션</h2><div class="mlist" id="mlist"></div></div>
       <div class="modes">
@@ -468,6 +485,8 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
       <div class="opts" id="bOpts"></div>
       <div class="bbar"><div class="items" id="bItems"></div><button class="special" id="bSpecial" hidden>💥 필살기!</button></div>
     </section>
+
+    <section id="scr-daily" hidden><div id="dailyBody"></div></section>
 
     <section id="scr-parent" hidden></section>
   </main>
@@ -699,7 +718,7 @@ function josa(s){const k=s.charCodeAt(s.length-1)-0xAC00;return (k>=0&&k<11172&&
 function weight(c){ const s=S.stat[c]||{r:0,w:0}; let w=1+(s.w*2)/(1+s.r*0.5); if(s.r+s.w===0)w+=0.6; if(BY[c].lv===S.level)w*=1.8; return w; }
 function wpick(cs){ const ws=cs.map(weight); let t=ws.reduce((a,b)=>a+b,0)*Math.random(); for(let i=0;i<cs.length;i++){t-=ws[i];if(t<=0)return cs[i]} return cs[cs.length-1]; }
 function wsample(cs,n){ const out=[]; let rest=[...cs]; while(out.length<n&&rest.length){const c=wpick(rest);out.push(c);rest=rest.filter(x=>x!==c)} return out; }
-function record(chars,ok){ chars.forEach(c=>{ if(!BY[c])return; const s=S.stat[c]||(S.stat[c]={r:0,w:0}); ok?s.r++:s.w++; }); }
+function record(chars,ok){ chars.forEach(c=>{ if(!BY[c])return; const s=S.stat[c]||(S.stat[c]={r:0,w:0}); ok?s.r++:s.w++; srsUpdate(c,ok); }); }
 
 /* ================= 소리 =================
    효과음: Kenney CC0 녹음(SFX) + 합성음.  목소리: 미리 녹음한 뉴럴 음성(voice/*.json), 없으면 기기 음성 */
@@ -764,7 +783,7 @@ const LINES=['이 한자의 뜻과 음은 뭘까?','이 낱말은 어떻게 읽�
   '합격이야! 정말 잘했어!','괜찮아, 틀린 것만 다시 보면 돼!','오늘의 미션을 모두 끝냈어! 최고야!','새 스티커!',
   '보스 등장!','어떻게 읽을까?','뜻과 음은?','필살기 준비 완료!','마왕이 화났다! 조심해!','방패로 막았다!','앗, 늦었어!','아야!',
   '필살기! 이 한자를 써라!','필살기 발사!','용사가 한자 마왕을 물리쳤어! 한자 나라에 평화가 찾아왔어!','보스를 물리쳤다!',
-  '물리쳤다! 보물 상자를 열어 볼까?','앗, 쓰러졌어. 괜찮아! 물약을 줄게. 다시 도전하자!'];
+  '물리쳤다! 보물 상자를 열어 볼까?','오늘 배울 새 한자야!','복습 퀴즈를 풀어 보자!','오늘 공부 끝! 정말 잘했어!','오늘은 복습할 한자가 없어요!','앗, 쓰러졌어. 괜찮아! 물약을 줄게. 다시 도전하자!'];
 const storyLine=s=>s.replace(/\s*\([^)]*\)/g,'');
 function voiceLines(){
   const out={core:new Set(LINES)}; LEVELS.forEach(L=>{ if(L.ready)out[L.id]=new Set(); });
@@ -783,7 +802,7 @@ let toastT; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList
 function confetti(){ if(matchMedia('(prefers-reduced-motion: reduce)').matches)return; for(let i=0;i<26;i++){ const e=document.createElement('span'); e.className='confetti'; e.textContent=pick(['⭐','🎉','✨','🌟','🎊']); e.style.left=Math.random()*100+'vw'; e.style.animationDelay=Math.random()*.6+'s'; document.body.appendChild(e); setTimeout(()=>e.remove(),2600);} }
 function addStars(n){ if(n<=0)return; S.stars+=n; const c=$('#starChip'); c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); }
 
-const MISSIONS=[{k:'cards',goal:3,label:'한자 카드 3장 보기',icon:'🃏'},{k:'quiz',goal:1,label:'몬스터 1마리 물리치기',icon:'👾'},{k:'write',goal:3,label:'한자 3글자 따라 쓰기',icon:'✍️'}];
+const MISSIONS=[{k:'daily',goal:1,label:'오늘의 공부 끝내기',icon:'📅'},{k:'quiz',goal:1,label:'몬스터 1마리 물리치기',icon:'👾'},{k:'write',goal:3,label:'한자 3글자 따라 쓰기',icon:'✍️'}];
 function bump(k){ checkDay(); S.today[k]=(S.today[k]||0)+1;
   if(!S.today.bonus && MISSIONS.every(m=>S.today[m.k]>=m.goal)){ S.today.bonus=true; addStars(5); setTimeout(()=>{toast('오늘의 미션 완료! ⭐ +5');confetti();sWin();say('오늘의 미션을 모두 끝냈어! 최고야!')},900); } }
 
@@ -791,7 +810,7 @@ const RANKS=[[0,'🌱','새싹 탐험대원'],[30,'🐣','씩씩한 탐험대원
 const rankOf=n=>RANKS.filter(r=>n>=r[0]).pop();
 
 /* ================= 화면 이동 ================= */
-const TITLES={adv:'한자 모험',battle:'전투',home:'한자 탐험대',learn:'한자 카드',quiz:'몬스터 퀴즈',match:'짝 맞추기',write:'따라 쓰기',exam:'시험 연습',parent:'부모님 화면'};
+const TITLES={daily:'오늘의 공부',adv:'한자 모험',battle:'전투',home:'한자 탐험대',learn:'한자 카드',quiz:'몬스터 퀴즈',match:'짝 맞추기',write:'따라 쓰기',exam:'시험 연습',parent:'부모님 화면'};
 let cur='home', cleanup=null;
 /* 뒤로가기: 브라우저 기록에 화면을 쌓아서 기기의 뒤로 버튼이 앱 안에서 한 단계씩 돌아가게 함
    깊이 d: 홈 0 → 놀이 화면 1 → 전투·따라 쓰기 2, 동화책·지도 칸 창은 그 위에 한 칸 */
@@ -834,7 +853,7 @@ function go(name,arg,fromPop){
   cur=name; $('#backBtn').hidden=name==='home';
   $('#barTitle').textContent = name==='home'?`${heroName()}의 한자 탐험대`:`${TITLES[name]} · ${lvName()}`;
   window.scrollTo(0,0);
-  ({home:renderHome,learn:renderLearn,quiz:startQuiz,match:startMatch,write:()=>startWrite(arg),exam:startExam,parent:renderParent,adv:renderAdv,battle:()=>beginBattle(arg)})[name]();
+  ({home:renderHome,learn:renderLearn,quiz:startQuiz,match:startMatch,write:()=>startWrite(arg),exam:startExam,parent:renderParent,adv:renderAdv,battle:()=>beginBattle(arg),daily:startDaily})[name]();
 }
 const lvName=()=>LEVELS.find(L=>L.id===S.level).name;
 function renderTop(){ $('#starCount').textContent=S.stars; }
@@ -851,6 +870,7 @@ function renderHome(){
   $('#levels').innerHTML=LEVELS.map(L=>`<button class="lv ${L.id===S.level?'on':''} ${L.ready?'':'lock'}" data-lv="${L.id}">${L.ready?'':'🔒 '}${L.name}<small>${L.ready?CH.filter(o=>LV_INDEX[o.lv]<=LV_INDEX[L.id]).length+'자':'초등학교 가서 열어요'}</small></button>`).join('');
   $('#mlist').innerHTML=MISSIONS.map(m=>{const v=Math.min(S.today[m.k]||0,m.goal),d=v>=m.goal;return `<div class="mitem ${d?'done':''}"><span class="chk">${d?'✓':m.icon}</span><span class="t">${m.label}</span><b>${v}/${m.goal}</b></div>`}).join('')
     + (S.today.bonus?'<p class="small">오늘 미션 완료! 내일 또 만나요 🌙</p>':'<p class="small">미션을 다 하면 ⭐ 5개 보너스!</p>');
+  renderDday();
   { const w=advProgress(); $('#advProg').textContent=w>=WORLDS.length?'👑 마왕을 물리쳤어요! 다시 도전해도 좋아요':`지금: ${w+1}. ${WORLDS[w].name} · 장비 ${adv().gear.map(gearInfo).map(g=>g.e).join('')||'없음'}`; }
   $('#monrow').innerHTML=S.monsters.length?S.monsters.map(m=>`<span>${m}</span>`).join(''):'<span class="empty">몬스터 퀴즈에서 이기면 여기에 모여요</span>';
   save();
@@ -1780,6 +1800,103 @@ function loseBattle(){
     <div class="row"><button class="btn seal" data-battle="${B.w},${B.s}">다시 도전!</button><button class="btn" data-go="adv">지도 보기</button></div>`);
 }
 
+/* ================= 시험 D-day · 오늘의 공부 =================
+   간격 반복: 맞히면 1→3→7→14→30일 뒤 다시, 틀리면 다음 날 다시. 시험 전 마지막 7일은 복습만 */
+const BOXES=[0,1,3,7,14,30];
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const today=()=>ymd(new Date());
+const addDays=(s,n)=>{ const d=new Date(s+'T00:00:00'); d.setDate(d.getDate()+n); return ymd(d); };
+const daysBetween=(a,b)=>Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5);
+function exam(){ if(!S.exam)S.exam={date:'2026-11-28',level:S.level}; return S.exam; }
+function srs(){
+  if(!S.srs){ S.srs={}; Object.entries(S.stat).forEach(([c,s])=>{ if(BY[c]&&s.r>=2&&s.w===0)S.srs[c]={box:2,due:addDays(today(),1)}; }); }
+  return S.srs;
+}
+function srsUpdate(c,ok){ const r=srs()[c]; if(!r)return; if(ok&&r.due>today())return;
+  r.box=ok?Math.min(BOXES.length-1,r.box+1):1; r.due=addDays(today(),BOXES[r.box]); }
+function examPool(){ const li=LV_INDEX[exam().level]??0; return CH.filter(o=>LV_INDEX[o.lv]<=li).map(o=>o.c); }
+function daysLeft(){ return daysBetween(today(),exam().date); }
+function learnedCount(){ const R=srs(); return examPool().filter(c=>R[c]&&R[c].box>=2).length; }
+function newPerDay(){ const R=srs(), un=examPool().filter(c=>!R[c]).length, left=daysLeft(); if(left<=7)return 0; return Math.min(6,Math.ceil(un/Math.max(1,left-7))); }
+function dailyPlan(){
+  const t=today(), E=exam(); if(S.plan&&S.plan.day===t&&S.plan.lv===E.level&&S.plan.ex===E.date)return S.plan;
+  const R=srs(), pool=examPool(), left=daysLeft();
+  const strokes=c=>(STROKES[c]?STROKES[c].strokes.length:99);
+  const fresh=pool.filter(c=>!R[c]).sort((a,b)=>LV_INDEX[BY[a].lv]-LV_INDEX[BY[b].lv]||strokes(a)-strokes(b)).slice(0,newPerDay());
+  let review=pool.filter(c=>R[c]&&R[c].due<=t).sort((a,b)=>R[a].due<R[b].due?-1:R[a].due>R[b].due?1:R[a].box-R[b].box);
+  if(left>=0&&left<=7){ const weak=pool.filter(c=>R[c]&&!review.includes(c)).sort((a,b)=>R[a].box-R[b].box); review=review.concat(weak); }
+  review=review.slice(0,left>=0&&left<=7?20:12);
+  S.plan={day:t,lv:E.level,ex:E.date,fresh,review,done:false}; save(); return S.plan;
+}
+function ddayText(){ const n=daysLeft(); return n>0?`D-${n}`:n===0?'D-DAY':'시험 끝'; }
+function renderDday(){
+  const E=exam(), P=dailyPlan(), n=daysLeft(), L=LEVELS.find(x=>x.id===E.level), pool=examPool(), lc=learnedCount();
+  const [y,m,d]=E.date.split('-').map(Number);
+  $('#dday').innerHTML=`<div class="dd-num ${n<=7&&n>=0?'hot':''}">${ddayText()}</div>
+    <div class="dd-info"><b>${L.name} 시험 · ${m}월 ${d}일</b><div class="meter"><i style="width:${lc/pool.length*100}%"></i></div>
+    <span class="small">익힌 한자 ${lc} / ${pool.length}${n>7?` · 하루 새 한자 ${newPerDay()}개`:n>=0?' · 이제 복습만 해요!':''}</span></div>
+    ${n<0?'<span class="small">시험 수고했어요! 부모님 화면에서 다음 시험 날짜를 정해요</span>'
+      :`<button class="btn ${P.done?'':'grape'} dd-go" data-go="daily">${P.done?'✅ 오늘 공부 끝!':'📅 오늘의 공부'}<small>${P.done?'다시 보기':`새 한자 ${P.fresh.length} · 복습 ${P.review.length}`}</small></button>`}`;
+}
+
+let DY=null, dyWriter=null;
+function startDaily(){
+  const P=dailyPlan();
+  DY={stage:P.done?'done':P.fresh.length?'new':'quiz',i:0,queue:[],retried:new Set(),first:true,ok:0,lock:false};
+  if(DY.stage==='quiz')buildQueue();
+  renderDaily();
+}
+function buildQueue(){ const P=S.plan; DY.queue=shuffle([...new Set([...P.fresh,...P.review])]); DY.total=DY.queue.length; DY.stage=DY.total?'quiz':'done'; }
+function dProg(label,i,n){ return `<div class="dprog"><span>${label}</span><div class="eprog"><i style="width:${n?i/n*100:100}%"></i></div><span>${i} / ${n}</span></div>`; }
+function renderDaily(){
+  const P=S.plan, el=$('#dailyBody'); dyWriter=null;
+  if(DY.stage==='new'){
+    const c=P.fresh[DY.i], o=BY[c];
+    if(!srs()[c]){ srs()[c]={box:0,due:today()}; if(!S.seen[c]){S.seen[c]=1;addStars(1);} save(); }
+    el.innerHTML=dProg('🌱 오늘의 새 한자',DY.i,P.fresh.length)+`
+      <div class="panel dcard"><div class="dleft"><div class="mpic">${o.pic}</div><div class="bighan">${c}</div><div class="mhe">${o.he}</div><p class="story">${o.story}</p>
+        <div class="row"><button class="btn sun" data-say="${o.he}">🔊 듣기</button>${o.book?`<button class="btn grape" data-book2="${c}">📖 이야기 보기</button>`:''}</div></div>
+        <div class="dright"><div class="small">손가락으로 따라 써 봐요</div><div class="wbox" id="dWr"></div><div class="st" id="dWrSt"></div></div></div>
+      <div class="row"><button class="btn leaf dnext" id="dNext">${DY.i+1<P.fresh.length?'다음 한자 ➡':'퀴즈로 확인하기 ➡'}</button></div>`;
+    say(DY.i===0?['오늘 배울 새 한자야!',o.he]:o.he); sfx('open',{vol:.5});
+    if(typeof HanziWriter!=='undefined'){ const box=$('#dWr'), size=Math.floor(box.clientWidth||300);
+      dyWriter=HanziWriter.create(box,c,{width:size,height:size,padding:Math.round(size*.06),showCharacter:false,showOutline:true,strokeColor:'#1D2A48',outlineColor:'#D3E1EF',drawingColor:'#D93A2B',highlightColor:'#FFC12E',drawingWidth:Math.max(20,size/12),charDataLoader:(ch,done)=>done(STROKES[ch])});
+      dyWriter.quiz({showHintAfterMisses:2,onCorrectStroke:()=>tone([700],.06,'triangle',.12),onComplete:d=>{ const st=d.totalMistakes===0?3:d.totalMistakes<=2?2:1;
+        S.written[c]=Math.max(S.written[c]||0,st); addStars(st); save(); $('#dWrSt').textContent='⭐'.repeat(st)+' 잘 썼어요!'; sWin(); }}); }
+    return;
+  }
+  if(DY.stage==='quiz'){
+    const c=DY.queue[0], Pl=CH.filter(o=>examPool().includes(o.c));
+    const ws=poolWords().filter(w=>w.w.includes(c));
+    const t=pick(ws.length?['hun','find','read']:['hun','find']);
+    const q=t==='read'?qRead(pick(ws)):t==='hun'?qHun(c,Pl):qFind(c,Pl); DY.q=q; DY.first=true; DY.lock=false;
+    const done=DY.total-DY.queue.length;
+    el.innerHTML=dProg(DY.retried.has(c)?'🔁 다시 한 번!':'🧠 기억하고 있나요?',done,DY.total)+`<div class="prompt">${q.html}</div>
+      <div class="opts">${q.options.map((op,k)=>`<button class="opt ${q.optClass}" data-dk="${k}">${op.label}</button>`).join('')}</div><div class="cheer" id="dCheer"></div>`;
+    if(done===0&&!DY.saidStart){ DY.saidStart=true; say('복습 퀴즈를 풀어 보자!',q.speak); } else say(q.speak);
+    return;
+  }
+  // 끝
+  const R=srs(), tomorrow=addDays(today(),1), dueT=examPool().filter(c=>R[c]&&R[c].due<=tomorrow).length;
+  if(!P.done){ P.done=true; addStars(5); bump('daily'); save(); sWin(); confetti(); say(P.fresh.length+P.review.length?'오늘 공부 끝! 정말 잘했어!':'오늘은 복습할 한자가 없어요!'); }
+  el.innerHTML=`<div class="panel" style="text-align:center"><div class="result-big">🎉</div><div class="result-title">오늘 공부 끝!</div>
+    <p class="story">새 한자 ${P.fresh.length}개 · 복습 ${P.review.length}개${DY.total?` · 한 번에 맞힘 ${DY.ok}개`:''}<br>내일 복습할 한자: ${dueT}개 · 시험까지 ${ddayText()}</p>
+    <div class="row"><button class="btn grape" data-go="adv">⚔️ 모험하러 가기</button><button class="btn" data-go="home">처음으로</button></div></div>`;
+}
+function answerDaily(btn){
+  if(!DY||DY.lock||btn.disabled)return; const op=DY.q.options[+btn.dataset.dk], c=DY.queue[0];
+  if(op.correct){
+    DY.lock=true; btn.classList.add('right'); sGood();
+    if(DY.first){ record(DY.q.chars,true); if(!DY.retried.has(c))DY.ok++; addStars(1); }
+    const p=pick(PRAISE); $('#dCheer').textContent=p; say(p,DY.q.sayAns||'');
+    DY.queue.shift(); save();
+    setTimeout(()=>{ if(!DY)return; if(!DY.queue.length)DY.stage='done'; renderDaily(); },1300);
+  }else{
+    if(DY.first){ record(DY.q.chars,false); DY.first=false; if(!DY.retried.has(c)){ DY.retried.add(c); DY.queue.push(c); } }
+    btn.classList.add('wrong'); btn.disabled=true; sBad(); $('#dCheer').textContent='괜찮아, 다시 골라 봐요! 조금 있다 또 나와요'; say('다시 해볼까?'); save();
+  }
+}
+
 /* ================= 부모님 화면 ================= */
 let resetArm=false;
 function renderParent(){
@@ -1799,6 +1916,11 @@ function renderParent(){
       ${weak.length?`<div class="ptable">${weak.map(o=>{const s=S.stat[o.c];return `<div class="pc bad"><span class="han">${o.c}</span>${o.he}<br><span>맞음 ${s.r} · 틀림 ${s.w}</span></div>`}).join('')}</div><p class="small">퀴즈와 시험에서 이 한자들이 더 자주 나오도록 자동으로 조절돼요.</p>`:'<p>아직 틀린 한자가 없어요.</p>'}</div>
     <div class="panel"><h3 style="margin-top:0">한자별 기록 (${lvName()}까지)</h3>
       <div class="ptable">${P.map(o=>{const s=S.stat[o.c]||{r:0,w:0},t=s.r+s.w,acc=t?s.r/t:null;const cls=acc==null?'':acc>=.85?'good':acc>=.6?'mid':'bad';return `<div class="pc ${cls}"><span class="han">${o.c}</span>${o.he}<br><span>${t?`${s.r}/${t}`:'—'}${S.written[o.c]?' · ✍️':''}</span></div>`}).join('')}</div></div>
+    <div class="panel"><h3 style="margin-top:0">시험 날짜와 복습 계획</h3>
+      <div class="exrow"><input type="date" id="exDate" value="${exam().date}"><select id="exLv">${LEVELS.filter(L=>L.ready).map(L=>`<option value="${L.id}" ${L.id===exam().level?'selected':''}>${L.name}</option>`).join('')}</select><button class="btn grape" id="exSave">저장</button></div>
+      <p class="small">시험까지 ${ddayText()} · 하루 새 한자 ${newPerDay()}개 · 시험 전 7일은 새 한자 없이 복습만 해요. 맞힌 한자는 1·3·7·14·30일 뒤에 다시 나오고, 틀리면 다음 날 다시 나와요.</p>
+      <div class="kpis">${(()=>{ const R=srs(), pool=examPool(); const cnt=f=>pool.filter(f).length;
+        return [['아직 안 배움',cnt(c=>!R[c])],['배우는 중',cnt(c=>R[c]&&R[c].box<2)],['익히는 중',cnt(c=>R[c]&&R[c].box>=2&&R[c].box<4)],['잘 알아요',cnt(c=>R[c]&&R[c].box>=4)]].map(([l,v])=>`<div class="kpi">${l}<b>${v}</b></div>`).join(''); })()}</div></div>
     <div class="panel ptxt">
       <h3>알아 두세요</h3>
       한국어문회 한자능력검정시험 기준이에요. 실제 시험은 독음과 훈음을 <b>한글로 직접 써서</b> 답하니까, 앱에서 익힌 뒤 종이에 써 보는 연습도 같이 해 주세요.<br>
@@ -1847,6 +1969,11 @@ document.addEventListener('click',e=>{
   if(t.id==='wRetry'&&W.c){ loadWriter(W.c); return; }
   if(t.id==='wNext'){ const P=pool().map(o=>o.c); const i=P.indexOf(W.c); const c=P[(i+1)%P.length]; renderStrip(c); loadWriter(c); return; }
   if(t.id==='resetBtn'){ doReset(t); return; }
+  if(t.dataset.dk!==undefined){ answerDaily(t); return; }
+  if(t.id==='dNext'&&DY){ DY.i++; if(DY.i>=S.plan.fresh.length)buildQueue(); renderDaily(); return; }
+  if(t.dataset.book2){ openBook(t.dataset.book2); return; }
+  if(t.id==='exSave'){ const d=$('#exDate').value, lv=$('#exLv').value; if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){ toast('날짜를 골라 주세요'); return; }
+    S.exam={date:d,level:lv}; S.plan=null; save(); toast('시험 날짜를 저장했어요'); renderParent(); return; }
   if(t.id==='renameBtn'){ askName(false); return; }
 });
 document.addEventListener('submit',e=>{ if(e.target.id!=='nameForm')return; e.preventDefault();
