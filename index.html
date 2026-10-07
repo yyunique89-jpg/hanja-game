@@ -298,6 +298,29 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
 .mb-txt span{font-size:15px;opacity:.8}
 @keyframes ring{from{transform:scale(1);opacity:.95}to{transform:scale(1.9);opacity:0}}
 @keyframes hop{50%{transform:translateY(-5px)}}
+.advtabs{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.advtab{flex:1;min-width:140px;border:0;border-radius:18px;padding:10px 14px;background:var(--paper);box-shadow:0 5px 0 var(--sky2);display:grid;gap:2px;text-align:left}
+.advtab b{font-family:var(--f-display);font-weight:400;font-size:22px}
+.advtab small{font-size:13px;color:var(--ink2)}
+.advtab.on{background:var(--ink);color:#fff;box-shadow:0 5px 0 #0c1428}
+.advtab.on small{color:rgba(255,255,255,.8)}
+.advinfo{min-width:0;flex:1}
+.gearrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.gi{width:32px;height:32px;border-radius:10px;background:var(--soft);display:grid;place-items:center;font-size:18px;opacity:.45}
+.gi.on{opacity:1;background:#FFF3C9;box-shadow:inset 0 0 0 2px #F2C14E}
+.qchars{display:flex;justify-content:center;gap:10px;margin:6px 0 2px}
+.qchars .han{font-size:44px;line-height:1.1;background:var(--soft);border-radius:14px;padding:2px 10px}
+.equip{position:relative;width:200px;height:210px;margin:4px auto 0}
+.eq-hero{position:absolute;inset:0;animation:eqglow 1.6s .8s ease-out both}
+.eq-hero .hero-svg{width:100%;height:100%}
+.eq-hero .gnew{animation:gnew .7s .75s cubic-bezier(.2,1.5,.4,1) both;transform-box:fill-box;transform-origin:center}
+.eq-item{position:absolute;left:50%;top:0;font-size:56px;transform:translateX(-50%);animation:eqfly .8s ease-in both;pointer-events:none}
+.eq-burst{position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px;border-radius:50%;background:radial-gradient(circle,#FFF7C2,rgba(255,228,92,0));animation:eqburst .7s .75s ease-out both}
+.eq-name{font-family:var(--f-display);font-size:28px;margin-top:4px;animation:pop .5s .9s both}
+@keyframes eqfly{0%{transform:translate(-50%,-30px) scale(1.4);opacity:0}25%{opacity:1}100%{transform:translate(-50%,90px) scale(.3);opacity:0}}
+@keyframes gnew{0%{opacity:0;transform:scale(1.6)}100%{opacity:1;transform:none}}
+@keyframes eqburst{0%{transform:scale(0);opacity:1}100%{transform:scale(14);opacity:0}}
+@keyframes eqglow{0%{filter:drop-shadow(0 0 0 #FFE45C)}30%{filter:drop-shadow(0 0 18px #FFE45C) brightness(1.3)}100%{filter:drop-shadow(0 0 0 #FFE45C)}}
 /* 한자 모험: 전투 */
 .field{position:relative;border-radius:30px;min-height:300px;background:linear-gradient(180deg,var(--w1),var(--w2));overflow:hidden;box-shadow:0 6px 0 rgba(29,42,72,.18)}
 .field.shake{animation:shake .4s}
@@ -671,10 +694,13 @@ const LEVELS = [
   {id:'5',   name:'5급',  read:'오급',  ready:false},
 ];
 /* 한자어 | 읽기 (두음법칙 반영) */
-const WORDS = `大門 대문,父母 부모,兄弟 형제,南北 남북,東西 동서,山水 산수,國軍 국군,學校 학교,先生 선생,校門 교문,母校 모교,女王 여왕,中學 중학,生日 생일,人生 인생,外國 외국,韓國 한국,長女 장녀,火山 화산,三寸 삼촌,國民 국민,王室 왕실,敎室 교실,靑年 청년,白金 백금,土木 토목,生水 생수,萬一 만일,八月 팔월,外三寸 외삼촌,大韓民國 대한민국,東門 동문,女人 여인,年金 연금,校長 교장,學生 학생,軍人 군인,水門 수문,北韓 북한,南韓 남한,日月 일월,四寸 사촌,五月 오월,九月 구월,一生 일생,中年 중년,白人 백인,
-家門 가문,時間 시간,人間 인간,江山 강산,自動車 자동차,電車 전차,工場 공장,空氣 공기,日記 일기,男子 남자,男女 남녀,車道 차도,動物 동물,生物 생물,自立 자립,國立 국립,每日 매일,地方 지방,不安 불안,上下 상하,姓名 성명,世上 세상,手足 수족,木手 목수,市長 시장,食事 식사,安全 안전,午前 오전,午後 오후,左右 좌우,子女 자녀,電話 전화,電氣 전기,前後 전후,正門 정문,正直 정직,平安 평안,下山 하산,海水 해수,生活 생활,活動 활동,孝道 효도,孝子 효자,後門 후문,不足 부족,人力 인력,火力 화력,同時 동시,外出 외출,每年 매년,
-歌手 가수,校歌 교가,國歌 국가,食口 식구,入口 입구,出口 출구,國旗 국기,同生 동생,登山 등산,來日 내일,老人 노인,山林 산림,生命 생명,文字 문자,問答 문답,百姓 백성,算數 산수,色紙 색지,秋夕 추석,少年 소년,場所 장소,數學 수학,植物 식물,中心 중심,國語 국어,自然 자연,有名 유명,敎育 교육,入學 입학,祖上 조상,主人 주인,住民 주민,地下 지하,千年 천년,天地 천지,山川 산천,草木 초목,春秋 춘추,出生 출생,便安 편안,花草 화초,休日 휴일,村長 촌장,邑內 읍내,漢字 한자,祖父 조부,祖母 조모,夫人 부인,天然 천연`
-  .split(',').map(s=>s.trim()).filter(Boolean).map(s=>{const [w,r]=s.split(' ');return {w,r}});
+const WORDS = [...new Map(`大門 대문,父母 부모,兄弟 형제,南北 남북,東西 동서,山水 산수,國軍 국군,學校 학교,先生 선생,校門 교문,母校 모교,女王 여왕,中學 중학,生日 생일,人生 인생,外國 외국,韓國 한국,長女 장녀,火山 화산,三寸 삼촌,國民 국민,王室 왕실,敎室 교실,靑年 청년,白金 백금,土木 토목,生水 생수,萬一 만일,八月 팔월,外三寸 외삼촌,大韓民國 대한민국,東門 동문,女人 여인,年金 연금,校長 교장,學生 학생,軍人 군인,水門 수문,北韓 북한,南韓 남한,日月 일월,四寸 사촌,五月 오월,九月 구월,一生 일생,中年 중년,白人 백인,
+東北 동북,西北 서북,東南 동남,西南 서남,南山 남산,北門 북문,南門 남문,西門 서문,大學 대학,大學生 대학생,中學生 중학생,先金 선금,先王 선왕,先山 선산,王國 왕국,國王 국왕,國土 국토,民生 민생,人民 인민,父女 부녀,母女 모녀,父兄 부형,長兄 장형,生母 생모,生父 생부,外人 외인,二月 이월,三月 삼월,四月 사월,六月 유월,七月 칠월,十月 시월,十萬 십만,一萬 일만,五萬 오만,三國 삼국,萬年 만년,中國 중국,外國人 외국인,韓人 한인,白軍 백군,靑軍 청군,白日 백일,靑山 청산,靑白 청백,大小 대소,大王 대왕,大軍 대군,大人 대인,小人 소인,小國 소국,大國 대국,中小 중소,東大門 동대문,南大門 남대문,西大門 서대문,水木 수목,月日 월일,年月日 연월일,生年月日 생년월일,學年 학년,學長 학장,敎生 교생,校外 교외,室外 실외,室長 실장,長生 장생,白土 백토,八寸 팔촌,六寸 육촌,母國 모국,軍民 군민,萬民 만민,西山 서산,山中 산중,水中 수중,年中 연중,女軍 여군,
+家門 가문,時間 시간,人間 인간,江山 강산,自動車 자동차,電車 전차,工場 공장,空氣 공기,日記 일기,男子 남자,男女 남녀,車道 차도,動物 동물,生物 생물,自立 자립,國立 국립,每日 매일,不安 불안,上下 상하,姓名 성명,世上 세상,手足 수족,木手 목수,市長 시장,食事 식사,安全 안전,午前 오전,午後 오후,左右 좌우,子女 자녀,電話 전화,電氣 전기,前後 전후,正門 정문,正直 정직,平安 평안,下山 하산,海水 해수,生活 생활,活動 활동,孝道 효도,孝子 효자,後門 후문,不足 부족,人力 인력,火力 화력,每年 매년,
+家事 가사,家長 가장,農家 농가,農事 농사,農民 농민,農土 농토,國家 국가,大家 대가,外家 외가,王家 왕가,中間 중간,空間 공간,年間 연간,月間 월간,時事 시사,江南 강남,江北 강북,漢江 한강,工事 공사,工學 공학,人工 인공,木工 목공,空中 공중,空軍 공군,空白 공백,大氣 대기,生氣 생기,人氣 인기,日氣 일기,記事 기사,長男 장남,男學生 남학생,女學生 여학생,內外 내외,國內 국내,室內 실내,校內 교내,市內 시내,正答 정답,人道 인도,水道 수도,動力 동력,自動 자동,電動 전동,力道 역도,水力 수력,電力 전력,自力 자력,國力 국력,中立 중립,每事 매사,每月 매월,名物 명물,名人 명인,名門 명문,人名 인명,國名 국명,校名 교명,人物 인물,萬物 만물,東方 동방,西方 서방,南方 남방,北方 북방,四方 사방,八方 팔방,不正 부정,不平 불평,不孝 불효,不動 부동,事前 사전,事後 사후,食後 식후,食前 식전,上空 상공,上水道 상수도,下水道 하수도,上中下 상중하,下校 하교,下車 하차,後世 후세,手工 수공,手話 수화,先手 선수,後手 후수,市場 시장,市民 시민,市立 시립,食水 식수,生食 생식,正午 정오,子正 자정,王子 왕자,女子 여자,母子 모자,父子 부자,弟子 제자,長子 장자,自國 자국,自生 자생,自白 자백,立場 입장,場內 장내,場外 장외,前方 전방,前年 전년,前日 전일,全國 전국,全力 전력,全校 전교,正月 정월,直前 직전,直後 직후,直立 직립,平生 평생,平民 평민,平日 평일,下人 하인,下女 하녀,南海 남해,東海 동해,西海 서해,海軍 해군,海外 해외,自活 자활,活力 활력,孝女 효녀,後日 후일,後方 후방,人力車 인력거,
+歌手 가수,校歌 교가,國歌 국가,食口 식구,入口 입구,出口 출구,國旗 국기,同生 동생,登山 등산,來日 내일,老人 노인,山林 산림,生命 생명,文字 문자,問答 문답,百姓 백성,算數 산수,色紙 색지,秋夕 추석,少年 소년,場所 장소,數學 수학,植物 식물,中心 중심,國語 국어,自然 자연,有名 유명,敎育 교육,入學 입학,祖上 조상,主人 주인,住民 주민,地下 지하,千年 천년,天地 천지,山川 산천,草木 초목,春秋 춘추,出生 출생,便安 편안,花草 화초,休日 휴일,村長 촌장,邑內 읍내,漢字 한자,祖父 조부,祖母 조모,夫人 부인,天然 천연,地方 지방,外出 외출,同時 동시,
+人口 인구,白旗 백기,校旗 교기,立冬 입동,同名 동명,洞口 동구,洞長 동장,洞民 동민,登校 등교,登記 등기,來年 내년,來韓 내한,老母 노모,老年 노년,里長 이장,洞里 동리,農林 농림,面長 면장,正面 정면,前面 전면,命名 명명,人命 인명,文學 문학,文物 문물,漢文 한문,文人 문인,學問 학문,百萬 백만,百年 백년,數百 수백,工夫 공부,農夫 농부,人夫 인부,白色 백색,靑色 청색,七夕 칠석,少女 소녀,老少 노소,住所 주소,所有 소유,所長 소장,植木日 식목일,民心 민심,安心 안심,語學 어학,外國語 외국어,有力 유력,邑長 읍장,入場 입장,出入 출입,祖國 조국,先祖 선조,主食 주식,民主 민주,主力 주력,安住 안주,重大 중대,重力 중력,二重 이중,土地 토지,平地 평지,地名 지명,休紙 휴지,千萬 천만,天國 천국,天文 천문,天下 천하,草家 초가,農村 농촌,山村 산촌,江村 강촌,立春 입춘,立秋 입추,立夏 입하,春夏秋冬 춘하추동,出國 출국,出動 출동,便紙 편지,不便 불편,便所 변소,花木 화목,國花 국화,生花 생화,休校 휴교,休學 휴학,休火山 휴화산`
+  .split(',').map(s=>s.trim()).filter(Boolean).map(s=>{const [w,r]=s.split(' ');return [w,{w,r}]})).values()];
 /* 반대(상대)되는 한자 */
 const ANT = ['上下','左右','前後','男女','春秋','夏冬','天地','內外','出入','父母','兄弟','南北','東西','大小','老少','問答','手足','日月'];
 
@@ -784,14 +810,15 @@ const LINES=['이 한자의 뜻과 음은 뭘까?','이 낱말은 어떻게 읽�
   '보스 등장!','어떻게 읽을까?','뜻과 음은?','필살기 준비 완료!','마왕이 화났다! 조심해!','방패로 막았다!','앗, 늦었어!','아야!',
   '필살기! 이 한자를 써라!','필살기 발사!','용사가 한자 마왕을 물리쳤어! 한자 나라에 평화가 찾아왔어!','보스를 물리쳤다!',
   '물리쳤다! 보물 상자를 열어 볼까?','오늘 배울 새 한자야!','복습 퀴즈를 풀어 보자!','오늘 공부 끝! 정말 잘했어!','오늘은 복습할 한자가 없어요!','앗, 쓰러졌어. 괜찮아! 물약을 줄게. 다시 도전하자!'];
+const endLine=A=>{ const b=A.worlds[A.worlds.length-1].boss[1]; return `${b}${josa(b)} 물리쳤어! ${A.name}에 평화가 찾아왔어!`; };
 const storyLine=s=>s.replace(/\s*\([^)]*\)/g,'');
 function voiceLines(){
   const out={core:new Set(LINES)}; LEVELS.forEach(L=>{ if(L.ready)out[L.id]=new Set(); });
   PRAISE.forEach(p=>out.core.add(p)); for(let s=0;s<=100;s+=5)out.core.add(`${s}점!`);
   LEVELS.forEach(L=>out.core.add(lvLine(L)));
-  const names=[...MONSTERS.map(m=>m[1]),...WORLDS.flatMap(W=>[...W.mons.map(m=>m[1]),W.boss[1]])];
-  names.forEach(n=>{ out.core.add(`${n}${josaIG(n)} 나타났다!`); out.core.add(`야호! ${n}${josa(n)} 물리쳤어!`); });
-  WORLDS.forEach(W=>out.core.add(`보스를 물리쳤다! ${W.gear.n}${josa(W.gear.n)} 얻었어!`));
+  MONSTERS.forEach(m=>{ out.core.add(`${m[1]}${josaIG(m[1])} 나타났다!`); out.core.add(`야호! ${m[1]}${josa(m[1])} 물리쳤어!`); });
+  Object.values(ADVS).forEach(A=>{ A.worlds.forEach(W=>[...W.mons,W.boss].forEach(m=>out.core.add(`${m[1]}${josaIG(m[1])} 나타났다!`))); out.core.add(endLine(A)); });
+  Object.values(GEAR).forEach(g=>out.core.add(`보스를 물리쳤다! ${g.n}${josa(g.n)} 얻었어!`));
   Object.values(ITEMS).forEach(it=>out.core.add(it.n+'!'));
   CH.forEach(o=>{ out[o.lv].add(o.he); if(o.book){ const k='s'+o.lv; (out[k]=out[k]||new Set()); o.book.pages.forEach(t=>out[k].add(storyLine(t))); } });
   WORDS.forEach(w=>{ const lv=[...w.w].map(c=>BY[c].lv).sort((a,b)=>LV_INDEX[b]-LV_INDEX[a])[0]; out[lv].add(w.r); });
@@ -871,7 +898,7 @@ function renderHome(){
   $('#mlist').innerHTML=MISSIONS.map(m=>{const v=Math.min(S.today[m.k]||0,m.goal),d=v>=m.goal;return `<div class="mitem ${d?'done':''}"><span class="chk">${d?'✓':m.icon}</span><span class="t">${m.label}</span><b>${v}/${m.goal}</b></div>`}).join('')
     + (S.today.bonus?'<p class="small">오늘 미션 완료! 내일 또 만나요 🌙</p>':'<p class="small">미션을 다 하면 ⭐ 5개 보너스!</p>');
   renderDday();
-  { const w=advProgress(); $('#advProg').textContent=w>=WORLDS.length?'👑 마왕을 물리쳤어요! 다시 도전해도 좋아요':`지금: ${w+1}. ${WORLDS[w].name} · 장비 ${adv().gear.map(gearInfo).map(g=>g.e).join('')||'없음'}`; }
+  { setAdv(S.level); const w=advProgress(); $('#advProg').textContent=w>=WORLDS.length?`👑 ${ADV.name}을 구했어요! 다른 급수 왕국도 도전해요`:`${lvName()} ${ADV.name} · 지금: ${w+1}. ${WORLDS[w].name} · 장비 ${adv().gear.map(id=>GEAR[id].e).join('')||'없음 (맨몸)'}`; }
   $('#monrow').innerHTML=S.monsters.length?S.monsters.map(m=>`<span>${m}</span>`).join(''):'<span class="empty">몬스터 퀴즈에서 이기면 여기에 모여요</span>';
   save();
 }
@@ -1308,97 +1335,172 @@ function endExam(){
     <div class="row"><button class="btn seal" data-go="exam">다시 풀기</button><button class="btn" data-go="home">처음으로</button></div></div>`;
 }
 
-/* ================= 용사 그림 (SVG) ================= */
-let heroUid=0;
-function heroSVG(){
-  const u='h'+(++heroUid);
-  const blade=hasGear('sword2')?['#FFF3B0','#E8B92E']:hasGear('sword1')?['#E9F6FF','#7FB8E0']:['#EEF2F7','#9AA6B8'];
-  return `<svg class="hero-svg" viewBox="0 0 140 150" aria-label="용사">
-  <defs>
-    <linearGradient id="${u}b" x1="0" x2="1"><stop offset="0" stop-color="${blade[0]}"/><stop offset="1" stop-color="${blade[1]}"/></linearGradient>
-    <linearGradient id="${u}h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4EAF2"/><stop offset="1" stop-color="#9AA8BC"/></linearGradient>
-    <linearGradient id="${u}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B7BE0"/><stop offset="1" stop-color="#2556B0"/></linearGradient>
-  </defs>
-  <ellipse cx="70" cy="143" rx="36" ry="6" fill="rgba(20,25,45,.28)"/>
-  <g class="h-body">
-    <path class="h-cape" d="M60 74 Q40 96 30 134 Q46 130 54 138 Q60 126 66 136 Q70 104 76 80 Z" fill="#C2302A" stroke="#8E1F1A" stroke-width="2.5" stroke-linejoin="round"/>
-    <rect x="55" y="116" width="13" height="20" rx="5" fill="#33395A"/><rect x="73" y="116" width="13" height="20" rx="5" fill="#33395A"/>
-    <path d="M51 134 h19 a4 4 0 0 1 0 8 h-19 a4 4 0 0 1 0-8z" fill="#5A3A22"/><path d="M71 134 h20 a4 4 0 0 1 0 8 h-20 a4 4 0 0 1 0-8z" fill="#5A3A22"/>
-    <path d="M52 84 Q70 74 90 84 L94 120 Q71 128 48 120 Z" fill="url(#${u}t)" stroke="#1C3F86" stroke-width="2.5" stroke-linejoin="round"/>
-    <path d="M58 86 Q71 80 84 86 L82 104 Q71 109 60 104 Z" fill="url(#${u}h)" stroke="#6F7E96" stroke-width="2"/>
-    <path d="M71 86 L71 105" stroke="#6F7E96" stroke-width="1.6"/>
-    <rect x="49" y="108" width="45" height="7" rx="3" fill="#6B4A2B"/><rect x="67" y="107" width="9" height="9" rx="2" fill="#F2C14E" stroke="#B88A1E" stroke-width="1.5"/>
-    <g class="h-shield">
-      <circle cx="47" cy="100" r="17" fill="#C98B4A" stroke="#7E5124" stroke-width="4"/>
-      <circle cx="47" cy="100" r="11" fill="none" stroke="#F2C14E" stroke-width="2"/>
-      <text x="47" y="106.5" text-anchor="middle" font-size="16" font-weight="900" font-family="'Noto Serif KR',serif" fill="#7E1F18">勇</text>
-    </g>
-    <g class="h-head">
-      <circle cx="73" cy="54" r="27" fill="#FFD9B8" stroke="#E2A983" stroke-width="2"/>
-      <path d="M44 56 Q42 22 73 21 Q104 22 102 56 L97 56 Q96 36 73 35 Q50 36 49 56 Z" fill="url(#${u}h)" stroke="#6F7E96" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M47 46 Q73 36 99 46" fill="none" stroke="#F2C14E" stroke-width="4" stroke-linecap="round"/>
-      <path d="M44 56 L44 68 Q48 72 52 66 L50 56 Z" fill="url(#${u}h)" stroke="#6F7E96" stroke-width="2"/>
-      <path class="h-plume" d="M70 22 Q62 2 38 8 Q50 12 52 18 Q42 16 36 22 Q52 24 62 30 Z" fill="#D93A2B" stroke="#8E1F1A" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M66 50 l6 2" stroke="#4A2E1E" stroke-width="2.6" stroke-linecap="round"/><path d="M90 50 l-6 2" stroke="#4A2E1E" stroke-width="2.6" stroke-linecap="round"/>
-      <ellipse cx="70" cy="58" rx="3.6" ry="5" fill="#1D2A48"/><ellipse cx="86" cy="58" rx="3.6" ry="5" fill="#1D2A48"/>
-      <circle cx="71.2" cy="56.2" r="1.3" fill="#fff"/><circle cx="87.2" cy="56.2" r="1.3" fill="#fff"/>
-      <ellipse cx="63" cy="66" rx="4.5" ry="2.6" fill="#FF9E9E" opacity=".6"/><ellipse cx="93" cy="66" rx="4.5" ry="2.6" fill="#FF9E9E" opacity=".6"/>
-      <path d="M74 68 Q78 72 82 68" fill="none" stroke="#7A3B2A" stroke-width="2.4" stroke-linecap="round"/>
-    </g>
-    <g class="h-arm">
-      <path d="M86 88 Q98 92 102 100" fill="none" stroke="#2556B0" stroke-width="11" stroke-linecap="round"/>
-      <g class="h-sword">
-        <path class="h-blade" d="M99.5 92 L104.5 92 L105.5 38 L102 28 L98.5 38 Z" fill="url(#${u}b)" stroke="#5E6A80" stroke-width="1.5" stroke-linejoin="round"/>
-        <path d="M102 34 L102 90" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/>
-        <rect x="91" y="91" width="22" height="5.5" rx="2.5" fill="#F2C14E" stroke="#B88A1E" stroke-width="1.3"/>
-        <rect x="99.5" y="96" width="5" height="12" rx="2" fill="#6B4A2B"/>
-        <circle cx="102" cy="110" r="3.6" fill="#F2C14E" stroke="#B88A1E" stroke-width="1.2"/>
-      </g>
-      <circle cx="102" cy="101" r="6" fill="#FFD9B8" stroke="#E2A983" stroke-width="1.8"/>
-    </g>
-  </g>
-</svg>`;
-}
-
-/* ================= 한자 모험 (RPG) =================
-   세계 5개 × (몬스터 3 + 보스 1). 몬스터 힘 게이지가 차기 전에 맞혀야 공격! */
-const GROUPS={
-  num:'一二三四五六七八九十百千萬',
-  nature:'山水木火土日月金江川林草花天地空海春夏秋冬夕氣電靑白色',
-  people:'人父母兄弟女男子夫祖老孝王民家姓名心手足口面自主',
-  dir:'東西南北上下左右前後內外中出入方大小長少',
-  life:'學校敎室先生文字語話問答歌算數記紙旗事物工市場道車食住活休'
+/* ================= 장비 =================
+   용사는 맨몸(평상복·맨발·맨손)으로 시작해서, 보스를 이길 때마다 장비를 하나씩 입어요. 장비는 모든 왕국에서 함께 써요 */
+const GEAR={
+  feet1:{slot:'feet',e:'👟',n:'가죽 신발',d:'몬스터 힘이 조금 천천히 차요'},
+  weapon1:{slot:'weapon',e:'🪵',n:'나무 검',d:'맨손 대신 칼로 공격! 크리티컬이 잘 나와요'},
+  shield1:{slot:'shield',e:'🛡️',n:'나무 방패',d:'싸움마다 첫 공격을 막아요'},
+  head1:{slot:'head',e:'⛑️',n:'철 투구',d:'하트 +1'},
+  body1:{slot:'body',e:'🦺',n:'가죽 갑옷',d:'하트 +1'},
+  cape:{slot:'cape',e:'🧣',n:'용사 망토',d:'2번 연속 맞히면 필살기 준비!'},
+  weapon2:{slot:'weapon',e:'🗡️',n:'강철 검',d:'더 강한 칼! 크리티컬과 필살기가 세져요'},
+  feet2:{slot:'feet',e:'👢',n:'바람 신발',d:'몬스터 힘이 훨씬 천천히 차요'},
+  ring:{slot:'ring',e:'💍',n:'생명 반지',d:'하트 +1'},
+  body2:{slot:'body',e:'🥇',n:'황금 갑옷',d:'하트 +1'},
+  shield2:{slot:'shield',e:'🔰',n:'용 방패',d:'싸움마다 공격을 두 번 막아요'},
+  head2:{slot:'head',e:'🪖',n:'깃털 투구',d:'하트 +1'},
+  weapon3:{slot:'weapon',e:'⚔️',n:'빛의 검',d:'가장 강한 칼! 필살기가 엄청 세져요'},
+  amulet:{slot:'amulet',e:'⭐',n:'별 목걸이',d:'크리티컬이 더 자주 나와요'},
+  crown:{slot:'crown',e:'👑',n:'용사의 왕관',d:'한자 대마왕을 물리친 진짜 용사의 증거'},
 };
-const WORLDS=[
-  {name:'숫자 숲',bg:['#C9EDB8','#6DBE69'],g:'num',mons:[['🐛','꿈틀 애벌레'],['🐌','느림보 달팽이'],['🦔','따끔 고슴도치']],boss:['🦍','킹콩 대장'],gear:{id:'boots',e:'👢',n:'바람 신발',d:'몬스터 힘이 천천히 차요'},hp:5,dur:16},
-  {name:'자연 계곡',bg:['#C6EAF7','#4FA8C9'],g:'nature',mons:[['🐸','개굴 왕눈이'],['🦎','날쌘 도마뱀'],['🐍','쉭쉭 뱀']],boss:['🐊','악어 장군'],gear:{id:'sword1',e:'🗡️',n:'강철 검',d:'공격력 +1'},hp:6,dur:15},
-  {name:'도깨비 마을',bg:['#F6DDBE','#D0894C'],g:'people',mons:[['👻','장난 유령'],['👺','빨간 도깨비'],['🧟','흐느적 좀비']],boss:['👹','도깨비 대장'],gear:{id:'ring',e:'💍',n:'생명 반지',d:'하트 +1'},hp:7,dur:14},
-  {name:'파도 바다',bg:['#CFE0FB','#3F70D2'],g:'dir',mons:[['🦀','집게 꽃게'],['🐡','뾰족 복어'],['🦈','이빨 상어']],boss:['🐙','대왕 문어'],gear:{id:'sword2',e:'⚔️',n:'빛의 검',d:'공격력 +1'},hp:8,dur:13},
-  {name:'마왕성',bg:['#D3C7EE','#4B3B8F'],g:'all',mons:[['🦇','박쥐 경비병'],['💀','해골 기사'],['🐉','검은 용']],boss:['😈','한자 마왕'],gear:{id:'crown',e:'👑',n:'용사의 왕관',d:'한자 마왕을 물리친 증거'},hp:9,dur:12},
-];
 const ITEMS={potion:{e:'🧪',n:'회복 물약',d:'하트 2개 회복'},shield:{e:'🛡️',n:'방패',d:'공격 한 번 막기'},scroll:{e:'📜',n:'힌트 두루마리',d:'틀린 답 2개 지우기'},hour:{e:'⏳',n:'모래시계',d:'10초 동안 몬스터 멈춤'}};
-function adv(){ if(!S.adv)S.adv={cleared:{},items:{potion:2,shield:1,scroll:1,hour:1},gear:[]}; return S.adv; }
+function adv(){
+  if(!S.adv||S.adv.v!==2)S.adv={v:2,items:(S.adv&&S.adv.items)||{potion:2,shield:1,scroll:1,hour:1},gear:[],lv:{}};
+  return S.adv; }
+function advLv(id){ const A=adv(); id=id||S.level; return A.lv[id]||(A.lv[id]={cleared:{}}); }
 const hasGear=id=>adv().gear.includes(id);
-const gearInfo=id=>WORLDS.find(W=>W.gear.id===id).gear;
-const maxHearts=()=>5+(hasGear('ring')?1:0);
-const swordBonus=()=>(hasGear('sword1')?1:0)+(hasGear('sword2')?1:0);
-const skey=(w,s)=>w+'-'+s;
-function unlocked(w,s){ if(w===0&&s===0)return true; return s>0?!!adv().cleared[skey(w,s-1)]:!!adv().cleared[skey(w-1,3)]; }
-function advProgress(){ const A=adv(); let w=0; while(w<WORLDS.length&&A.cleared[skey(w,3)])w++; return w; }
-function worldChars(w){
-  const ps=poolSet(); let cs=WORLDS[w].g==='all'?[...ps]:[...GROUPS[WORLDS[w].g]].filter(c=>ps.has(c));
-  if(cs.length<8){ const rest=[...ps].filter(c=>!cs.includes(c)); cs=cs.concat(wsample(rest,8-cs.length)); }
-  return cs;
+const gearInfo=id=>Object.assign({id},GEAR[id]);
+const weaponTier=()=>hasGear('weapon3')?3:hasGear('weapon2')?2:hasGear('weapon1')?1:0;
+const maxHearts=()=>5+['head1','head2','body1','body2','ring'].filter(hasGear).length;
+const swordBonus=()=>weaponTier();
+const comboNeed=()=>hasGear('cape')?2:3;
+const critChance=()=>.1+weaponTier()*.07+(hasGear('amulet')?.15:0);
+const gaugeSlow=()=>hasGear('feet2')?1.25:hasGear('feet1')?1.12:1;
+const startShield=()=>hasGear('shield2')?2:hasGear('shield1')?1:0;
+
+/* ================= 용사 그림 (SVG): 가진 장비대로 그려요 ================= */
+let heroUid=0;
+function heroSVG(opt){
+  opt=opt||{}; const u='h'+(++heroUid), has=id=>hasGear(id), nw=s=>opt.newSlot===s?' gnew':'';
+  const wt=weaponTier(), body=has('body2')?2:has('body1')?1:0, head=has('head2')?2:has('head1')?1:0, feet=has('feet2')?2:has('feet1')?1:0, shield=has('shield2')?2:has('shield1')?1:0;
+  const blade=[null,['#D9A066','#9A6334'],['#EEF2F7','#8F9CB0'],['#FFF3B0','#E8B92E']][wt];
+  const sleeve=['#EDE6D6','#8A5A2B','#2556B0'][body];
+  let g=`<svg class="hero-svg" viewBox="0 0 140 150" aria-label="용사"><defs>
+    <linearGradient id="${u}b" x1="0" x2="1"><stop offset="0" stop-color="${blade?blade[0]:'#fff'}"/><stop offset="1" stop-color="${blade?blade[1]:'#fff'}"/></linearGradient>
+    <linearGradient id="${u}h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${head===2?'#FFE07A':'#E4EAF2'}"/><stop offset="1" stop-color="${head===2?'#D9A21E':'#9AA8BC'}"/></linearGradient>
+    <linearGradient id="${u}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE7A0"/><stop offset="1" stop-color="#E0A92A"/></linearGradient></defs>
+  <ellipse cx="70" cy="143" rx="36" ry="6" fill="rgba(20,25,45,.28)"/><g class="h-body">`;
+  if(has('cape'))g+=`<g class="g-cape${nw('cape')}"><path class="h-cape" d="M60 74 Q40 96 30 134 Q46 130 54 138 Q60 126 66 136 Q70 104 76 80 Z" fill="#C2302A" stroke="#8E1F1A" stroke-width="2.5" stroke-linejoin="round"/></g>`;
+  // 다리와 발
+  g+=`<rect x="56" y="116" width="11" height="20" rx="4" fill="#FFD9B8" stroke="#E2A983" stroke-width="1.5"/><rect x="74" y="116" width="11" height="20" rx="4" fill="#FFD9B8" stroke="#E2A983" stroke-width="1.5"/>
+    <path d="M50 112 H92 L90 124 H74 L71 118 L68 124 H52Z" fill="#3B4A7A"/>`;
+  g+=`<g class="g-feet${nw('feet')}">`+(feet===0?`<ellipse cx="60" cy="138" rx="8" ry="4.5" fill="#FFD9B8" stroke="#E2A983" stroke-width="1.5"/><ellipse cx="80" cy="138" rx="8" ry="4.5" fill="#FFD9B8" stroke="#E2A983" stroke-width="1.5"/>`
+    :feet===1?`<path d="M52 128 h16 v6 a4 4 0 0 1 -4 4 h-14 a4 4 0 0 1 0-8z" fill="#7A4A2A" stroke="#4E2E18" stroke-width="1.5"/><path d="M72 128 h16 v6 a4 4 0 0 1 -4 4 h-14 a4 4 0 0 1 0-8z" fill="#7A4A2A" stroke="#4E2E18" stroke-width="1.5"/>`
+    :`<path d="M52 124 h16 v10 a4 4 0 0 1 -4 4 h-14 a4 4 0 0 1 0-8 h2z" fill="#2F7BE0" stroke="#1C4F9C" stroke-width="1.5"/><path d="M72 124 h16 v10 a4 4 0 0 1 -4 4 h-14 a4 4 0 0 1 0-8 h2z" fill="#2F7BE0" stroke="#1C4F9C" stroke-width="1.5"/><path d="M52 126 l-9 -6 l3 8 Z M72 126 l-9 -6 l3 8Z" fill="#FFFFFF" stroke="#9FC7F2" stroke-width="1"/>`)+`</g>`;
+  // 몸통
+  g+=`<g class="g-body${nw('body')}">`+(body===0
+    ?`<path d="M52 84 Q70 76 90 84 L93 116 Q71 122 49 116 Z" fill="#F4F1EA" stroke="#B9B3A6" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 108 Q71 113 92 108" stroke="#C9A570" stroke-width="3" fill="none"/><path d="M66 82 Q71 88 76 82" stroke="#B9B3A6" stroke-width="2" fill="none"/>`
+    :body===1?`<path d="M52 84 Q70 74 90 84 L94 120 Q71 128 48 120 Z" fill="#9A6A3E" stroke="#5E3B1F" stroke-width="2.5" stroke-linejoin="round"/><path d="M58 88 Q71 82 84 88 L82 104 Q71 109 60 104 Z" fill="#B88350" stroke="#5E3B1F" stroke-width="2"/><path d="M60 92 h22 M61 98 h20" stroke="#5E3B1F" stroke-width="1.2" stroke-dasharray="2 3"/><rect x="49" y="108" width="45" height="7" rx="3" fill="#4E2E18"/><rect x="67" y="107" width="9" height="9" rx="2" fill="#C9A570" stroke="#4E2E18" stroke-width="1.5"/>`
+    :`<path d="M52 84 Q70 74 90 84 L94 120 Q71 128 48 120 Z" fill="#2F6FD6" stroke="#1C3F86" stroke-width="2.5" stroke-linejoin="round"/><path d="M57 85 Q71 78 85 85 L83 106 Q71 112 59 106 Z" fill="url(#${u}g)" stroke="#A8741A" stroke-width="2"/><path d="M71 85 V108" stroke="#A8741A" stroke-width="1.6"/><path d="M62 90 Q66 88 68 92" stroke="#FFF7D6" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="49" y="108" width="45" height="7" rx="3" fill="#6B4A2B"/><rect x="67" y="107" width="9" height="9" rx="2" fill="#F2C14E" stroke="#B88A1E" stroke-width="1.5"/>`)+`</g>`;
+  if(has('amulet'))g+=`<g class="g-amulet${nw('amulet')}"><path d="M64 82 Q71 92 78 82" stroke="#F2C14E" stroke-width="1.6" fill="none"/><path d="M71 89 l2 4 4.4 .6 -3.2 3 .8 4.4 -4 -2.1 -4 2.1 .8 -4.4 -3.2 -3 4.4 -.6z" fill="#FFE45C" stroke="#C9971A" stroke-width="1"/></g>`;
+  // 방패 (왼팔)
+  g+=`<g class="g-shield${nw('shield')}">`+(shield===0?`<circle cx="50" cy="100" r="6" fill="#FFD9B8" stroke="#E2A983" stroke-width="1.8"/>`
+    :shield===1?`<circle cx="47" cy="100" r="17" fill="#C98B4A" stroke="#7E5124" stroke-width="4"/><circle cx="47" cy="100" r="11" fill="none" stroke="#F2C14E" stroke-width="2"/><text x="47" y="106.5" text-anchor="middle" font-size="16" font-weight="900" font-family="'Noto Serif KR',serif" fill="#7E1F18">勇</text>`
+    :`<path d="M29 84 H65 V102 Q65 118 47 124 Q29 118 29 102Z" fill="#C9D3E0" stroke="#F2C14E" stroke-width="4" stroke-linejoin="round"/><path d="M35 89 H59 V102 Q59 113 47 118 Q35 113 35 102Z" fill="#2F5DA8"/><text x="47" y="109" text-anchor="middle" font-size="17" font-weight="900" font-family="'Noto Serif KR',serif" fill="#FFE07A">勇</text>`)+`</g>`;
+  // 머리
+  g+=`<g class="h-head"><circle cx="73" cy="54" r="27" fill="#FFD9B8" stroke="#E2A983" stroke-width="2"/>`;
+  g+=`<g class="g-head${nw('head')}">`+(head===0
+    ?`<path d="M45 54 Q42 24 73 23 Q104 24 101 54 Q97 40 88 38 Q90 44 84 46 Q80 38 70 40 Q62 44 54 42 Q49 46 45 54Z" fill="#4A2E1E" stroke="#2E1B10" stroke-width="2" stroke-linejoin="round"/>`
+    :`<path d="M44 56 Q42 22 73 21 Q104 22 102 56 L97 56 Q96 36 73 35 Q50 36 49 56 Z" fill="url(#${u}h)" stroke="${head===2?'#A8741A':'#6F7E96'}" stroke-width="2.5" stroke-linejoin="round"/><path d="M44 56 L44 68 Q48 72 52 66 L50 56 Z" fill="url(#${u}h)" stroke="${head===2?'#A8741A':'#6F7E96'}" stroke-width="2"/>`
+     +(head===1?`<path d="M70 22 Q62 2 38 8 Q50 12 52 18 Q42 16 36 22 Q52 24 62 30 Z" fill="#D93A2B" stroke="#8E1F1A" stroke-width="2" stroke-linejoin="round"/>`
+       :`<path d="M47 46 Q73 36 99 46" fill="none" stroke="#FFF3B0" stroke-width="4" stroke-linecap="round"/><path d="M72 22 Q70 -2 96 -6 Q86 4 90 8 Q78 10 80 26Z" fill="#4FB3F0" stroke="#1C6FA8" stroke-width="2" stroke-linejoin="round"/><path d="M76 20 Q80 6 92 0" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>`))+`</g>`;
+  g+=`<path d="M66 50 l6 2" stroke="#4A2E1E" stroke-width="2.6" stroke-linecap="round"/><path d="M90 50 l-6 2" stroke="#4A2E1E" stroke-width="2.6" stroke-linecap="round"/>
+    <ellipse cx="70" cy="58" rx="3.6" ry="5" fill="#1D2A48"/><ellipse cx="86" cy="58" rx="3.6" ry="5" fill="#1D2A48"/><circle cx="71.2" cy="56.2" r="1.3" fill="#fff"/><circle cx="87.2" cy="56.2" r="1.3" fill="#fff"/>
+    <ellipse cx="63" cy="66" rx="4.5" ry="2.6" fill="#FF9E9E" opacity=".6"/><ellipse cx="93" cy="66" rx="4.5" ry="2.6" fill="#FF9E9E" opacity=".6"/><path d="M74 68 Q78 72 82 68" fill="none" stroke="#7A3B2A" stroke-width="2.4" stroke-linecap="round"/>`;
+  if(has('crown'))g+=`<g class="g-crown${nw('crown')}"><path d="M56 ${head?16:22} L60 ${head?2:8} L67 ${head?11:17} L73 ${head?-2:4} L79 ${head?11:17} L86 ${head?2:8} L90 ${head?16:22}Z" fill="url(#${u}g)" stroke="#A8741A" stroke-width="2" stroke-linejoin="round"/><circle cx="73" cy="${head?10:16}" r="2.6" fill="#E8453C"/><circle cx="62" cy="${head?13:19}" r="1.8" fill="#4FB3F0"/><circle cx="84" cy="${head?13:19}" r="1.8" fill="#4FB3F0"/></g>`;
+  g+=`</g>`;
+  // 오른팔 + 무기
+  g+=`<g class="h-arm"><path d="M86 88 Q98 92 102 100" fill="none" stroke="${sleeve}" stroke-width="11" stroke-linecap="round"/>`;
+  g+=`<g class="g-weapon${nw('weapon')}">`+(wt===0?'':`<g class="h-sword"><path class="h-blade" d="M99.5 92 L104.5 92 L105.5 ${wt===1?50:38} L102 ${wt===1?42:28} L98.5 ${wt===1?50:38} Z" fill="url(#${u}b)" stroke="${wt===1?'#6B4423':'#5E6A80'}" stroke-width="1.5" stroke-linejoin="round"/>`
+     +(wt>1?`<path d="M102 34 L102 90" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/>`:'')
+     +`<rect x="${wt===1?94:91}" y="91" width="${wt===1?16:22}" height="5.5" rx="2.5" fill="${wt===1?'#7A4A2A':'#F2C14E'}" stroke="${wt===1?'#4E2E18':'#B88A1E'}" stroke-width="1.3"/><rect x="99.5" y="96" width="5" height="12" rx="2" fill="#6B4A2B"/><circle cx="102" cy="110" r="3.6" fill="${wt===1?'#7A4A2A':'#F2C14E'}" stroke="${wt===1?'#4E2E18':'#B88A1E'}" stroke-width="1.2"/></g>`)+`</g>`;
+  g+=`<circle cx="102" cy="101" r="${wt?6:7}" fill="#FFD9B8" stroke="#E2A983" stroke-width="1.8"/>`;
+  if(has('ring'))g+=`<g class="g-ring${nw('ring')}"><circle cx="97.5" cy="104" r="2.4" fill="none" stroke="#F2C14E" stroke-width="1.8"/><circle cx="97" cy="102" r="1.3" fill="#E8453C"/></g>`;
+  g+=`</g></g></svg>`;
+  return g;
 }
 
-/* ---- 모험 지도: 아래 출발 → 위 마왕성, 구불구불한 길 ---- */
-const MAP_W=400, REG_H=340;
+/* ================= 한자 모험: 급수마다 다른 왕국 =================
+   8급 숲 왕국(4개 땅×5칸) → 7급Ⅱ 바다 왕국(5×6) → 7급 하늘 왕국(6×6).
+   그 급수에서 새로 나오는 한자와 낱말을 퀘스트마다 나눠 넣어서, 지도를 끝까지 깨면 모두 한 번 이상 만나요 */
+const ADVS={
+  '8':{name:'숲 왕국',stages:5,hits:5,wrong:.25,dur:[16,15,14,13],worlds:[
+    {name:'새싹 숲',bg:['#C9EDB8','#6DBE69'],deco:['tree','tree','bush','flower','rock'],mons:[['🐛','꿈틀 애벌레'],['🐌','느림보 달팽이'],['🦔','따끔 고슴도치'],['🐝','윙윙 꿀벌']],boss:['🦍','킹콩 대장'],gear:'feet1'},
+    {name:'맑은 계곡',bg:['#C7EBC0','#9BD6C6'],deco:['mountain','pine','flower','rock','bush'],river:true,mons:[['🐸','개굴 왕눈이'],['🦎','날쌘 도마뱀'],['🐍','쉭쉭 뱀'],['🦆','꽥꽥 오리']],boss:['🐊','악어 장군'],gear:'weapon1'},
+    {name:'도깨비 마을',bg:['#F3DDB8','#E2B984'],deco:['house','house','tree','lantern','fence'],mons:[['👻','장난 유령'],['👺','빨간 도깨비'],['🧟','흐느적 좀비'],['🎃','호박 도깨비']],boss:['👹','도깨비 대장'],gear:'shield1'},
+    {name:'어둠의 성',bg:['#8B7BB8','#4A3C78'],deco:['deadtree','spike','rock','bones'],castle:['#3D2F63','#7A2E52'],mons:[['🦇','박쥐 경비병'],['💀','해골 기사'],['🕷️','거미 마법사'],['🐺','늑대 장군']],boss:['😈','어둠의 마왕'],gear:'head1'}]},
+  '7-2':{name:'바다 왕국',stages:6,hits:6,wrong:.3,dur:[15,14,13,12,11],worlds:[
+    {name:'모래 해변',bg:['#FBE7B5','#F2D08A'],deco:['wave','rock','fish','bush'],mons:[['🦀','집게 꽃게'],['🐚','소라 병사'],['🐡','뾰족 복어'],['🦞','가재 기사'],['🦭','물개 씨름꾼']],boss:['🐢','거북 대장'],gear:'body1'},
+    {name:'산호 숲',bg:['#9ED3F5','#4E95DB'],deco:['fish','fish','wave','rock'],island:true,mons:[['🐠','줄무늬 물고기'],['🪼','찌릿 해파리'],['🦑','먹물 오징어'],['🐙','여덟발 문어'],['🦐','통통 새우']],boss:['🦈','상어 왕'],gear:'cape'},
+    {name:'해적 섬',bg:['#E9D7A8','#C9A866'],deco:['house','tree','rock','wave'],island:true,mons:[['🦜','앵무 해적'],['🐀','생쥐 해적'],['🐒','원숭이 해적'],['🦨','냄새 해적'],['🐊','악어 해적']],boss:['🐳','고래 선장'],gear:'weapon2'},
+    {name:'얼음 섬',bg:['#E8F4FF','#A9CDEB'],deco:['pine','rock','rock','bush'],mons:[['🐧','펭귄 병사'],['🦊','눈여우'],['☃️','눈사람'],['🐺','얼음 늑대'],['🦌','눈사슴']],boss:['🐻‍❄️','얼음 곰왕'],gear:'feet2'},
+    {name:'심해 궁전',bg:['#3E5FA8','#1E2F66'],deco:['fish','wave','rock','bones'],castle:['#1F5B6B','#2F8FA0'],mons:[['🐡','가시 복어'],['🦑','대왕 오징어'],['🐟','등불 아귀'],['🦈','검은 상어'],['🐉','물뱀 용']],boss:['🐲','바다 용왕'],gear:'ring'}]},
+  '7':{name:'하늘 왕국',stages:6,hits:7,wrong:.35,dur:[14,13,12,11,10,10],worlds:[
+    {name:'구름 들판',bg:['#E6F4FF','#BFE0FA'],deco:['bush','flower','flower','tree'],mons:[['🐑','구름 양'],['🐤','삐약 병아리'],['🦋','나비 요정'],['🐇','깡총 토끼'],['🦉','부엉 박사']],boss:['🦅','독수리 장군'],gear:'body2'},
+    {name:'번개 산',bg:['#C9CED8','#7D8597'],deco:['mountain','rock','pine'],mons:[['🐐','번개 염소'],['🐗','멧돼지 돌격대'],['🦏','코뿔소 장사'],['🐆','날쌘 표범'],['🦬','들소 대장']],boss:['🦁','사자왕'],gear:'shield2'},
+    {name:'마법 숲',bg:['#C9B8EE','#7C62C9'],deco:['tree','flower','bush','pine'],mons:[['🍄','독버섯'],['🦉','마법 올빼미'],['🐍','마법 뱀'],['🕷️','보라 거미'],['🦇','밤 박쥐']],boss:['🌳','나무 거인'],gear:'head2'},
+    {name:'불꽃 화산',bg:['#F7B08A','#C9432E'],deco:['mountain','rock','spike'],mons:[['🦎','불도마뱀'],['🦂','불 전갈'],['🐗','용암 멧돼지'],['🐲','아기 용'],['🔥','불꽃 정령']],boss:['🐉','불의 용'],gear:'weapon3'},
+    {name:'별빛 탑',bg:['#3B3F8F','#1B1E4F'],deco:['spike','rock'],mons:[['👾','외계 꼬마'],['🤖','로봇 병사'],['🛸','비행접시'],['👽','별 손님'],['☄️','혜성 돌']],boss:['🐙','우주 문어'],gear:'amulet'},
+    {name:'대마왕성',bg:['#6B4E8F','#2B1D45'],deco:['deadtree','spike','bones','rock'],castle:['#2B1D45','#8C1F2E'],mons:[['🦇','어둠 박쥐'],['💀','해골 장군'],['🧟','좀비 기사'],['👹','도깨비 왕'],['🐲','어둠의 용']],boss:['😈','한자 대마왕'],gear:'crown'}]},
+};
+let ADV=ADVS['8'], WORLDS=ADV.worlds, KS=ADV.stages;
+function setAdv(id){ if(!ADVS[id])id='8'; ADV=ADVS[id]; ADV.id=id; WORLDS=ADV.worlds; KS=ADV.stages; }
+const skey=(w,s)=>w+'-'+s;
+function unlocked(w,s){ const C=advLv().cleared; if(w===0&&s===0)return true; return s>0?!!C[skey(w,s-1)]:!!C[skey(w-1,KS-1)]; }
+function advProgress(){ const C=advLv().cleared; let w=0; while(w<WORLDS.length&&C[skey(w,KS-1)])w++; return w; }
+
+/* 퀘스트마다 다른 한자: 그 급수의 새 한자를 칸마다 나누고, 낱말은 그 한자가 든 칸에 골고루 */
+const QUESTS={};
+function lvWords(id){ return WORDS.filter(w=>[...w.w].every(c=>BY[c])&&[...w.w].map(c=>LV_INDEX[BY[c].lv]).reduce((a,b)=>Math.max(a,b),0)===LV_INDEX[id]); }
+function quests(id){
+  if(QUESTS[id])return QUESTS[id];
+  const A=ADVS[id], r=rng(id.length*131+7), chars=CH.filter(o=>o.lv===id).map(o=>o.c);
+  for(let i=chars.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [chars[i],chars[j]]=[chars[j],chars[i]]; }
+  const nW=A.worlds.length, nS=A.stages-1, slots=[];
+  for(let w=0;w<nW;w++)for(let s=0;s<nS;s++)slots.push({w,s,chars:[],words:[]});
+  chars.forEach((c,i)=>slots[i%slots.length].chars.push(c));
+  const where={}; slots.forEach((q,i)=>q.chars.forEach(c=>where[c]=i));
+  lvWords(id).forEach(wd=>{ const cand=[...new Set([...wd.w].filter(c=>where[c]!=null).map(c=>where[c]))];
+    if(!cand.length)return; cand.sort((a,b)=>slots[a].words.length-slots[b].words.length); slots[cand[0]].words.push(wd.w); });
+  // 한 칸에 낱말이 너무 많으면 뒤쪽 칸으로 나눠 보내서 퀘스트 길이를 고르게
+  const CAP=6;
+  slots.forEach((q,i)=>{ while(q.words.length>CAP){ const later=slots.slice(i+1).filter(x=>x.words.length<CAP); if(!later.length)break;
+    later.sort((a,b)=>a.words.length-b.words.length); later[0].words.push(q.words.pop()); } });
+  return QUESTS[id]={slots,get:(w,s)=>slots.find(q=>q.w===w&&q.s===s)};
+}
+function questDeck(w,s){
+  const id=ADV.id, Q=quests(id), boss=s===KS-1, last=boss&&w===WORLDS.length-1, P=pool();
+  const item=(c)=>({t:pick(['hun','find']),c}), read=(wd)=>({t:'read',w:wd});
+  let deck=[];
+  if(!boss){ const q=Q.get(w,s); deck=[...q.chars.map(item),...q.words.map(read)];
+    const before=Q.slots.filter(x=>x.w<w||(x.w===w&&x.s<s)).flatMap(x=>x.chars);
+    const rev=before.length?sample(before,Math.min(2,before.length)):sample(P.filter(o=>LV_INDEX[o.lv]<LV_INDEX[id]).map(o=>o.c),1);
+    rev.forEach(c=>deck.push(item(c)));
+    if(id!=='8'){ const ants=poolAnts().filter(p=>q.chars.includes(p[0])||q.chars.includes(p[1])); if(ants.length)deck.push({t:'ant',p:pick(ants)}); }
+  }else{
+    const qs=last?Q.slots:Q.slots.filter(x=>x.w===w), cs=qs.flatMap(x=>x.chars), ws=qs.flatMap(x=>x.words);
+    const n=last?ADV.hits*3:ADV.hits*2;
+    deck=[...sample(ws,Math.ceil(n*.6)).map(read),...sample(cs,n).map(item)].slice(0,n);
+  }
+  // 낱말과 한자를 섞되 너무 몰리지 않게
+  return shuffle(deck);
+}
+function deckQ(it){ const P=CH.filter(o=>poolSet().has(o.c));
+  if(it.t==='read'){ const wd=WORDS.find(x=>x.w===it.w); return qRead(wd); }
+  if(it.t==='ant')return qAnt(it.p,P);
+  return it.t==='hun'?qHun(it.c,P):qFind(it.c,P); }
+function worldChars(w){ const Q=quests(ADV.id); return Q.slots.filter(x=>x.w===w).flatMap(x=>x.chars); }
+
+/* ---- 모험 지도 ---- */
+const MAP_W=400;
+const regH=()=>70*KS+50;
 function mapLayout(){
-  const H=REG_H*WORLDS.length+60, pts=[{x:200,y:H-26}];
-  WORLDS.forEach((W,w)=>{ const base=H-60-w*REG_H, flip=w%2===1, last=w===WORLDS.length-1;
-    const xs=[110,290,115,last?200:255], dys=[60,140,215,last?272:292];
-    xs.forEach((x,i)=>pts.push({x:flip&&!(last&&i===3)?MAP_W-x:x,y:base-dys[i]})); });
-  return {H,pts};
+  const R=regH(), H=R*WORLDS.length+60, pts=[{x:200,y:H-26}], XS=[110,290,120,280,130,255];
+  WORLDS.forEach((W,w)=>{ const base=H-60-w*R, flip=w%2===1, last=w===WORLDS.length-1;
+    for(let i=0;i<KS;i++){ const boss=i===KS-1; let x=boss?(last?200:255):XS[i%5]; if(flip&&!(last&&boss))x=MAP_W-x;
+      const y=base-(boss&&last?R-68:55+i*((R-80)/(KS-1))); pts.push({x,y}); } });
+  return {H,pts,R};
 }
 function segCtrl(P,i){ const p0=P[i-1]||P[i], p1=P[i], p2=P[i+1], p3=P[i+2]||p2;
   return [p1,{x:p1.x+(p2.x-p0.x)/6,y:p1.y+(p2.y-p0.y)/6},{x:p2.x-(p3.x-p1.x)/6,y:p2.y-(p3.y-p1.y)/6},p2]; }
@@ -1421,51 +1523,45 @@ const DECO={
   spike:()=>`<path d="M-14 8 L-8 -14 L-2 8Z M0 8 L6 -20 L12 8Z" fill="#3B2F4F" stroke="#241B33" stroke-width="1.5" stroke-linejoin="round"/>`,
   bones:()=>`<path d="M-10 4 L10 -4" stroke="#EDE6D6" stroke-width="4" stroke-linecap="round"/><circle cx="-11" cy="5" r="3" fill="#EDE6D6"/><circle cx="11" cy="-5" r="3" fill="#EDE6D6"/>`,
 };
-const REGION_DECO=[['tree','tree','tree','pine','bush','rock','flower'],['mountain','pine','flower','flower','rock','bush'],['house','house','tree','lantern','fence','bush'],['wave','wave','wave','fish','rock'],['deadtree','spike','rock','bones','spike']];
-const REGION_BG=[['#BFE6A8','#8ACF7B'],['#C7EBC0','#9BD6C6'],['#F3DDB8','#E2B984'],['#9ED3F5','#4E95DB'],['#8B7BB8','#4A3C78']];
-function castleSVG(){ return `<g transform="translate(200,58)">
-  <path d="M-150 30 Q-120 -10 -80 10 Q-60 -30 -20 -6 Q20 -40 60 -8 Q100 -26 150 30Z" fill="#2E2450" opacity=".55"/>
-  <rect x="-70" y="-20" width="140" height="58" fill="#3D2F63" stroke="#211839" stroke-width="3"/>
+
+function castleSVG(c){ c=c||['#3D2F63','#7A2E52']; return `<g transform="translate(200,58)">
+  <path d="M-150 30 Q-120 -10 -80 10 Q-60 -30 -20 -6 Q20 -40 60 -8 Q100 -26 150 30Z" fill="#2E2450" opacity=".45"/>
+  <rect x="-70" y="-20" width="140" height="58" fill="${c[0]}" stroke="#211839" stroke-width="3"/>
   <path d="M-70 -20 v-10 h12 v10 h12 v-10 h12 v10 h12 v-10 h12 v10 h12 v-10 h12 v10 h12 v-10 h12 v10 h12 v-10 h12 v10 h10 v-10" fill="none" stroke="#211839" stroke-width="3"/>
-  <rect x="-92" y="-52" width="34" height="90" fill="#463870" stroke="#211839" stroke-width="3"/><path d="M-98 -52 L-75 -86 L-52 -52Z" fill="#7A2E52" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
-  <rect x="58" y="-52" width="34" height="90" fill="#463870" stroke="#211839" stroke-width="3"/><path d="M52 -52 L75 -86 L98 -52Z" fill="#7A2E52" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
-  <rect x="-20" y="-62" width="40" height="44" fill="#4F4080" stroke="#211839" stroke-width="3"/><path d="M-26 -62 L0 -98 L26 -62Z" fill="#8C2F4E" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="-92" y="-52" width="34" height="90" fill="${c[0]}" stroke="#211839" stroke-width="3"/><path d="M-98 -52 L-75 -86 L-52 -52Z" fill="${c[1]}" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="58" y="-52" width="34" height="90" fill="${c[0]}" stroke="#211839" stroke-width="3"/><path d="M52 -52 L75 -86 L98 -52Z" fill="${c[1]}" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="-20" y="-62" width="40" height="44" fill="${c[0]}" stroke="#211839" stroke-width="3"/><path d="M-26 -62 L0 -98 L26 -62Z" fill="${c[1]}" stroke="#211839" stroke-width="3" stroke-linejoin="round"/>
   <path d="M0 -98 V-118" stroke="#211839" stroke-width="2.5"/><path d="M0 -118 L18 -112 L0 -106Z" fill="#E8453C"/>
   <rect x="-81" y="-36" width="8" height="12" rx="4" fill="#FFD34D"/><rect x="69" y="-36" width="8" height="12" rx="4" fill="#FFD34D"/><rect x="-4" y="-50" width="8" height="12" rx="4" fill="#FFD34D"/>
   <path d="M-22 38 V14 Q0 -8 22 14 V38Z" fill="#1A1230"/></g>`; }
-function curNode(){ const A=adv(); for(let k=0;k<WORLDS.length*4;k++){ const w=Math.floor(k/4), s=k%4; if(!A.cleared[skey(w,s)]&&unlocked(w,s))return k; } return WORLDS.length*4-1; }
+function curNode(){ const C=advLv().cleared, N=WORLDS.length*KS; for(let k=0;k<N;k++){ const w=Math.floor(k/KS), s=k%KS; if(!C[skey(w,s)]&&unlocked(w,s))return k; } return N-1; }
 function mapSVG(L,cur){
-  const {H,pts}=L, A=adv(), segs=pts.slice(0,-1).map((_,i)=>segCtrl(pts,i));
+  const {H,pts,R}=L, C=advLv().cleared, segs=pts.slice(0,-1).map((_,i)=>segCtrl(pts,i));
   const samples=segs.flatMap(s=>Array.from({length:12},(_,j)=>bez(s,j/11)));
+  const topOf=w=>H-60-(w+1)*R;
   let g=`<svg class="mapsvg" viewBox="0 0 ${MAP_W} ${H}" role="img" aria-label="모험 지도"><defs>`;
-  REGION_BG.forEach((c,w)=>g+=`<linearGradient id="rg${w}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient>`);
-  g+=`</defs><rect width="${MAP_W}" height="${H}" fill="${REGION_BG[0][0]}"/>`;
-  WORLDS.forEach((W,w)=>{ const top=H-60-(w+1)*REG_H; g+=`<rect x="0" y="${top}" width="${MAP_W}" height="${REG_H+(w===0?60:2)}" fill="url(#rg${w})"/>`; });
-  // 자연 계곡의 강
-  { const top=H-60-2*REG_H, y=top+175; g+=`<path d="M-10 ${y} C 80 ${y-40}, 150 ${y+40}, 220 ${y} S 360 ${y-30}, 410 ${y+10}" stroke="#5AB3E6" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M-10 ${y} C 80 ${y-40}, 150 ${y+40}, 220 ${y} S 360 ${y-30}, 410 ${y+10}" stroke="#9FD8FF" stroke-width="6" fill="none" stroke-dasharray="14 22" stroke-linecap="round"/>`; }
-  // 바다의 섬
-  pts.slice(1).forEach((p,k)=>{ if(Math.floor(k/4)===3)g+=`<ellipse cx="${p.x}" cy="${p.y+8}" rx="44" ry="26" fill="#F3E2A9" stroke="#D8BE78" stroke-width="2"/><path d="M${p.x-30} ${p.y+2} q6 -10 12 0 M${p.x+20} ${p.y+4} q5 -9 10 0" stroke="#3E9A48" stroke-width="4" fill="none" stroke-linecap="round"/>`; });
-  // 장식
-  WORLDS.forEach((W,w)=>{ const r=rng(w*97+13), top=H-60-(w+1)*REG_H, kinds=REGION_DECO[w]; let placed=[];
-    for(let i=0;i<60&&placed.length<16;i++){ const x=18+r()*(MAP_W-36), y=top+30+r()*(REG_H-40);
-      if(w===WORLDS.length-1&&y<top+125)continue;
+  WORLDS.forEach((W,w)=>g+=`<linearGradient id="rg${w}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${W.bg[0]}"/><stop offset="1" stop-color="${W.bg[1]}"/></linearGradient>`);
+  g+=`</defs><rect width="${MAP_W}" height="${H}" fill="${WORLDS[0].bg[0]}"/>`;
+  WORLDS.forEach((W,w)=>{ g+=`<rect x="0" y="${topOf(w)}" width="${MAP_W}" height="${R+(w===0?60:2)}" fill="url(#rg${w})"/>`; });
+  WORLDS.forEach((W,w)=>{ if(!W.river)return; const y=topOf(w)+R*.52;
+    g+=`<path d="M-10 ${y} C 80 ${y-40}, 150 ${y+40}, 220 ${y} S 360 ${y-30}, 410 ${y+10}" stroke="#5AB3E6" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M-10 ${y} C 80 ${y-40}, 150 ${y+40}, 220 ${y} S 360 ${y-30}, 410 ${y+10}" stroke="#9FD8FF" stroke-width="6" fill="none" stroke-dasharray="14 22" stroke-linecap="round"/>`; });
+  pts.slice(1).forEach((p,k)=>{ if(WORLDS[Math.floor(k/KS)].island)g+=`<ellipse cx="${p.x}" cy="${p.y+8}" rx="44" ry="26" fill="#F3E2A9" stroke="#D8BE78" stroke-width="2"/><path d="M${p.x-30} ${p.y+2} q6 -10 12 0 M${p.x+20} ${p.y+4} q5 -9 10 0" stroke="#3E9A48" stroke-width="4" fill="none" stroke-linecap="round"/>`; });
+  WORLDS.forEach((W,w)=>{ const r=rng(w*97+13+(ADV.id.length*7)), top=topOf(w), kinds=W.deco; let placed=[];
+    for(let i=0;i<70&&placed.length<18;i++){ const x=18+r()*(MAP_W-36), y=top+30+r()*(R-40);
+      if(W.castle&&y<top+125)continue;
       if(samples.some(p=>Math.hypot(p.x-x,p.y-y)<44))continue; if(placed.some(p=>Math.hypot(p.x-x,p.y-y)<38))continue;
       placed.push({x,y,k:kinds[Math.floor(r()*kinds.length)],s:.8+r()*.5}); }
     placed.sort((a,b)=>a.y-b.y).forEach(d=>g+=`<g transform="translate(${d.x.toFixed(0)},${d.y.toFixed(0)}) scale(${d.s.toFixed(2)})">${DECO[d.k]()}</g>`);
   });
-  g+=castleSVG();
-  // 길: 바깥 테두리 → 흙길 → 지나온 길(금색) / 남은 길(점선)
+  const lastW=WORLDS[WORLDS.length-1]; if(lastW.castle)g+=castleSVG(lastW.castle);
   const full=segs.map(segD).join(' ');
   g+=`<path d="${full}" stroke="#A88A55" stroke-width="27" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${full}" stroke="#F1DFB4" stroke-width="21" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
   segs.forEach((s,i)=>{ g+= i<=cur ? `<path d="${segD(s)}" stroke="#FFC12E" stroke-width="9" fill="none" stroke-linecap="round"/>` : `<path d="${segD(s)}" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-dasharray="2 12" stroke-linecap="round"/>`; });
-  // 출발
   g+=`<g transform="translate(${pts[0].x},${pts[0].y-4})"><rect x="-30" y="-14" width="60" height="26" rx="13" fill="#FFFFFF" stroke="#1D2A48" stroke-width="2.5"/><text y="5" text-anchor="middle" class="mtext" font-size="15">출발</text></g>`;
-  // 땅 이름표
-  WORLDS.forEach((W,w)=>{ const top=H-60-(w+1)*REG_H, left=w%2===0, last=w===WORLDS.length-1; const x=last?20:left?14:MAP_W-14, y=last?top+150:top+22;
+  WORLDS.forEach((W,w)=>{ const top=topOf(w), left=w%2===0, last=w===WORLDS.length-1; const x=last?20:left?14:MAP_W-14, y=last?top+150:top+22;
     const tw=W.name.length*15+40; const rx=last||left?x:x-tw;
     g+=`<g><rect x="${rx}" y="${y-17}" width="${tw}" height="32" rx="16" fill="rgba(255,255,255,.92)" stroke="#1D2A48" stroke-width="2"/><text x="${rx+tw/2}" y="${y+5}" text-anchor="middle" class="mtext" font-size="17">${w+1}. ${W.name}</text></g>`; });
-  // 칸(노드)
-  pts.slice(1).forEach((p,k)=>{ const w=Math.floor(k/4), s=k%4, boss=s===3, done=!!A.cleared[skey(w,s)], can=unlocked(w,s), isCur=k===cur&&!done;
+  pts.slice(1).forEach((p,k)=>{ const w=Math.floor(k/KS), s=k%KS, boss=s===KS-1, done=!!C[skey(w,s)], can=unlocked(w,s), isCur=k===cur&&!done;
     const r=boss?27:20, fill=done?'#FFC12E':can?'#FFFFFF':'#C9D2DE', stroke=boss?'#B3261E':'#1D2A48';
     g+=`<g class="mnode ${can?'':'lock'}" ${can?`data-node="${w},${s}"`:''} transform="translate(${p.x},${p.y})">`;
     if(isCur)g+=`<circle r="${r}" fill="none" stroke="#FFC12E" stroke-width="6" class="pulse"/>`;
@@ -1473,36 +1569,37 @@ function mapSVG(L,cur){
     if(boss)g+=`<path d="M${-r*.75} ${-r*.55} L${-r*1.05} ${-r*1.35} L${-r*.25} ${-r*.9}Z M${r*.75} ${-r*.55} L${r*1.05} ${-r*1.35} L${r*.25} ${-r*.9}Z" fill="${can?'#B3261E':'#8C96A6'}" stroke="#1D2A48" stroke-width="2" stroke-linejoin="round"/>`;
     g+=`<circle r="${r}" fill="${fill}" stroke="${can?stroke:'#7E8899'}" stroke-width="${boss?4:3}"/>`;
     g+= done?`<path d="M-8 0 L-2 7 L9 -7" stroke="#1D2A48" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
-        : `<text y="${boss?6:6}" text-anchor="middle" class="mtext" font-size="${boss?15:17}" fill="${can?(boss?'#B3261E':'#1D2A48'):'#7E8899'}">${boss?'보스':s+1}</text>`;
+        : `<text y="6" text-anchor="middle" class="mtext" font-size="${boss?15:17}" fill="${can?(boss?'#B3261E':'#1D2A48'):'#7E8899'}">${boss?'보스':s+1}</text>`;
     g+=`</g>`; });
-  // 잠긴 땅: 구름
-  WORLDS.forEach((W,w)=>{ if(unlocked(w,0))return; const top=H-60-(w+1)*REG_H, r=rng(w*31+7);
-    g+=`<g class="fog"><rect x="0" y="${top}" width="${MAP_W}" height="${REG_H}" fill="rgba(236,241,248,.82)"/>`;
-    for(let i=0;i<9;i++){ const x=r()*MAP_W, y=top+20+r()*(REG_H-40), s=28+r()*30; g+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${s.toFixed(0)}" fill="#FFFFFF" opacity=".75"/>`; }
-    g+=`<text x="200" y="${top+REG_H/2-4}" text-anchor="middle" class="mtext" font-size="22" fill="#56658A">${w+1}. ${W.name}</text><text x="200" y="${top+REG_H/2+24}" text-anchor="middle" class="mtext" font-size="15" fill="#56658A">${WORLDS[w-1].boss[1]}${josa(WORLDS[w-1].boss[1])} 이기면 열려요</text></g>`; });
-  // 용사
+  WORLDS.forEach((W,w)=>{ if(unlocked(w,0))return; const top=topOf(w), r=rng(w*31+7);
+    g+=`<g class="fog"><rect x="0" y="${top}" width="${MAP_W}" height="${R}" fill="rgba(236,241,248,.84)"/>`;
+    for(let i=0;i<10;i++){ const x=r()*MAP_W, y=top+20+r()*(R-40), s=28+r()*30; g+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${s.toFixed(0)}" fill="#FFFFFF" opacity=".75"/>`; }
+    g+=`<text x="200" y="${top+R/2-4}" text-anchor="middle" class="mtext" font-size="22" fill="#56658A">${w+1}. ${W.name}</text><text x="200" y="${top+R/2+24}" text-anchor="middle" class="mtext" font-size="15" fill="#56658A">${WORLDS[w-1].boss[1]}${josa(WORLDS[w-1].boss[1])} 이기면 열려요</text></g>`; });
   const hp=pts[cur+1];
   g+=`<g id="mapHero" transform="translate(${hp.x},${hp.y})"><g class="mh-bob">${heroSVG().replace('<svg class="hero-svg"','<svg class="hero-svg" x="-30" y="-78" width="60" height="64"')}</g></g>`;
   return g+'</svg>';
 }
 function renderAdv(){
-  const A=adv(), L=mapLayout(), cur=curNode(), w=Math.floor(cur/4), s=cur%4, W=WORLDS[w], m=s===3?W.boss:W.mons[s];
-  const allDone=!!A.cleared[skey(WORLDS.length-1,3)];
-  const from=(typeof A.pos==='number'&&A.pos<cur)?A.pos:cur;
-  const toBoss=(WORLDS.length*4-1)-cur;
-  $('#advBody').innerHTML=`<div class="panel advtop">
-      <div class="hero2">${heroSVG()}<span class="geared">${A.gear.map(id=>gearInfo(id).e).join('')}</span></div>
-      <div><div class="t">용사 ${esc(heroName())}</div><div class="small">하트 ${maxHearts()}개 · 공격력 ${1+swordBonus()}</div>
-      <div class="inv">${Object.entries(ITEMS).map(([k,it])=>`<span>${it.e} ${A.items[k]||0}</span>`).join('')}</div></div></div>
+  setAdv(S.level);
+  const A=adv(), AL=advLv(), L=mapLayout(), cur=curNode(), w=Math.floor(cur/KS), s=cur%KS, W=WORLDS[w], m=s===KS-1?W.boss:W.mons[s];
+  const N=WORLDS.length*KS, allDone=!!AL.cleared[skey(WORLDS.length-1,KS-1)];
+  const from=(typeof AL.pos==='number'&&AL.pos<cur)?AL.pos:cur, toBoss=N-1-cur;
+  const doneN=Object.keys(AL.cleared).length;
+  $('#advBody').innerHTML=`<div class="advtabs">${LEVELS.filter(Lv=>ADVS[Lv.id]).map(Lv=>`<button class="advtab ${Lv.id===ADV.id?'on':''}" data-advlv="${Lv.id}"><b>${Lv.name}</b><small>${ADVS[Lv.id].name} · ${ADVS[Lv.id].worlds.length*ADVS[Lv.id].stages}칸</small></button>`).join('')}</div>
+    <div class="panel advtop">
+      <div class="hero2">${heroSVG()}</div>
+      <div class="advinfo"><div class="t">용사 ${esc(heroName())}</div><div class="small">하트 ${maxHearts()}개 · ${['맨손','나무 검','강철 검','빛의 검'][weaponTier()]} · ${ADV.name} ${doneN}/${N}칸</div>
+      <div class="inv">${Object.entries(ITEMS).map(([k,it])=>`<span>${it.e} ${A.items[k]||0}</span>`).join('')}</div>
+      <div class="gearrow">${Object.keys(GEAR).map(id=>`<span class="gi ${hasGear(id)?'on':''}" title="${GEAR[id].n}">${hasGear(id)?GEAR[id].e:'❔'}</span>`).join('')}</div></div></div>
     <div class="mapwrap" id="mapWrap">${mapSVG(L,from)}</div>
-    <div class="mapbar"><div class="mb-txt">${allDone?'<b>👑 한자 마왕을 물리쳤어요!</b><span>아무 칸이나 눌러 다시 싸울 수 있어요</span>'
-      :`<b>다음 목표: ${m[1]}</b><span>${W.name} · ${s===3?'보스':(s+1)+'단계'}${toBoss?` · 마왕까지 ${toBoss}칸`:''}</span>`}</div>
+    <div class="mapbar"><div class="mb-txt">${allDone?`<b>👑 ${ADV.name}을 구했어요!</b><span>아무 칸이나 눌러 다시 싸울 수 있어요</span>`
+      :`<b>다음 목표: ${m[1]}</b><span>${W.name} · ${s===KS-1?'보스':(s+1)+'단계'}${toBoss?` · 마왕까지 ${toBoss}칸`:''}</span>`}</div>
       ${allDone?'':`<button class="btn grape" data-battle="${w},${s}">싸우러 가기 ⚔️</button>`}</div>`;
-  requestAnimationFrame(()=>{ scrollToHero(false); if(from<cur)setTimeout(()=>walkHero(L,from,cur),500); else { A.pos=cur; save(); } });
+  requestAnimationFrame(()=>{ scrollToHero(false); if(from<cur)setTimeout(()=>walkHero(L,from,cur),500); else { AL.pos=cur; save(); } });
 }
 function scrollToHero(smooth){ const h=$('#mapHero'); if(!h)return; const r=h.getBoundingClientRect(); window.scrollTo({top:Math.max(0,window.scrollY+r.top-window.innerHeight*.45),behavior:smooth?'smooth':'auto'}); }
 async function walkHero(L,from,to){
-  const g=$('#mapHero'); if(!g)return; const A=adv();
+  const g=$('#mapHero'); if(!g)return; const AL=advLv();
   for(let i=from+1;i<=to;i++){
     const seg=segCtrl(L.pts,i), t0=performance.now(), dur=900; let lastStep=0;
     await new Promise(res=>{ const f=now=>{ if(!document.body.contains(g))return res();
@@ -1511,14 +1608,16 @@ async function walkHero(L,from,to){
       if(now-lastStep>180){ lastStep=now; sfx(Math.random()<.5?'step1':'step2',{vol:.4}); }
       t<1?requestAnimationFrame(f):res(); }; requestAnimationFrame(f); });
   }
-  A.pos=to; save();
+  AL.pos=to; save();
   if(document.body.contains(g)){ sparkle(); renderAdv(); }
 }
 function openNode(w,s){
-  const W=WORLDS[w], m=s===3?W.boss:W.mons[s], done=adv().cleared[skey(w,s)];
+  const W=WORLDS[w], boss=s===KS-1, m=boss?W.boss:W.mons[s], done=advLv().cleared[skey(w,s)], g=GEAR[W.gear];
+  const q=boss?null:quests(ADV.id).get(w,s);
   sfx('open',{vol:.5}); navOverlay();
-  openModal(`<div class="result-big">${m[0]}</div><div class="small">${w+1}. ${W.name} · ${s===3?'보스':(s+1)+'단계'}</div><div class="result-title">${m[1]}</div>
-    <p class="story">${s===3?`이기면 ${W.gear.e} ${W.gear.n}${josa(W.gear.n)} 얻고 ${w<WORLDS.length-1?'다음 땅이 열려요!':'한자 나라를 구해요!'}`:done?'이미 이긴 몬스터예요. 또 싸워도 좋아요!':'이기면 보물 상자가 나와요!'}</p>
+  openModal(`<div class="result-big">${m[0]}</div><div class="small">${w+1}. ${W.name} · ${boss?'보스':(s+1)+'단계'}</div><div class="result-title">${m[1]}</div>
+    ${q?`<div class="qchars">${q.chars.map(c=>`<span class="han">${c}</span>`).join('')}</div><p class="small">이 퀘스트의 한자 ${q.chars.length}개 · 낱말 ${q.words.length}개</p>`:''}
+    <p class="story">${boss?`이기면 ${g.e} ${g.n}${josa(g.n)} 얻고 ${w<WORLDS.length-1?'다음 땅이 열려요!':ADV.name+'을 구해요!'}`:done?'이미 이긴 몬스터예요. 또 싸워도 좋아요!':'이기면 보물 상자가 나와요!'}</p>
     <div class="row"><button class="btn grape" data-battle="${w},${s}">⚔️ 싸우기!</button><button class="btn" data-close="1">지도 보기</button></div>`);
 }
 
@@ -1526,10 +1625,11 @@ let B=null, rafId=0, spWriter=null;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 function beginBattle([w,s]){
-  const W=WORLDS[w], boss=s===3, last=w===WORLDS.length-1&&boss, m=boss?W.boss:W.mons[s];
-  const max=last?30:boss?W.hp*2:W.hp;
-  B={w,s,boss,last,m,hp:max,max,hearts:maxHearts(),shield:0,charge:0,
-     dur:W.dur*(boss?.85:1)*(hasGear('boots')?1.25:1),combo:0,ready:false,cs:worldChars(w),recent:[],
+  setAdv(S.level);
+  const W=WORLDS[w], boss=s===KS-1, last=w===WORLDS.length-1&&boss, m=boss?W.boss:W.mons[s];
+  const deck=questDeck(w,s), max=Math.max(ADV.hits*(boss?2:1),deck.length)*10;
+  B={w,s,boss,last,m,hp:max,max,hearts:maxHearts(),shield:startShield(),charge:0,deck,wrongPen:ADV.wrong,
+     dur:ADV.dur[w]*(boss?.85:1)*gaugeSlow(),combo:0,ready:false,cs:worldChars(w),recent:[],
      lock:true,paused:false,hold:Infinity,freeze:0,phase2:false,t:performance.now(),over:false,first:true,q:null,pendingNext:false};
   const f=$('#bField'); f.style.setProperty('--w1',W.bg[0]); f.style.setProperty('--w2',W.bg[1]);
   $('#barTitle').textContent=`${W.name} · ${boss?'보스':(s+1)+'단계'}`;
@@ -1616,7 +1716,7 @@ function dmgNum(n,crit,big){ const mon=centerOf($('#bMon .e')); const e=document
   if(crit||big){ const t=document.createElement('span'); t.className='dmg tag'+(big?' big':''); t.textContent=big?'필살!':'크리티컬!'; t.style.left=mon.x+'px'; t.style.top=(mon.y-mon.h*.95)+'px'; $('#bField').appendChild(t); setTimeout(()=>t.remove(),1100); } }
 
 /* ---- 용사 공격 ---- */
-function swordColor(){ return hasGear('sword2')?'#FFD34D':hasGear('sword1')?'#9FD8FF':'#FFFFFF'; }
+function swordColor(){ return ['#FFFFFF','#E9C08A','#9FD8FF','#FFD34D'][weaponTier()]; }
 async function heroStrike(dmg,crit){
   const hero=$('#bHero'), arm=hero.querySelector('.h-arm'), monEl=$('#bMon'), e=$('#bMon .e');
   const hr=hero.getBoundingClientRect(), mr=e.getBoundingClientRect();
@@ -1627,7 +1727,7 @@ async function heroStrike(dmg,crit){
   hero.animate([{transform:'translate(-8px,4px)'},{transform:`translate(${dx}px,-6px)`}],{duration:160,fill:'forwards',easing:'cubic-bezier(.6,0,.9,.5)'});
   whoosh(.35,.2); sfx('step2',{vol:.5,delay:.06}); await sleep(150);
   arm.animate([{transform:'rotate(-75deg)'},{transform:'rotate(125deg)'}],{duration:100,fill:'forwards',easing:'cubic-bezier(.2,.9,.3,1)'});
-  sfx(pick(['slash1','slash2']),{vol:.8}); whoosh(.5,.14); await sleep(60);
+  if(weaponTier())sfx(pick(['slash1','slash2']),{vol:.8}); whoosh(.5,.14); await sleep(60);
   await impact(dmg,crit,false);
   await sleep(110);
   hero.animate([{transform:`translate(${dx}px,-6px)`},{transform:`translate(${dx*.4}px,-26px)`},{transform:'none'}],{duration:340,fill:'forwards',easing:'ease-out'});
@@ -1637,7 +1737,7 @@ async function heroStrike(dmg,crit){
 async function impact(dmg,crit,big){
   const monEl=$('#bMon'), e=$('#bMon .e'), c=centerOf(e);
   monEl.style.animationPlayState='paused'; e.classList.add('flash');
-  slashFx(c.x,c.y,c.w*.62,(Math.random()*.6-.3)+(big?.8:-.3),swordColor());
+  if(weaponTier()||big)slashFx(c.x,c.y,c.w*.62,(Math.random()*.6-.3)+(big?.8:-.3),swordColor()); else ringFx(c.x,c.y,c.w*.5,'rgba(255,228,92,.95)',.25);
   sparks(c.x,c.y,crit||big?34:20,['#FFFFFF','#FFE45C','#FFB13B',swordColor()],crit||big?760:560);
   ringFx(c.x,c.y,c.w*.9,'rgba(255,255,255,.9)');
   sfx(pick(['hit1','hit2','hit3']),{vol:1}); boom(crit||big?.7:.45,crit||big?150:120,.3);
@@ -1685,7 +1785,8 @@ async function heroSpecial(dmg){
 /* ---- 문제 ---- */
 function nextBQ(){
   if(!B||B.over)return;
-  const q=makeQFrom(B.cs,B.recent,B.w>=2&&S.level!=='8'); B.q=q; B.first=true; B.recent=[...B.recent,...q.chars].slice(-6);
+  if(!B.deck.length)B.deck=questDeck(B.w,B.s);
+  const it=B.deck.shift(), q=deckQ(it); B.item=it; B.q=q; B.first=true; B.recent=[...B.recent,...q.chars].slice(-6);
   $('#bPrompt').innerHTML=q.html; $('#bOpts').innerHTML=q.options.map((op,k)=>`<button class="opt ${q.optClass}" data-bk="${k}">${op.label}</button>`).join('');
   B.lock=false; B.hold=performance.now()+1300;
   say(q.kind==='한자 찾기'||q.kind==='반대말'?q.speak:q.kind==='독음'?'어떻게 읽을까?':'뜻과 음은?');
@@ -1696,17 +1797,17 @@ async function answerBattle(btn){
   if(op.correct){
     B.lock=true; btn.classList.add('right'); if(B.first)record(B.q.chars,true);
     B.combo++; B.charge=Math.max(0,B.charge-.3); drawBattle(); save();
-    const crit=B.combo>=2&&Math.random()<.3;
-    if(B.combo>=3&&!B.ready){ B.ready=true; setTimeout(()=>{ if(B&&!B.over){ say('필살기 준비 완료!'); sfx('shing2',{vol:.6}); drawBattle(); } },900); }
+    const crit=Math.random()<critChance();
+    if(B.combo>=comboNeed()&&!B.ready){ B.ready=true; setTimeout(()=>{ if(B&&!B.over){ say('필살기 준비 완료!'); sfx('shing2',{vol:.6}); drawBattle(); } },900); }
     else say(pick(PRAISE));
-    await heroStrike(1+swordBonus()+(crit?1:0),crit);
+    await heroStrike(crit?20:10,crit);
     if(!B||B.over)return;
     await sleep(150);
     if(B.paused)B.pendingNext=true; else nextBQ();
   }else{
-    if(B.first){record(B.q.chars,false);B.first=false;}
+    if(B.first){record(B.q.chars,false,B.q.kind==='독음');B.first=false; B.deck.splice(Math.min(2,B.deck.length),0,B.item);}
     B.combo=0; btn.classList.add('wrong'); btn.disabled=true; sBad();
-    B.charge=Math.min(1,B.charge+.25); floatAt('⚡ 힘이 세졌다!','info','6%','38%'); say('다시 해볼까?');
+    B.charge=Math.min(1,B.charge+B.wrongPen); floatAt('⚡ 힘이 세졌다!','info','6%','38%'); say('다시 해볼까?');
     $('#bMon .e').animate([{transform:'none'},{transform:'scale(1.15) rotate(-6deg)'},{transform:'none'}],{duration:400}); growl(.35,.18);
     drawBattle(); save();
     if(B.charge>=1)monsterAttack(false);
@@ -1714,7 +1815,7 @@ async function answerBattle(btn){
 }
 async function monsterAttack(timeout){
   if(!B||B.over)return;
-  B.lock=true; B.charge=0; if(timeout&&B.first&&B.q)record(B.q.chars,false); B.combo=0; drawBattle();
+  B.lock=true; B.charge=0; if(timeout&&B.first&&B.q){ record(B.q.chars,false,B.q.kind==='독음'); B.deck.splice(Math.min(2,B.deck.length),0,B.item); } B.combo=0; drawBattle();
   const e=$('#bMon .e'), hero=$('#bHero');
   const hr=hero.getBoundingClientRect(), mr=e.getBoundingClientRect(), dx=Math.max(0,mr.left-hr.right+hr.width*.35);
   growl(.45,.32);
@@ -1753,7 +1854,7 @@ function useItem(k){
 function startSpecial(){
   if(!B||B.over||!B.ready||B.lock&&!B.q)return;
   const cands=B.recent.filter(c=>STROKES[c]&&BY[c]); const c=cands.length?pick(cands):wpick(B.cs.filter(c=>STROKES[c]));
-  const dmg0=3+swordBonus();
+  const dmg0=30+10*weaponTier();
   if(typeof HanziWriter==='undefined'){ B.ready=false; B.combo=0; heroSpecial(dmg0).then(afterSpecial); return; }
   B.paused=true; sfx('shing',{vol:.7});
   openModal(`<div class="result-title">💥 필살기!</div><p class="story" style="margin:4px auto"><b class="han" style="font-size:30px">${c}</b> ${BY[c].he}, 따라 쓰면 큰 공격!</p><div class="wbox" id="spBox"></div>`);
@@ -1762,7 +1863,7 @@ function startSpecial(){
   spWriter=HanziWriter.create(box,c,{width:size,height:size,padding:Math.round(size*.06),showCharacter:false,showOutline:true,
     strokeColor:'#1D2A48',outlineColor:'#D3E1EF',drawingColor:'#D93A2B',highlightColor:'#FFC12E',drawingWidth:Math.max(20,size/12),charDataLoader:(ch,done)=>done(STROKES[ch])});
   spWriter.quiz({showHintAfterMisses:2,onCorrectStroke:()=>{whoosh(.25,.12)},onMistake:()=>tone([260],.08,'sine',.12),onComplete:d=>{
-    const dmg=dmg0+(d.totalMistakes===0?1:0); spWriter=null;
+    const dmg=dmg0+(d.totalMistakes===0?10:0); spWriter=null;
     setTimeout(async()=>{ if(!B||B.over)return; closeModal(true); B.ready=false; B.combo=0; B.paused=false; B.t=performance.now(); drawBattle();
       await heroSpecial(dmg); afterSpecial(); },450);
   }});
@@ -1772,24 +1873,25 @@ function resumeBattle(){ if(!B)return; B.paused=false; B.t=performance.now(); B.
 function rollItem(){ const r=Math.random(); return r<.35?'potion':r<.6?'shield':r<.85?'scroll':'hour'; }
 function winBattle(){
   cancelAnimationFrame(rafId);
-  const A=adv(), W=WORLDS[B.w], k=skey(B.w,B.s); A.cleared[k]=true;
+  const A=adv(), AL=advLv(), W=WORLDS[B.w], k=skey(B.w,B.s); AL.cleared[k]=true;
   const loot=[rollItem()]; if(B.boss||Math.random()<.3)loot.push(rollItem()); loot.forEach(x=>A.items[x]=(A.items[x]||0)+1);
-  let gear=null; if(B.boss&&!A.gear.includes(W.gear.id)){ gear=W.gear; A.gear.push(gear.id); }
+  let gear=null; if(B.boss&&!A.gear.includes(W.gear)){ A.gear.push(W.gear); gear=gearInfo(W.gear); }
   const stars=B.boss?10:3; addStars(stars); bump('quiz'); if(!S.monsters.includes(B.m[0]))S.monsters.push(B.m[0]); save();
   sWin(); confetti();
-  const lootHtml=`<div class="loot">${gear?`<div><b>${gear.e}</b>${gear.n}<br><span class="small">${gear.d}</span></div>`:''}${loot.map(x=>`<div><b>${ITEMS[x].e}</b>${ITEMS[x].n}</div>`).join('')}<div><b>⭐</b>별 ${stars}개</div></div>`;
+  const equip=gear?`<div class="equip"><div class="eq-hero">${heroSVG({newSlot:gear.slot})}</div><div class="eq-item">${gear.e}</div><div class="eq-burst"></div></div><div class="eq-name">${gear.e} ${gear.n} 착용!</div><p class="small">${gear.d}</p>`:'';
+  const lootHtml=equip+`<div class="loot">${loot.map(x=>`<div><b>${ITEMS[x].e}</b>${ITEMS[x].n}</div>`).join('')}<div><b>⭐</b>별 ${stars}개</div></div>`;
   if(B.last){
     setTimeout(confetti,800); setTimeout(confetti,1600);
-    say('용사가 한자 마왕을 물리쳤어! 한자 나라에 평화가 찾아왔어!');
-    openModal(`<div class="result-big">👑</div><div class="result-title">${esc(heroName())} 용사가 한자 마왕을 물리쳤어요!</div>
-      <p class="story">한자 나라에 평화가 찾아왔어요. 정말 대단해요! 🎉</p>${lootHtml}
+    say(endLine(ADV)); if(gear)setTimeout(()=>{ sfx('shing',{vol:.8}); sparkle(); },900);
+    openModal(`<div class="result-title">${esc(heroName())} 용사가 ${B.m[1]}${josa(B.m[1])} 물리쳤어요!</div>
+      <p class="story">${ADV.name}에 평화가 찾아왔어요. 정말 대단해요! 🎉</p>${lootHtml}
       <div class="row"><button class="btn grape" data-go="adv">지도로 가기</button><button class="btn" data-go="home">처음으로</button></div>`);
     return;
   }
-  const nx=B.s<3?[B.w,B.s+1]:[B.w+1,0];
+  const nx=B.s<KS-1?[B.w,B.s+1]:[B.w+1,0]; if(gear)setTimeout(()=>{ sfx('shing',{vol:.8}); sparkle(); },900);
   const msg=B.boss?`보스를 물리쳤어요! '${WORLDS[B.w+1].name}'이 열렸어요!`:`${B.m[1]}${josa(B.m[1])} 물리쳤어요!`;
   say(B.boss?(gear?`보스를 물리쳤다! ${gear.n}${josa(gear.n)} 얻었어!`:'보스를 물리쳤다!'):'물리쳤다! 보물 상자를 열어 볼까?'); sfx('chest',{vol:.7,delay:.2}); sfx('coins',{vol:.7,delay:.7});
-  openModal(`<div class="chest">🎁</div><div class="result-title">${msg}</div>${lootHtml}
+  openModal(`${gear?'':'<div class="chest">🎁</div>'}<div class="result-title">${msg}</div>${lootHtml}
     <div class="row"><button class="btn grape" data-battle="${nx[0]},${nx[1]}">다음 싸움 ➡</button><button class="btn" data-go="adv">지도 보기</button></div>`);
 }
 function loseBattle(){
@@ -1982,6 +2084,7 @@ document.addEventListener('click',e=>{
     if(!L.ready){ toast(`${L.name}은 초등학교 가서 열어요 🔒`); return; }
     S.level=L.id; save(); renderHome(); toast(`${L.name} 모드!`); say(lvLine(L)); loadVoices();; return; }
   if(t.dataset.bk!==undefined){ answerBattle(t); return; }
+  if(t.dataset.advlv){ S.level=t.dataset.advlv; save(); loadVoices(); renderAdv(); window.scrollTo(0,0); toast(`${lvName()} ${ADVS[S.level].name}!`); return; }
   if(t.dataset.battle){ go('battle',t.dataset.battle.split(',').map(Number)); return; }
   if(t.dataset.item){ useItem(t.dataset.item); return; }
   if(t.id==='bSpecial'){ startSpecial(); return; }

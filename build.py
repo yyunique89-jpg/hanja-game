@@ -8,6 +8,7 @@ body = (root/'src/template.html').read_text(encoding='utf-8')
 body = body.replace('/*STROKES*/', (root/'src/strokes.js').read_text(encoding='utf-8'))
 body = body.replace('/*SFX*/', (root/'src/sfx.js').read_text(encoding='utf-8'))
 body = body.replace('/*BOOK*/', (root/'src/stories.txt').read_text(encoding='utf-8').strip())
+body = body.replace('/*WORDS*/', (root/'src/words.txt').read_text(encoding='utf-8').strip())
 head = '''<!doctype html>
 <html lang="ko">
 <head>
