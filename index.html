@@ -321,6 +321,50 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
 @keyframes gnew{0%{opacity:0;transform:scale(1.6)}100%{opacity:1;transform:none}}
 @keyframes eqburst{0%{transform:scale(0);opacity:1}100%{transform:scale(14);opacity:0}}
 @keyframes eqglow{0%{filter:drop-shadow(0 0 0 #FFE45C)}30%{filter:drop-shadow(0 0 18px #FFE45C) brightness(1.3)}100%{filter:drop-shadow(0 0 0 #FFE45C)}}
+.emon.hm .e svg,.hmbig svg{width:1.15em;height:1.15em;display:block}
+.emon.hm{font-size:clamp(110px,18vw,150px)}
+.emon.hm.boss{font-size:clamp(140px,24vw,190px);top:56px}
+.hmbig{font-size:120px;display:flex;justify-content:center}
+.mon-svg{overflow:visible}
+.eltag{display:inline-block;font-family:var(--f-body);font-size:13px;padding:2px 8px;border-radius:99px;background:var(--ec);color:#fff;vertical-align:middle;white-space:nowrap}
+.partner{position:absolute;left:calc(3% + clamp(110px,18vw,150px));bottom:22px;width:clamp(64px,10vw,86px);z-index:2;animation:hop 1.4s ease-in-out infinite}
+.partner svg{width:100%;height:auto;display:block}
+.proj{position:absolute;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FFFFFF,var(--pc1) 40%,var(--pc2));box-shadow:0 0 22px var(--pc1),0 0 40px var(--pc2);z-index:5;pointer-events:none}
+.hball{position:absolute;width:46px;height:46px;border-radius:50%;z-index:6;pointer-events:none;background:radial-gradient(circle at 35% 30%,#FFFFFF 0 10%,#4FB3F0 11% 48%,#1C4F9C 49% 52%,#FFD34D 53%);border:3px solid #1D2A48;display:grid;place-items:center;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.hball span{font-family:var(--f-han);font-weight:900;font-size:18px;color:#1D2A48;background:#FFFFFF;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;border:2px solid #1D2A48}
+.hball.done{box-shadow:0 0 0 6px rgba(255,228,92,.6),0 0 30px #FFE45C}
+.bmsg.ko{font-size:clamp(54px,11vw,88px);color:#FFE45C;-webkit-text-stroke:3px #1D2A48;animation:kopop .7s cubic-bezier(.2,1.6,.4,1)}
+@keyframes kopop{0%{transform:scale(3);opacity:0}60%{transform:scale(.9);opacity:1}100%{transform:none}}
+.info.big2{font-size:32px;color:#FFE45C;text-shadow:0 3px 0 #1D2A48,0 -2px 0 #1D2A48}
+.newmon{display:flex;gap:14px;align-items:center;justify-content:center;background:#FFF6D8;border-radius:20px;padding:10px 14px;margin:6px 0 10px;text-align:left}
+.nm-art{width:110px;flex:none}
+.nm-art svg{width:100%;height:auto}
+.dexhan{font-size:15px;color:var(--ink2)}
+.dexhan .han{font-size:20px}
+.dexhead{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.dexhead b{font-family:var(--f-display);font-weight:400;font-size:26px;display:block}
+.dexgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.dexcard{background:var(--paper);border-radius:22px;padding:10px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;box-shadow:0 6px 0 var(--sky2);cursor:pointer}
+.dexcard svg{width:120px;height:120px}
+.dexcard b{font-family:var(--f-display);font-weight:400;font-size:21px}
+.dexcard.none{background:#E8EEF6;cursor:default}
+.dexcard.pt{box-shadow:0 0 0 4px var(--leaf),0 6px 0 var(--sky2)}
+.dexbtn{font-size:16px;min-height:44px;padding:8px 14px;margin-top:4px}
+.meter.sm{height:10px;width:80%}
+.monrow .mini{width:56px;height:56px;cursor:pointer}
+.monrow .mini svg{width:100%;height:100%}
+.ptn2{width:70px;margin-left:-20px;cursor:pointer;align-self:flex-end}
+.ptn2 svg{width:100%;height:auto}
+.evo{position:relative;width:200px;height:200px;margin:6px auto}
+.evo-a,.evo-b{position:absolute;inset:0}
+.evo-a svg,.evo-b svg{width:100%;height:100%}
+.evo-a{animation:evoA 2.2s steps(1,end) forwards}
+.evo-b{opacity:0;animation:evoB 2.2s steps(1,end) forwards}
+.evo-burst{animation-delay:2.1s}
+.evo-name{animation-delay:2.3s}
+@keyframes evoA{0%{opacity:1;filter:brightness(1)}15%{filter:brightness(0) invert(1)}30%{opacity:0}40%{opacity:1}55%{opacity:0}62%{opacity:1}72%{opacity:0}77%{opacity:1}84%{opacity:0}88%{opacity:1}93%,100%{opacity:0}}
+@keyframes evoB{0%,29%{opacity:0}30%{opacity:1;filter:brightness(0) invert(1)}40%{opacity:0}55%{opacity:1}62%{opacity:0}72%{opacity:1}77%{opacity:0}84%{opacity:1}88%{opacity:0}93%{opacity:1;filter:brightness(0) invert(1)}100%{opacity:1;filter:none}}
+@media (max-width:520px){ .partner{left:calc(3% + 100px);width:58px} .dexgrid{grid-template-columns:repeat(2,1fr)} .dexcard svg{width:96px;height:96px} }
 /* 한자 모험: 전투 */
 .field{position:relative;border-radius:30px;min-height:300px;background:linear-gradient(180deg,var(--w1),var(--w2));overflow:hidden;box-shadow:0 6px 0 rgba(29,42,72,.18)}
 .field.shake{animation:shake .4s}
@@ -443,13 +487,14 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
       <div class="panel mission"><h2>오늘의 미션</h2><div class="mlist" id="mlist"></div></div>
       <div class="modes">
         <button class="mode big" data-go="adv"><span class="ic">⚔️</span><span class="tx"><span class="nm">한자 모험</span><span class="ds">몬스터를 물리치고 한자 마왕을 무찔러라!</span><span class="ds" id="advProg"></span></span></button>
+        <button class="mode" data-go="dex" style="--c:#E8453C"><span class="ic">🎴</span><span class="nm">한자몬 도감</span><span class="ds" id="dexProg">잡아서 모아요</span></button>
         <button class="mode" data-go="learn" style="--c:var(--sun)"><span class="ic">🃏</span><span class="nm">한자 카드</span><span class="ds">그림으로 배우기</span></button>
         <button class="mode" data-go="quiz" style="--c:var(--grape)"><span class="ic">👾</span><span class="nm">몬스터 퀴즈</span><span class="ds">맞히면 공격!</span></button>
         <button class="mode" data-go="match" style="--c:var(--peach)"><span class="ic">🧩</span><span class="nm">짝 맞추기</span><span class="ds">카드 뒤집기</span></button>
         <button class="mode" data-go="write" style="--c:var(--leaf)"><span class="ic">✍️</span><span class="nm">따라 쓰기</span><span class="ds">손가락으로 쓰기</span></button>
         <button class="mode" data-go="exam" style="--c:var(--seal)"><span class="ic">📝</span><span class="nm">시험 연습</span><span class="ds">진짜 시험처럼</span></button>
       </div>
-      <div class="panel collection"><h2>잡은 몬스터</h2><div class="monrow" id="monrow"></div></div>
+      <div class="panel collection"><h2>잡은 한자몬</h2><div class="monrow" id="monrow"></div></div>
       <button class="parentBtn" id="parentBtn"><span class="fill"></span>부모님 화면 (꾹 누르고 있기)</button>
     </section>
 
@@ -499,6 +544,7 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
         <div class="ebox"><div class="ename" id="bName"></div><div class="ehp"><i id="bHp"></i></div><div class="small" id="bHpTxt"></div></div>
         <div class="emon" id="bMon"></div>
         <div class="bhero" id="bHero"></div>
+        <div class="partner" id="bPartner"></div>
         <div class="pl"><span id="bHearts"></span><span id="bShield"></span><span class="combo" id="bCombo"></span></div>
         <canvas class="fx" id="bFx"></canvas>
         <div class="bflash" id="bFlash"></div>
@@ -508,6 +554,8 @@ button:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
       <div class="opts" id="bOpts"></div>
       <div class="bbar"><div class="items" id="bItems"></div><button class="special" id="bSpecial" hidden>💥 필살기!</button></div>
     </section>
+
+    <section id="scr-dex" hidden><div id="dexBody"></div></section>
 
     <section id="scr-daily" hidden><div id="dailyBody"></div></section>
 
@@ -818,6 +866,9 @@ function voiceLines(){
   LEVELS.forEach(L=>out.core.add(lvLine(L)));
   MONSTERS.forEach(m=>{ out.core.add(`${m[1]}${josaIG(m[1])} 나타났다!`); out.core.add(`야호! ${m[1]}${josa(m[1])} 물리쳤어!`); });
   Object.values(ADVS).forEach(A=>{ A.worlds.forEach(W=>[...W.mons,W.boss].forEach(m=>out.core.add(`${m[1]}${josaIG(m[1])} 나타났다!`))); out.core.add(endLine(A)); });
+  HMON_ORDER.forEach(id=>{ const M=HMON[id]; [M.n,M.evo].filter(Boolean).forEach(n=>{ out.core.add(`${n}, 공격!`); out.core.add(`${n}${josaIG(n)} 함께 싸워요!`); out.core.add(n); });
+    out.core.add(`${M.n}${josa(M.n)} 잡았다!`); if(M.evo)out.core.add(`${M.n}${josaIG(M.n)} ${M.evo}${josaRo(M.evo)} 진화했다!`); });
+  ['한자볼, 가랏!','속성 상성! 두 배 공격!'].forEach(t=>out.core.add(t));
   Object.values(GEAR).forEach(g=>out.core.add(`보스를 물리쳤다! ${g.n}${josa(g.n)} 얻었어!`));
   Object.values(ITEMS).forEach(it=>out.core.add(it.n+'!'));
   CH.forEach(o=>{ out[o.lv].add(o.he); if(o.book){ const k='s'+o.lv; (out[k]=out[k]||new Set()); o.book.pages.forEach(t=>out[k].add(storyLine(t))); } });
@@ -837,7 +888,7 @@ const RANKS=[[0,'🌱','새싹 탐험대원'],[30,'🐣','씩씩한 탐험대원
 const rankOf=n=>RANKS.filter(r=>n>=r[0]).pop();
 
 /* ================= 화면 이동 ================= */
-const TITLES={daily:'오늘의 공부',adv:'한자 모험',battle:'전투',home:'한자 탐험대',learn:'한자 카드',quiz:'몬스터 퀴즈',match:'짝 맞추기',write:'따라 쓰기',exam:'시험 연습',parent:'부모님 화면'};
+const TITLES={dex:'한자몬 도감',daily:'오늘의 공부',adv:'한자 모험',battle:'전투',home:'한자 탐험대',learn:'한자 카드',quiz:'몬스터 퀴즈',match:'짝 맞추기',write:'따라 쓰기',exam:'시험 연습',parent:'부모님 화면'};
 let cur='home', cleanup=null;
 /* 뒤로가기: 브라우저 기록에 화면을 쌓아서 기기의 뒤로 버튼이 앱 안에서 한 단계씩 돌아가게 함
    깊이 d: 홈 0 → 놀이 화면 1 → 전투·따라 쓰기 2, 동화책·지도 칸 창은 그 위에 한 칸 */
@@ -880,7 +931,7 @@ function go(name,arg,fromPop){
   cur=name; $('#backBtn').hidden=name==='home';
   $('#barTitle').textContent = name==='home'?`${heroName()}의 한자 탐험대`:`${TITLES[name]} · ${lvName()}`;
   window.scrollTo(0,0);
-  ({home:renderHome,learn:renderLearn,quiz:startQuiz,match:startMatch,write:()=>startWrite(arg),exam:startExam,parent:renderParent,adv:renderAdv,battle:()=>beginBattle(arg),daily:startDaily})[name]();
+  ({home:renderHome,learn:renderLearn,quiz:startQuiz,match:startMatch,write:()=>startWrite(arg),exam:startExam,parent:renderParent,adv:renderAdv,battle:()=>beginBattle(arg),daily:startDaily,dex:renderDex})[name]();
 }
 const lvName=()=>LEVELS.find(L=>L.id===S.level).name;
 function renderTop(){ $('#starCount').textContent=S.stars; }
@@ -899,7 +950,9 @@ function renderHome(){
     + (S.today.bonus?'<p class="small">오늘 미션 완료! 내일 또 만나요 🌙</p>':'<p class="small">미션을 다 하면 ⭐ 5개 보너스!</p>');
   renderDday();
   { setAdv(S.level); const w=advProgress(); $('#advProg').textContent=w>=WORLDS.length?`👑 ${ADV.name}을 구했어요! 다른 급수 왕국도 도전해요`:`${lvName()} ${ADV.name} · 지금: ${w+1}. ${WORLDS[w].name} · 장비 ${adv().gear.map(id=>GEAR[id].e).join('')||'없음 (맨몸)'}`; }
-  $('#monrow').innerHTML=S.monsters.length?S.monsters.map(m=>`<span>${m}</span>`).join(''):'<span class="empty">몬스터 퀴즈에서 이기면 여기에 모여요</span>';
+  { const cs=HMON_ORDER.filter(caught); $('#dexProg').textContent=`${cs.length} / ${HMON_ORDER.length} 잡음`;
+    $('#monrow').innerHTML=cs.length?cs.map(id=>`<span class="mini" data-go="dex">${monSVG(id,{evo:isEvo(id)})}</span>`).join(''):'<span class="empty">한자 모험에서 몬스터를 이기면 한자볼로 잡을 수 있어요</span>'; }
+  setTimeout(checkEvo,1200);
   save();
 }
 
@@ -1335,6 +1388,193 @@ function endExam(){
     <div class="row"><button class="btn seal" data-go="exam">다시 풀기</button><button class="btn" data-go="home">처음으로</button></div></div>`;
 }
 
+/* ================= 한자몬 =================
+   한자에서 태어난 오리지널 몬스터. 배에 자기 한자가 있어요. 잡아서 도감에 모으고, 파트너로 데리고 싸우고, 한자를 5번 맞히면 진화해요.
+   속성 상성(오행): 물→불→쇠→나무→흙→물 (화살표 방향을 이겨요) */
+const EL={
+  fire:{n:'불',i:'🔥',m:'#FF7A45',d:'#B8402B',l:'#FFE0C2',a:'#FFD34D'},
+  water:{n:'물',i:'💧',m:'#4FA8E8',d:'#1F6FB0',l:'#D6EEFF',a:'#FFFFFF'},
+  wood:{n:'나무',i:'🌿',m:'#6CC46B',d:'#2F7A3E',l:'#DDF4D2',a:'#FF9EC0'},
+  earth:{n:'흙',i:'🪨',m:'#C99A5B',d:'#7E5A2E',l:'#F4E2C2',a:'#8E97A8'},
+  metal:{n:'쇠',i:'⚙️',m:'#B9C6D6',d:'#5F6E86',l:'#F7F9FC',a:'#F2C14E'},
+  dark:{n:'어둠',i:'🌑',m:'#7A5CC9',d:'#3B2A6B',l:'#E2D8FA',a:'#FF5A7A'},
+};
+const BEATS={water:'fire',fire:'metal',metal:'wood',wood:'earth',earth:'water'};
+const HMON={
+  ppuri:{n:'뿌리뿌',evo:'뿌리거목',c:'木',el:'wood',shape:'tall',ears:'leaf',tail:'leaf',extra:'spots'},
+  heukto:{n:'흙토리',evo:'바위토리',c:'土',el:'earth',shape:'round',ears:'round',tail:'rock',extra:'shell'},
+  ssak:{n:'싹싹이',evo:'꽃싹이',c:'生',el:'wood',shape:'tiny',ears:'sprout',tail:'none',extra:'flower'},
+  haedol:{n:'해돌이',evo:'해불꽃',c:'日',el:'fire',shape:'round',ears:'rays',tail:'flame',extra:'none'},
+  sankku:{n:'산꾸러기',c:'山',el:'earth',shape:'round',ears:'peaks',tail:'rock',extra:'shell',boss:true},
+  joljol:{n:'졸졸이',evo:'출렁이',c:'水',el:'water',shape:'round',ears:'fin',tail:'fin',extra:'bubble'},
+  dalkong:{n:'달콩',evo:'보름달콩',c:'月',el:'water',shape:'tiny',ears:'long',tail:'none',extra:'moon'},
+  parang:{n:'파랑이',evo:'파랑날개',c:'靑',el:'water',shape:'tall',ears:'cat',tail:'fin',extra:'wings'},
+  hayan:{n:'하얀솜',evo:'은빛솜',c:'白',el:'metal',shape:'round',ears:'round',tail:'none',extra:'fluff'},
+  manman:{n:'만만룡',c:'萬',el:'water',shape:'long',ears:'horn',tail:'fin',extra:'wings',boss:true},
+  hwa:{n:'화르륵',evo:'활활화룡',c:'火',el:'fire',shape:'long',ears:'horn',tail:'flame',extra:'spots'},
+  munmun:{n:'문문이',evo:'철문장군',c:'門',el:'metal',shape:'tall',ears:'antenna',tail:'none',extra:'shell'},
+  kkoma:{n:'꼬마인',evo:'거인인',c:'人',el:'earth',shape:'tall',ears:'round',tail:'none',extra:'spots'},
+  jakkong:{n:'작은콩',evo:'큰콩나무',c:'小',el:'wood',shape:'tiny',ears:'sprout',tail:'leaf',extra:'none'},
+  daewang:{n:'대왕도깨',c:'大',el:'fire',shape:'round',ears:'horn',tail:'flame',extra:'mane',boss:true},
+  geumnyang:{n:'금빛냥',evo:'황금사자',c:'金',el:'metal',shape:'round',ears:'cat',tail:'bolt',extra:'mane'},
+  cheolgap:{n:'철갑군',evo:'강철군단',c:'軍',el:'metal',shape:'tall',ears:'horn',tail:'none',extra:'shell'},
+  bukpung:{n:'북풍이',evo:'눈보라북',c:'北',el:'water',shape:'round',ears:'cat',tail:'fin',extra:'snow'},
+  noeul:{n:'노을새',evo:'황혼봉황',c:'西',el:'fire',shape:'tiny',ears:'crest',tail:'flame',extra:'wings'},
+  mawang:{n:'어둠의 마왕',c:'王',el:'dark',shape:'round',ears:'horn',tail:'bolt',extra:'crown',boss:true},
+};
+const HMON_ORDER=Object.keys(HMON);
+function dex(){ if(!S.dex)S.dex={}; return S.dex; }
+const caught=id=>!!dex()[id];
+const isEvo=id=>!!(dex()[id]&&dex()[id].evo);
+const monName=id=>isEvo(id)?HMON[id].evo:HMON[id].n;
+const monOf=m=>m&&typeof m[0]==='string'&&m[0][0]==='@'?m[0].slice(1):null;
+function josaRo(s){ const k=s.charCodeAt(s.length-1)-0xAC00; if(k<0||k>=11172)return '로'; const j=k%28; return j===0||j===8?'로':'으로'; }
+function monVis(m,cls){ const id=monOf(m); return id?monSVG(id,{evo:false,cls}):m[0]; }
+function evoNeed(id){ const s=S.stat[HMON[id].c]; return Math.min(5,s?s.r:0); }
+
+function monSVG(id,o){
+  o=o||{}; const M=HMON[id], E=EL[M.el], ev=!!o.evo&&!M.boss, big=ev||M.boss, sil=!!o.sil, u='m'+(++heroUid);
+  const F=c=>sil?'#2A2F45':c, S2=c=>sil?'#1A1E30':c;
+  let [cx,cy,rx,ry]={round:[60,76,33,29],tall:[60,72,26,36],long:[60,82,40,24],tiny:[60,84,25,23]}[M.shape];
+  if(big){ rx*=1.12; ry*=1.12; cy-=4; }
+  const top=cy-ry, L=cx-rx, R=cx+rx, sw=3;
+  let g=`<svg class="mon-svg ${o.cls||''}" viewBox="0 0 120 120" aria-label="${sil?'???':M.n}"><defs><radialGradient id="${u}" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="${F(E.l)}"/><stop offset=".45" stop-color="${F(E.m)}"/><stop offset="1" stop-color="${F(E.d)}"/></radialGradient></defs>`;
+  g+=`<ellipse cx="60" cy="${cy+ry+3}" rx="${rx*.95}" ry="5" fill="rgba(20,25,45,.25)"/>`;
+  // 날개 (뒤)
+  if((M.extra==='wings'&&(ev||M.boss||M.ears==='crest'))||(ev&&M.extra==='none')){ const wy=cy-ry*.25;
+    g+=`<path d="M${L+8} ${wy} Q${L-26} ${wy-30} ${L-20} ${wy+8} Q${L-10} ${wy} ${L-6} ${wy+16} Q${L+2} ${wy+8} ${L+10} ${wy+14}Z" fill="${F(E.a==='#FFFFFF'?E.l:E.a)}" stroke="${S2(E.d)}" stroke-width="${sw}" stroke-linejoin="round"/>
+      <path d="M${R-8} ${wy} Q${R+26} ${wy-30} ${R+20} ${wy+8} Q${R+10} ${wy} ${R+6} ${wy+16} Q${R-2} ${wy+8} ${R-10} ${wy+14}Z" fill="${F(E.a==='#FFFFFF'?E.l:E.a)}" stroke="${S2(E.d)}" stroke-width="${sw}" stroke-linejoin="round"/>`; }
+  // 갈기 (뒤)
+  if(M.extra==='mane'&&(ev||M.boss)){ let p=''; for(let i=0;i<12;i++){ const a=Math.PI*(i/11)-Math.PI, r1=rx*1.08, r2=rx*1.38; const a2=a+Math.PI/22;
+      p+=`${i?'L':'M'}${(cx+Math.cos(a)*r1).toFixed(1)} ${(top+ry*.75+Math.sin(a)*r1).toFixed(1)} L${(cx+Math.cos(a2)*r2).toFixed(1)} ${(top+ry*.75+Math.sin(a2)*r2).toFixed(1)} `; }
+    g+=`<path d="${p}Z" fill="${F(E.a)}" stroke="${S2(E.d)}" stroke-width="2.5" stroke-linejoin="round"/>`; }
+  // 꼬리 (뒤, 오른쪽)
+  const ty=cy+ry*.2;
+  if(M.tail==='flame')g+=`<path d="M${R-6} ${ty+6} Q${R+24} ${ty-2} ${R+16} ${ty-32} Q${R+8} ${ty-18} ${R+3} ${ty-26} Q${R-1} ${ty-10} ${R-10} ${ty-2}Z" fill="${F('#FFB13B')}" stroke="${S2('#C9432E')}" stroke-width="2.5" stroke-linejoin="round"/><path d="M${R+2} ${ty+2} Q${R+14} ${ty-4} ${R+10} ${ty-18} Q${R+4} ${ty-8} ${R-2} ${ty-4}Z" fill="${F('#FFE45C')}"/>`;
+  if(M.tail==='fin')g+=`<path d="M${R-6} ${ty+8} L${R+22} ${ty-14} Q${R+14} ${ty+4} ${R+22} ${ty+22}Z" fill="${F(E.l)}" stroke="${S2(E.d)}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  if(M.tail==='leaf')g+=`<path d="M${R-6} ${ty+6} Q${R+10} ${ty-28} ${R+28} ${ty-20} Q${R+18} ${ty+4} ${R-6} ${ty+6}Z" fill="${F('#8FD67E')}" stroke="${S2('#2F7A3E')}" stroke-width="2.5"/><path d="M${R-4} ${ty+4} Q${R+10} ${ty-10} ${R+24} ${ty-18}" stroke="${S2('#2F7A3E')}" stroke-width="1.6" fill="none"/>`;
+  if(M.tail==='rock')g+=`<circle cx="${R+6}" cy="${ty+4}" r="9" fill="${F('#9AA3B2')}" stroke="${S2('#5F6878')}" stroke-width="2.5"/><circle cx="${R+18}" cy="${ty-6}" r="6" fill="${F('#9AA3B2')}" stroke="${S2('#5F6878')}" stroke-width="2.5"/>`;
+  if(M.tail==='bolt')g+=`<path d="M${R-6} ${ty+6} L${R+10} ${ty-4} L${R+6} ${ty+4} L${R+24} ${ty-18} L${R+16} ${ty+8} L${R+20} ${ty+2} L${R+2} ${ty+16}Z" fill="${F(E.a)}" stroke="${S2(E.d)}" stroke-width="2.5" stroke-linejoin="round"/>`;
+  // 귀·뿔·머리 장식 (뒤)
+  const ex=rx*.55, ey=top+8;
+  if(M.ears==='cat')g+=`<path d="M${cx-ex-12} ${ey+6} L${cx-ex-6} ${ey-22} L${cx-ex+12} ${ey}Z M${cx+ex+12} ${ey+6} L${cx+ex+6} ${ey-22} L${cx+ex-12} ${ey}Z" fill="${F(E.m)}" stroke="${S2(E.d)}" stroke-width="${sw}" stroke-linejoin="round"/><path d="M${cx-ex-6} ${ey-12} L${cx-ex+4} ${ey-2} L${cx-ex-8} ${ey+2}Z M${cx+ex+6} ${ey-12} L${cx+ex-4} ${ey-2} L${cx+ex+8} ${ey+2}Z" fill="${F(E.a==='#FFFFFF'?'#FFC2D6':E.a)}"/>`;
+  if(M.ears==='round')g+=`<circle cx="${cx-ex}" cy="${ey-2}" r="10" fill="${F(E.m)}" stroke="${S2(E.d)}" stroke-width="${sw}"/><circle cx="${cx+ex}" cy="${ey-2}" r="10" fill="${F(E.m)}" stroke="${S2(E.d)}" stroke-width="${sw}"/><circle cx="${cx-ex}" cy="${ey-2}" r="4.5" fill="${F(E.l)}"/><circle cx="${cx+ex}" cy="${ey-2}" r="4.5" fill="${F(E.l)}"/>`;
+  if(M.ears==='long')g+=`<ellipse cx="${cx-12}" cy="${ey-20}" rx="7" ry="20" fill="${F(E.m)}" stroke="${S2(E.d)}" stroke-width="${sw}" transform="rotate(-12 ${cx-12} ${ey-4})"/><ellipse cx="${cx+12}" cy="${ey-20}" rx="7" ry="20" fill="${F(E.m)}" stroke="${S2(E.d)}" stroke-width="${sw}" transform="rotate(12 ${cx+12} ${ey-4})"/><ellipse cx="${cx-12}" cy="${ey-20}" rx="3" ry="13" fill="${F('#FFC2D6')}" transform="rotate(-12 ${cx-12} ${ey-4})"/><ellipse cx="${cx+12}" cy="${ey-20}" rx="3" ry="13" fill="${F('#FFC2D6')}" transform="rotate(12 ${cx+12} ${ey-4})"/>`;
+  if(M.ears==='horn'){ const h=big?30:20; g+=`<path d="M${cx-ex} ${ey+4} Q${cx-ex-10} ${ey-h*.5} ${cx-ex-4} ${ey-h} Q${cx-ex+4} ${ey-h*.4} ${cx-ex+10} ${ey+2}Z M${cx+ex} ${ey+4} Q${cx+ex+10} ${ey-h*.5} ${cx+ex+4} ${ey-h} Q${cx+ex-4} ${ey-h*.4} ${cx+ex-10} ${ey+2}Z" fill="${F(M.el==='dark'?'#FFE07A':'#FFF3D6')}" stroke="${S2(E.d)}" stroke-width="2.5" stroke-linejoin="round"/>`; }
+  if(M.ears==='fin')g+=`<path d="M${cx-14} ${top+6} Q${cx} ${top-26} ${cx+16} ${top+6}Z" fill="${F(E.l)}" stroke="${S2(E.d)}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  if(M.ears==='leaf')g+=`<path d="M${cx-6} ${top+4} Q${cx-34} ${top-14} ${cx-30} ${top-30} Q${cx-10} ${top-20} ${cx-6} ${top+4}Z M${cx+6} ${top+4} Q${cx+34} ${top-14} ${cx+30} ${top-30} Q${cx+10} ${top-20} ${cx+6} ${top+4}Z" fill="${F('#8FD67E')}" stroke="${S2('#2F7A3E')}" stroke-width="2.5"/>`;
+  if(M.ears==='sprout'){ g+=`<path d="M${cx} ${top+4} V${top-14}" stroke="${S2('#2F7A3E')}" stroke-width="3.5" stroke-linecap="round"/><path d="M${cx} ${top-12} Q${cx-20} ${top-24} ${cx-22} ${top-10} Q${cx-10} ${top-4} ${cx} ${top-12}Z M${cx} ${top-12} Q${cx+20} ${top-26} ${cx+22} ${top-12} Q${cx+10} ${top-4} ${cx} ${top-12}Z" fill="${F('#8FD67E')}" stroke="${S2('#2F7A3E')}" stroke-width="2.2"/>`;
+    if(ev&&M.extra==='flower')g+=`<g transform="translate(${cx},${top-16})">${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-8" rx="5" ry="8" fill="${F('#FF9EC0')}" stroke="${S2('#C94A7A')}" stroke-width="1.5" transform="rotate(${a})"/>`).join('')}<circle r="4.5" fill="${F('#FFE45C')}"/></g>`; }
+  if(M.ears==='rays')g+=[...Array(7)].map((_,i)=>{ const a=Math.PI*(i/6)-Math.PI, r1=rx*.92, r2=rx*(big?1.45:1.3); return `<path d="M${(cx+Math.cos(a-.12)*r1).toFixed(1)} ${(cy-4+Math.sin(a-.12)*r1).toFixed(1)} L${(cx+Math.cos(a)*r2).toFixed(1)} ${(cy-4+Math.sin(a)*r2).toFixed(1)} L${(cx+Math.cos(a+.12)*r1).toFixed(1)} ${(cy-4+Math.sin(a+.12)*r1).toFixed(1)}Z" fill="${F('#FFD34D')}" stroke="${S2('#C9971A')}" stroke-width="2" stroke-linejoin="round"/>`; }).join('');
+  if(M.ears==='peaks')g+=`<path d="M${cx-rx*.7} ${top+12} L${cx-rx*.4} ${top-14} L${cx-rx*.1} ${top+8} L${cx+rx*.15} ${top-26} L${cx+rx*.45} ${top+8} L${cx+rx*.7} ${top-10} L${cx+rx*.85} ${top+14}Z" fill="${F('#8E97A8')}" stroke="${S2('#4E5A75')}" stroke-width="2.5" stroke-linejoin="round"/><path d="M${cx+rx*.05} ${top-16} L${cx+rx*.15} ${top-26} L${cx+rx*.25} ${top-16}Z" fill="${F('#FFFFFF')}"/>`;
+  if(M.ears==='antenna')g+=`<path d="M${cx-10} ${top+4} Q${cx-16} ${top-14} ${cx-22} ${top-20} M${cx+10} ${top+4} Q${cx+16} ${top-14} ${cx+22} ${top-20}" stroke="${S2(E.d)}" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="${cx-22}" cy="${top-21}" r="5" fill="${F(E.a)}" stroke="${S2(E.d)}" stroke-width="2"/><circle cx="${cx+22}" cy="${top-21}" r="5" fill="${F(E.a)}" stroke="${S2(E.d)}" stroke-width="2"/>`;
+  if(M.ears==='crest')g+=`<path d="M${cx-4} ${top+4} Q${cx-14} ${top-22} ${cx+2} ${top-30} Q${cx-2} ${top-16} ${cx+12} ${top-24} Q${cx+8} ${top-8} ${cx+8} ${top+4}Z" fill="${F('#FFD34D')}" stroke="${S2('#C9432E')}" stroke-width="2.2" stroke-linejoin="round"/>`;
+  // 몸
+  g+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#${u})" stroke="${S2(E.d)}" stroke-width="${sw}"/>`;
+  if(M.extra==='fluff')g+=[...Array(10)].map((_,i)=>{ const a=Math.PI*2*i/10; return `<circle cx="${(cx+Math.cos(a)*rx*.95).toFixed(1)}" cy="${(cy+Math.sin(a)*ry*.95).toFixed(1)}" r="${big?9:7}" fill="${F('#FFFFFF')}" stroke="${S2('#9AA6B8')}" stroke-width="1.6"/>`; }).join('');
+  if(M.extra==='shell')g+=`<path d="M${L+4} ${cy-ry*.2} Q${cx} ${cy-ry*1.05} ${R-4} ${cy-ry*.2}" fill="none" stroke="${S2(E.d)}" stroke-width="${big?7:5}" stroke-linecap="round" opacity=".55"/>`;
+  if(M.extra==='spots')g+=`<circle cx="${L+rx*.35}" cy="${cy+ry*.1}" r="4" fill="${F(E.d)}" opacity=".45"/><circle cx="${R-rx*.3}" cy="${cy-ry*.05}" r="3.2" fill="${F(E.d)}" opacity=".45"/><circle cx="${R-rx*.42}" cy="${cy+ry*.4}" r="2.6" fill="${F(E.d)}" opacity=".45"/>`;
+  if(M.extra==='snow')g+=`<path d="M${L+rx*.3} ${cy} l6 0 m-3 -3 l0 6 m-2 -2 l4 -2 m-4 0 l4 2" stroke="${S2('#FFFFFF')}" stroke-width="1.8" stroke-linecap="round"/><path d="M${R-rx*.3} ${cy+6} l6 0 m-3 -3 l0 6" stroke="${S2('#FFFFFF')}" stroke-width="1.8" stroke-linecap="round"/>`;
+  // 배와 한자
+  const by=cy+ry*.3, bry=ry*.55;
+  g+=`<ellipse cx="${cx}" cy="${by}" rx="${rx*.6}" ry="${bry}" fill="${F(E.l)}" opacity="${sil?1:.95}"/>`;
+  if(!sil)g+=`<text x="${cx}" y="${by+bry*.36}" text-anchor="middle" font-family="'Noto Serif KR',serif" font-weight="900" font-size="${(bry*1.05).toFixed(1)}" fill="${E.d}">${M.c}</text>`;
+  // 팔다리
+  g+=`<ellipse cx="${L+3}" cy="${cy+ry*.2}" rx="7" ry="9" fill="${F(E.m)}" stroke="${S2(E.d)}" stroke-width="2.5"/><ellipse cx="${R-3}" cy="${cy+ry*.2}" rx="7" ry="9" fill="${F(E.m)}" stroke="${S2(E.d)}" stroke-width="2.5"/>
+    <ellipse cx="${cx-rx*.45}" cy="${cy+ry-2}" rx="10" ry="6.5" fill="${F(E.d)}"/><ellipse cx="${cx+rx*.45}" cy="${cy+ry-2}" rx="10" ry="6.5" fill="${F(E.d)}"/>`;
+  // 얼굴
+  const fy=cy-ry*.38, fx=rx*.34;
+  if(sil){ g+=`<ellipse cx="${cx-fx}" cy="${fy}" rx="5" ry="6" fill="#FFFFFF" opacity=".85"/><ellipse cx="${cx+fx}" cy="${fy}" rx="5" ry="6" fill="#FFFFFF" opacity=".85"/>`; }
+  else{
+    const angry=M.boss, er=big?7.5:7;
+    g+=`<ellipse cx="${cx-fx}" cy="${fy}" rx="${er}" ry="${er+1.5}" fill="#FFFFFF" stroke="${E.d}" stroke-width="1.8"/><ellipse cx="${cx+fx}" cy="${fy}" rx="${er}" ry="${er+1.5}" fill="#FFFFFF" stroke="${E.d}" stroke-width="1.8"/>
+      <circle cx="${cx-fx+1}" cy="${fy+1}" r="${er*.62}" fill="#1D2A48"/><circle cx="${cx+fx-1}" cy="${fy+1}" r="${er*.62}" fill="#1D2A48"/>
+      <circle cx="${cx-fx+2.6}" cy="${fy-1.6}" r="1.8" fill="#FFFFFF"/><circle cx="${cx+fx+.6}" cy="${fy-1.6}" r="1.8" fill="#FFFFFF"/>`;
+    if(angry||ev)g+=`<path d="M${cx-fx-8} ${fy-11} L${cx-fx+6} ${fy-7}" stroke="${E.d}" stroke-width="3.2" stroke-linecap="round"/><path d="M${cx+fx+8} ${fy-11} L${cx+fx-6} ${fy-7}" stroke="${E.d}" stroke-width="3.2" stroke-linecap="round"/>`;
+    g+=`<ellipse cx="${cx-fx-6}" cy="${fy+10}" rx="5" ry="2.8" fill="#FF8FA3" opacity=".55"/><ellipse cx="${cx+fx+6}" cy="${fy+10}" rx="5" ry="2.8" fill="#FF8FA3" opacity=".55"/>`;
+    g+= angry?`<path d="M${cx-9} ${fy+10} Q${cx} ${fy+5} ${cx+9} ${fy+10}" stroke="${E.d}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M${cx-6} ${fy+8.4} l2 4 l2 -3.6 M${cx+2} ${fy+7.6} l2 4 l2 -3.4" fill="#FFFFFF" stroke="${E.d}" stroke-width="1.2"/>`
+      :`<path d="M${cx-6} ${fy+8} Q${cx} ${fy+14} ${cx+6} ${fy+8}" stroke="${E.d}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+    if(M.extra==='moon')g+=`<path d="M${cx+2} ${top+6} a8 8 0 1 0 6 13 a6.4 6.4 0 1 1 -6 -13z" fill="${ev?'#FFE45C':'#FFF3B0'}" stroke="#C9971A" stroke-width="1.2"/>`;
+    if(M.extra==='bubble'&&ev)g+=`<circle cx="${R+12}" cy="${top}" r="6" fill="none" stroke="#FFFFFF" stroke-width="2"/><circle cx="${R+20}" cy="${top-12}" r="4" fill="none" stroke="#FFFFFF" stroke-width="2"/>`;
+  }
+  if(M.extra==='crown')g+=`<path d="M${cx-18} ${top+2} L${cx-14} ${top-16} L${cx-6} ${top-6} L${cx} ${top-20} L${cx+6} ${top-6} L${cx+14} ${top-16} L${cx+18} ${top+2}Z" fill="${F('#FFD34D')}" stroke="${S2('#A8741A')}" stroke-width="2.2" stroke-linejoin="round"/>`;
+  if(ev&&!sil)g+=`<path d="M${cx-rx-6} ${top+4} l3 -7 l3 7 l-7 -3 l8 0z" fill="#FFE45C" opacity=".9"/><path d="M${R+4} ${cy+ry*.5} l2 -5 l2 5 l-5 -2 l6 0z" fill="#FFE45C" opacity=".9"/>`;
+  return g+'</svg>';
+}
+function elTag(id){ const E=EL[HMON[id].el]; return `<span class="eltag" style="--ec:${E.d}">${E.i} ${E.n}</span>`; }
+
+/* ---- 도감 ---- */
+function renderDex(){
+  const D=dex(), n=HMON_ORDER.filter(caught).length;
+  const where=id=>{ for(const [lid,A] of Object.entries(ADVS))for(const W of A.worlds){ if([...W.mons,W.boss].some(m=>monOf(m)===id))return `${A.name} · ${W.name}`; } return ''; };
+  $('#dexBody').innerHTML=`<div class="panel dexhead"><div><b>한자몬 도감</b><span class="small">잡은 한자몬 ${n} / ${HMON_ORDER.length}</span></div>
+      <div class="small">물 💧 → 불 🔥 → 쇠 ⚙️ → 나무 🌿 → 흙 🪨 → 물 💧<br>화살표 쪽을 이겨요! 상성이 맞으면 파트너 공격이 2배</div></div>
+    <div class="dexgrid">${HMON_ORDER.map(id=>{ const M=HMON[id], c=caught(id), ev=isEvo(id), need=evoNeed(id), pt=S.partner===id;
+      if(!c)return `<div class="dexcard none">${monSVG(id,{sil:true})}<b>???</b><span class="small">${where(id)}</span></div>`;
+      return `<div class="dexcard ${pt?'pt':''}" data-dexsay="${id}">${monSVG(id,{evo:ev})}<b>${monName(id)}</b>${elTag(id)}
+        <span class="dexhan"><span class="han">${M.c}</span> ${BY[M.c].he}</span>
+        ${M.boss?'<span class="small">보스 한자몬</span>':ev?'<span class="small">✨ 진화 완료!</span>':`<div class="meter sm"><i style="width:${need/5*100}%"></i></div><span class="small">진화까지 ${M.c} 맞히기 ${need}/5</span>`}
+        <button class="btn ${pt?'leaf':''} dexbtn" data-partner="${id}">${pt?'✓ 함께 싸우는 중':'함께 싸우기'}</button></div>`; }).join('')}</div>`;
+  setTimeout(checkEvo,600);
+}
+/* ---- 진화: 한자몬의 한자를 5번 맞히면 ---- */
+function checkEvo(){
+  if(!$('#modal').hidden||BK||cur==='battle')return;
+  const id=HMON_ORDER.find(id=>caught(id)&&!isEvo(id)&&!HMON[id].boss&&evoNeed(id)>=5); if(!id)return;
+  const M=HMON[id]; dex()[id].evo=true; save();
+  openModal(`<div class="result-title">어? ${M.n}의 모습이…!</div><div class="evo"><div class="evo-a">${monSVG(id)}</div><div class="evo-b">${monSVG(id,{evo:true})}</div><div class="eq-burst evo-burst"></div></div>
+    <div class="eq-name evo-name">✨ ${M.evo}${josaRo(M.evo)} 진화했어요!</div><p class="small">${M.c}(${BY[M.c].he})를 5번 맞혀서 진화했어요</p>
+    <div class="row"><button class="btn grape" data-close="1">멋져!</button></div>`);
+  sfx('shing',{vol:.7}); setTimeout(()=>{ sWin(); confetti(); say(`${M.n}${josaIG(M.n)} ${M.evo}${josaRo(M.evo)} 진화했다!`); },2300);
+}
+
+/* ---- 파트너 공격 ---- */
+async function partnerAttack(){
+  const id=S.partner; if(!id||!caught(id)||!B||B.over)return;
+  const P=HMON[id], E=EL[P.el], pe=$('#bPartner'), eid=monOf(B.m), en=eid?HMON[eid]:null;
+  const mult=en?(BEATS[P.el]===en.el?2:BEATS[en.el]===P.el?.5:1):1;
+  const nm=monName(id);
+  say(`${nm}, 공격!`);
+  pe.animate([{transform:'none'},{transform:'translateY(-26px) scale(1.15)'},{transform:'none'}],{duration:420,easing:'ease-out'});
+  await sleep(260);
+  const f=$('#bField').getBoundingClientRect(), pc=centerOf(pe), mc=centerOf($('#bMon .e'));
+  const ball=document.createElement('div'); ball.className='proj'; ball.style.setProperty('--pc1',E.a==='#FFFFFF'?E.l:E.a); ball.style.setProperty('--pc2',E.m);
+  ball.style.left=pc.x+'px'; ball.style.top=pc.y+'px'; $('#bField').appendChild(ball);
+  whoosh(.5,.3); if(P.el==='fire')boom(.3,200,.25);
+  ball.animate([{transform:'translate(-50%,-50%) scale(.5)'},{transform:`translate(calc(-50% + ${(mc.x-pc.x)*.5}px), calc(-50% + ${(mc.y-pc.y)*.5-50}px)) scale(1.2)`},{transform:`translate(calc(-50% + ${mc.x-pc.x}px), calc(-50% + ${mc.y-pc.y}px)) scale(1.4)`}],{duration:380,easing:'ease-in'}); await sleep(380);
+  ball.remove(); if(!B||B.over)return;
+  const cols=[E.a,E.m,E.l,'#FFFFFF'];
+  sparks(mc.x,mc.y,30,cols,640); ringFx(mc.x,mc.y,mc.w*.9,E.m,.4); ringFx(mc.x,mc.y,mc.w*.6,'#FFFFFF',.3);
+  sfx({fire:'crit',water:'hurt',wood:'chop',earth:'die',metal:'metal',dark:'crit'}[P.el]||'hit1',{vol:.9}); sfx('hit2',{vol:.7}); boom(mult>1?.7:.4,130,.3);
+  flash(E.m,mult>1?.5:.25,220); shake(mult>1?14:7,300); vib(30);
+  const e=$('#bMon .e'); e.classList.add('flash'); setTimeout(()=>e.classList.remove('flash'),110);
+  if(mult>1){ floatAt('속성 상성! 2배!','info big2','40%','18%'); say('속성 상성! 두 배 공격!'); }
+  else if(mult<1)floatAt('효과가 조금 약해요','info','40%','18%');
+  applyDamage(Math.round(10*mult),mult>1,false);
+  await sleep(300);
+}
+
+/* ---- 격파와 잡기 ---- */
+async function captureSeq(id){
+  const M=HMON[id], e=$('#bMon .e'), hero=$('#bHero'), mc=centerOf(e), hc=centerOf(hero);
+  const ball=document.createElement('div'); ball.className='hball'; ball.innerHTML='<span>字</span>';
+  ball.style.left=hc.x+'px'; ball.style.top=(hc.y-20)+'px'; $('#bField').appendChild(ball);
+  say('한자볼, 가랏!'); whoosh(.5,.35);
+  ball.animate([{transform:'translate(-50%,-50%) rotate(0)'},{transform:`translate(calc(-50% + ${(mc.x-hc.x)*.5}px), calc(-50% + ${(mc.y-hc.y)*.5-110}px)) rotate(360deg)`},{transform:`translate(calc(-50% + ${mc.x-hc.x}px), calc(-50% + ${mc.y-hc.y+20}px)) rotate(720deg)`}],{duration:650,easing:'ease-in-out',fill:'forwards'}); await sleep(650);
+  sfx('open',{vol:.8}); flash('#FFFFFF',.6,200);
+  e.animate([{transform:'none',opacity:1,filter:'brightness(1)'},{transform:'scale(.15) translateY(80px)',opacity:0,filter:'brightness(4)'}],{duration:380,fill:'forwards',easing:'ease-in'}); await sleep(380);
+  const base=`translate(calc(-50% + ${mc.x-hc.x}px), calc(-50% + ${mc.y-hc.y+20}px))`;
+  ball.getAnimations().forEach(a=>{ try{a.commitStyles()}catch(_){} a.cancel(); }); ball.style.transform=base;
+  for(let i=0;i<3;i++){ await sleep(380); tone([340+i*60],.07,'square',.12);
+    ball.animate([{transform:base+' rotate(0)'},{transform:base+' rotate(-24deg)'},{transform:base+' rotate(20deg)'},{transform:base+' rotate(0)'}],{duration:420}); await sleep(420); }
+  await sleep(250);
+  sfx('shing',{vol:.9}); sfx('coins',{vol:.6}); sparks(mc.x,mc.y+20,34,['#FFE45C','#FFFFFF','#9FD8FF'],520); ringFx(mc.x,mc.y+20,90,'#FFE45C',.5);
+  ball.classList.add('done'); $('#bMsg').textContent=`${M.n}${josa(M.n)} 잡았다!`; say(`${M.n}${josa(M.n)} 잡았다!`); confetti();
+  dex()[id]={evo:false,at:today()}; B.caughtNew=id;
+  if(!S.partner){ S.partner=id; }
+  save(); await sleep(1400); ball.remove();
+}
+
 /* ================= 장비 =================
    용사는 맨몸(평상복·맨발·맨손)으로 시작해서, 보스를 이길 때마다 장비를 하나씩 입어요. 장비는 모든 왕국에서 함께 써요 */
 const GEAR={
@@ -1426,10 +1666,10 @@ function heroSVG(opt){
    그 급수에서 새로 나오는 한자와 낱말을 퀘스트마다 나눠 넣어서, 지도를 끝까지 깨면 모두 한 번 이상 만나요 */
 const ADVS={
   '8':{name:'숲 왕국',stages:5,hits:5,wrong:.25,dur:[16,15,14,13],worlds:[
-    {name:'새싹 숲',bg:['#C9EDB8','#6DBE69'],deco:['tree','tree','bush','flower','rock'],mons:[['🐛','꿈틀 애벌레'],['🐌','느림보 달팽이'],['🦔','따끔 고슴도치'],['🐝','윙윙 꿀벌']],boss:['🦍','킹콩 대장'],gear:'feet1'},
-    {name:'맑은 계곡',bg:['#C7EBC0','#9BD6C6'],deco:['mountain','pine','flower','rock','bush'],river:true,mons:[['🐸','개굴 왕눈이'],['🦎','날쌘 도마뱀'],['🐍','쉭쉭 뱀'],['🦆','꽥꽥 오리']],boss:['🐊','악어 장군'],gear:'weapon1'},
-    {name:'도깨비 마을',bg:['#F3DDB8','#E2B984'],deco:['house','house','tree','lantern','fence'],mons:[['👻','장난 유령'],['👺','빨간 도깨비'],['🧟','흐느적 좀비'],['🎃','호박 도깨비']],boss:['👹','도깨비 대장'],gear:'shield1'},
-    {name:'어둠의 성',bg:['#8B7BB8','#4A3C78'],deco:['deadtree','spike','rock','bones'],castle:['#3D2F63','#7A2E52'],mons:[['🦇','박쥐 경비병'],['💀','해골 기사'],['🕷️','거미 마법사'],['🐺','늑대 장군']],boss:['😈','어둠의 마왕'],gear:'head1'}]},
+    {name:'새싹 숲',bg:['#C9EDB8','#6DBE69'],deco:['tree','tree','bush','flower','rock'],mons:[['@ppuri','뿌리뿌'],['@heukto','흙토리'],['@ssak','싹싹이'],['@haedol','해돌이']],boss:['@sankku','산꾸러기'],gear:'feet1'},
+    {name:'맑은 계곡',bg:['#C7EBC0','#9BD6C6'],deco:['mountain','pine','flower','rock','bush'],river:true,mons:[['@joljol','졸졸이'],['@dalkong','달콩'],['@parang','파랑이'],['@hayan','하얀솜']],boss:['@manman','만만룡'],gear:'weapon1'},
+    {name:'도깨비 마을',bg:['#F3DDB8','#E2B984'],deco:['house','house','tree','lantern','fence'],mons:[['@hwa','화르륵'],['@munmun','문문이'],['@kkoma','꼬마인'],['@jakkong','작은콩']],boss:['@daewang','대왕도깨'],gear:'shield1'},
+    {name:'어둠의 성',bg:['#8B7BB8','#4A3C78'],deco:['deadtree','spike','rock','bones'],castle:['#3D2F63','#7A2E52'],mons:[['@geumnyang','금빛냥'],['@cheolgap','철갑군'],['@bukpung','북풍이'],['@noeul','노을새']],boss:['@mawang','어둠의 마왕'],gear:'head1'}]},
   '7-2':{name:'바다 왕국',stages:6,hits:6,wrong:.3,dur:[15,14,13,12,11],worlds:[
     {name:'모래 해변',bg:['#FBE7B5','#F2D08A'],deco:['wave','rock','fish','bush'],mons:[['🦀','집게 꽃게'],['🐚','소라 병사'],['🐡','뾰족 복어'],['🦞','가재 기사'],['🦭','물개 씨름꾼']],boss:['🐢','거북 대장'],gear:'body1'},
     {name:'산호 숲',bg:['#9ED3F5','#4E95DB'],deco:['fish','fish','wave','rock'],island:true,mons:[['🐠','줄무늬 물고기'],['🪼','찌릿 해파리'],['🦑','먹물 오징어'],['🐙','여덟발 문어'],['🦐','통통 새우']],boss:['🦈','상어 왕'],gear:'cape'},
@@ -1587,7 +1827,7 @@ function renderAdv(){
   const doneN=Object.keys(AL.cleared).length;
   $('#advBody').innerHTML=`<div class="advtabs">${LEVELS.filter(Lv=>ADVS[Lv.id]).map(Lv=>`<button class="advtab ${Lv.id===ADV.id?'on':''}" data-advlv="${Lv.id}"><b>${Lv.name}</b><small>${ADVS[Lv.id].name} · ${ADVS[Lv.id].worlds.length*ADVS[Lv.id].stages}칸</small></button>`).join('')}</div>
     <div class="panel advtop">
-      <div class="hero2">${heroSVG()}</div>
+      <div class="hero2">${heroSVG()}</div>${S.partner&&caught(S.partner)?`<div class="ptn2" data-go="dex">${monSVG(S.partner,{evo:isEvo(S.partner)})}</div>`:''}
       <div class="advinfo"><div class="t">용사 ${esc(heroName())}</div><div class="small">하트 ${maxHearts()}개 · ${['맨손','나무 검','강철 검','빛의 검'][weaponTier()]} · ${ADV.name} ${doneN}/${N}칸</div>
       <div class="inv">${Object.entries(ITEMS).map(([k,it])=>`<span>${it.e} ${A.items[k]||0}</span>`).join('')}</div>
       <div class="gearrow">${Object.keys(GEAR).map(id=>`<span class="gi ${hasGear(id)?'on':''}" title="${GEAR[id].n}">${hasGear(id)?GEAR[id].e:'❔'}</span>`).join('')}</div></div></div>
@@ -1595,6 +1835,7 @@ function renderAdv(){
     <div class="mapbar"><div class="mb-txt">${allDone?`<b>👑 ${ADV.name}을 구했어요!</b><span>아무 칸이나 눌러 다시 싸울 수 있어요</span>`
       :`<b>다음 목표: ${m[1]}</b><span>${W.name} · ${s===KS-1?'보스':(s+1)+'단계'}${toBoss?` · 마왕까지 ${toBoss}칸`:''}</span>`}</div>
       ${allDone?'':`<button class="btn grape" data-battle="${w},${s}">싸우러 가기 ⚔️</button>`}</div>`;
+  setTimeout(checkEvo,900);
   requestAnimationFrame(()=>{ scrollToHero(false); if(from<cur)setTimeout(()=>walkHero(L,from,cur),500); else { AL.pos=cur; save(); } });
 }
 function scrollToHero(smooth){ const h=$('#mapHero'); if(!h)return; const r=h.getBoundingClientRect(); window.scrollTo({top:Math.max(0,window.scrollY+r.top-window.innerHeight*.45),behavior:smooth?'smooth':'auto'}); }
@@ -1615,7 +1856,8 @@ function openNode(w,s){
   const W=WORLDS[w], boss=s===KS-1, m=boss?W.boss:W.mons[s], done=advLv().cleared[skey(w,s)], g=GEAR[W.gear];
   const q=boss?null:quests(ADV.id).get(w,s);
   sfx('open',{vol:.5}); navOverlay();
-  openModal(`<div class="result-big">${m[0]}</div><div class="small">${w+1}. ${W.name} · ${boss?'보스':(s+1)+'단계'}</div><div class="result-title">${m[1]}</div>
+  const mid=monOf(m);
+  openModal(`<div class="result-big ${mid?'hmbig':''}">${monVis(m)}</div>${mid?`<div>${elTag(mid)} ${caught(mid)?'<span class="small">✓ 잡은 한자몬</span>':'<span class="small">아직 못 잡았어요</span>'}</div>`:''}<div class="small">${w+1}. ${W.name} · ${boss?'보스':(s+1)+'단계'}</div><div class="result-title">${m[1]}</div>
     ${q?`<div class="qchars">${q.chars.map(c=>`<span class="han">${c}</span>`).join('')}</div><p class="small">이 퀘스트의 한자 ${q.chars.length}개 · 낱말 ${q.words.length}개</p>`:''}
     <p class="story">${boss?`이기면 ${g.e} ${g.n}${josa(g.n)} 얻고 ${w<WORLDS.length-1?'다음 땅이 열려요!':ADV.name+'을 구해요!'}`:done?'이미 이긴 몬스터예요. 또 싸워도 좋아요!':'이기면 보물 상자가 나와요!'}</p>
     <div class="row"><button class="btn grape" data-battle="${w},${s}">⚔️ 싸우기!</button><button class="btn" data-close="1">지도 보기</button></div>`);
@@ -1631,9 +1873,11 @@ function beginBattle([w,s]){
   B={w,s,boss,last,m,hp:max,max,hearts:maxHearts(),shield:startShield(),charge:0,deck,wrongPen:ADV.wrong,
      dur:ADV.dur[w]*(boss?.85:1)*gaugeSlow(),combo:0,ready:false,cs:worldChars(w),recent:[],
      lock:true,paused:false,hold:Infinity,freeze:0,phase2:false,t:performance.now(),over:false,first:true,q:null,pendingNext:false};
+  document.querySelectorAll('#bField .hball,#bField .proj,#bField .dmg,#bField .float').forEach(x=>x.remove()); $('#bMsg').classList.remove('ko');
   const f=$('#bField'); f.style.setProperty('--w1',W.bg[0]); f.style.setProperty('--w2',W.bg[1]);
   $('#barTitle').textContent=`${W.name} · ${boss?'보스':(s+1)+'단계'}`;
-  $('#bName').textContent=m[1]; $('#bMon').className='emon'+(boss?' boss':''); $('#bMon').innerHTML=`<span class="e">${m[0]}</span>`;
+  const mid=monOf(m); $('#bName').innerHTML=esc(m[1])+(mid?' '+elTag(mid):''); $('#bMon').className='emon'+(boss?' boss':'')+(mid?' hm':''); $('#bMon').innerHTML=`<span class="e">${monVis(m)}</span>`;
+  $('#bPartner').innerHTML=S.partner&&caught(S.partner)?monSVG(S.partner,{evo:isEvo(S.partner)}):''; B&&(B.pc=0);
   $('#bHero').innerHTML=heroSVG(); $('#bHero').getAnimations?.().forEach(a=>a.cancel());
   $('#bPrompt').innerHTML='<div class="tag">준비!</div>'; $('#bOpts').innerHTML='';
   drawBattle();
@@ -1754,10 +1998,13 @@ function applyDamage(dmg,crit,big){
   if(B.hp<=0){ B.over=true; B.lock=true; monsterDie(); }
 }
 async function monsterDie(){
-  const e=$('#bMon .e'); await sleep(260); const c=centerOf(e);
+  const e=$('#bMon .e'), id=monOf(B.m); await sleep(200);
+  const ko=$('#bMsg'); ko.textContent='격파!'; ko.classList.remove('ko'); void ko.offsetWidth; ko.classList.add('ko'); boom(.8,90,.6); shake(16,420);
+  if(id&&!caught(id)){ await sleep(700); ko.classList.remove('ko'); ko.textContent=''; await captureSeq(id); $('#bMsg').textContent=''; winBattle(); return; }
+  await sleep(300); const c=centerOf(e);
   sfx('die',{vol:.9}); poof(); sparks(c.x,c.y,26,['#FFFFFF','#D8DDE8','#A9B3C6'],420); ringFx(c.x,c.y,c.w,'rgba(255,255,255,.8)',.5);
   e.animate([{transform:'none',opacity:1,filter:'brightness(1)'},{transform:'scale(1.2) rotate(-10deg)',opacity:1,filter:'brightness(3)',offset:.25},{transform:'scale(0) rotate(200deg)',opacity:0,filter:'brightness(3)'}],{duration:700,fill:'forwards',easing:'ease-in'});
-  setTimeout(winBattle,1100);
+  setTimeout(()=>{ $('#bMsg').textContent=''; $('#bMsg').classList.remove('ko'); winBattle(); },1100);
 }
 async function heroSpecial(dmg){
   const hero=$('#bHero'), arm=hero.querySelector('.h-arm'), e=$('#bMon .e');
@@ -1802,6 +2049,7 @@ async function answerBattle(btn){
     else say(pick(PRAISE));
     await heroStrike(crit?20:10,crit);
     if(!B||B.over)return;
+    B.pc=(B.pc||0)+1; if(B.pc>=2&&S.partner&&caught(S.partner)){ B.pc=0; await sleep(120); await partnerAttack(); if(!B||B.over)return; }
     await sleep(150);
     if(B.paused)B.pendingNext=true; else nextBQ();
   }else{
@@ -1876,10 +2124,11 @@ function winBattle(){
   const A=adv(), AL=advLv(), W=WORLDS[B.w], k=skey(B.w,B.s); AL.cleared[k]=true;
   const loot=[rollItem()]; if(B.boss||Math.random()<.3)loot.push(rollItem()); loot.forEach(x=>A.items[x]=(A.items[x]||0)+1);
   let gear=null; if(B.boss&&!A.gear.includes(W.gear)){ A.gear.push(W.gear); gear=gearInfo(W.gear); }
-  const stars=B.boss?10:3; addStars(stars); bump('quiz'); if(!S.monsters.includes(B.m[0]))S.monsters.push(B.m[0]); save();
+  const stars=B.boss?10:3; addStars(stars); bump('quiz'); if(!monOf(B.m)&&!S.monsters.includes(B.m[0]))S.monsters.push(B.m[0]); save();
   sWin(); confetti();
   const equip=gear?`<div class="equip"><div class="eq-hero">${heroSVG({newSlot:gear.slot})}</div><div class="eq-item">${gear.e}</div><div class="eq-burst"></div></div><div class="eq-name">${gear.e} ${gear.n} 착용!</div><p class="small">${gear.d}</p>`:'';
-  const lootHtml=equip+`<div class="loot">${loot.map(x=>`<div><b>${ITEMS[x].e}</b>${ITEMS[x].n}</div>`).join('')}<div><b>⭐</b>별 ${stars}개</div></div>`;
+  const nc=B.caughtNew, newMon=nc?`<div class="newmon"><div class="nm-art">${monSVG(nc)}</div><div><b>🎴 새 한자몬!</b><div class="eq-name">${HMON[nc].n}</div>${elTag(nc)} <span class="dexhan"><span class="han">${HMON[nc].c}</span> ${BY[HMON[nc].c].he}</span>${S.partner===nc?'<div class="small">파트너가 되어 함께 싸워요!</div>':''}</div></div>`:'';
+  const lootHtml=newMon+equip+`<div class="loot">${loot.map(x=>`<div><b>${ITEMS[x].e}</b>${ITEMS[x].n}</div>`).join('')}<div><b>⭐</b>별 ${stars}개</div></div>`;
   if(B.last){
     setTimeout(confetti,800); setTimeout(confetti,1600);
     say(endLine(ADV)); if(gear)setTimeout(()=>{ sfx('shing',{vol:.8}); sparkle(); },900);
@@ -2064,6 +2313,8 @@ function doReset(btn){
 /* ================= 이벤트 ================= */
 document.addEventListener('click',e=>{
   const nd=e.target.closest('[data-node]'); if(nd&&!e.target.closest('button')){ const [w,s]=nd.dataset.node.split(',').map(Number); openNode(w,s); return; }
+  const dx=e.target.closest('[data-dexsay]'); if(dx&&!e.target.closest('button')){ const id=dx.dataset.dexsay; say(monName(id),BY[HMON[id].c].he); return; }
+  const gd=e.target.closest('div[data-go],span[data-go]'); if(gd&&!e.target.closest('button')){ go(gd.dataset.go); return; }
   const t=e.target.closest('button'); if(!t)return;
   if(t.dataset.close){ closeModal(); return; }
   if(t.dataset.say!==undefined){ say(t.dataset.say); return; }
@@ -2084,6 +2335,7 @@ document.addEventListener('click',e=>{
     if(!L.ready){ toast(`${L.name}은 초등학교 가서 열어요 🔒`); return; }
     S.level=L.id; save(); renderHome(); toast(`${L.name} 모드!`); say(lvLine(L)); loadVoices();; return; }
   if(t.dataset.bk!==undefined){ answerBattle(t); return; }
+  if(t.dataset.partner){ const id=t.dataset.partner; S.partner=id; save(); renderDex(); sparkle(); say(`${monName(id)}${josaIG(monName(id))} 함께 싸워요!`); return; }
   if(t.dataset.advlv){ S.level=t.dataset.advlv; save(); loadVoices(); renderAdv(); window.scrollTo(0,0); toast(`${lvName()} ${ADVS[S.level].name}!`); return; }
   if(t.dataset.battle){ go('battle',t.dataset.battle.split(',').map(Number)); return; }
   if(t.dataset.item){ useItem(t.dataset.item); return; }
