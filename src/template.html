@@ -467,6 +467,9 @@ em.up,.sl em.up{color:#22A065;font-style:normal}.sl em.dn{color:#E8453C}
 .qcard>div{flex:1;min-width:0}
 .mon-svg.pk image{image-rendering:auto}
 .mon-svg.pksil image{filter:brightness(0) opacity(.8)}
+.exampic{font-size:110px;line-height:1.2}
+.sent{font-size:clamp(20px,3.6vw,26px);line-height:1.7;padding:6px 4px;word-break:keep-all}
+.sent u{text-decoration-thickness:3px;text-underline-offset:5px;font-weight:700}
 /* 한자 모험: 전투 */
 .field{position:relative;border-radius:30px;min-height:300px;background:linear-gradient(180deg,var(--w1),var(--w2));overflow:hidden;box-shadow:0 6px 0 rgba(29,42,72,.18)}
 .field.shake{animation:shake .4s}
@@ -898,7 +901,8 @@ const RAW = {
 韓|나라|한|🇰🇷|우리나라 대한민국
 兄|형|형|🧑|입(口)으로 동생을 이끄는 형
 火|불|화|🔥|활활 타오르는 불꽃`,
-'7-2':`家|집|가|🏠|지붕 아래 돼지를 기르던 우리 집
+'7-2':`目|눈|목|👁️|눈 모양을 세로로 세워서 그렸어요
+家|집|가|🏠|지붕 아래 돼지를 기르던 우리 집
 間|사이|간|⏳|문(門) 사이로 햇빛(日)이 들어와요
 江|강|강|🏞️|물(氵)이 크게 흐르는 강
 車|수레|거|🚗|바퀴 달린 수레 모양 (자동차에서는 '차')
@@ -1001,8 +1005,8 @@ const RAW = {
 };
 const LEVELS = [
   {id:'8',   name:'8급',  read:'팔급',  ready:true},
-  {id:'7-2', name:'7급Ⅱ', read:'칠급 투', ready:true},
-  {id:'7',   name:'7급',  read:'칠급',  ready:true},
+  {id:'7-2', name:'7급', read:'칠급', ready:true},
+  {id:'7',   name:'도전', read:'도전 한자', ready:true},
   {id:'6-2', name:'6급Ⅱ', read:'육급 투', ready:false},
   {id:'6',   name:'6급',  read:'육급',  ready:false},
   {id:'5-2', name:'5급Ⅱ', read:'오급 투', ready:false},
@@ -1020,6 +1024,11 @@ LEVELS.forEach(L=>{ (RAW[L.id]||'').split('\n').filter(Boolean).forEach(line=>{
   CH.push(o); BY[c]=o; }); });
 const lvLine=L=>`${L.read} 공부를 시작해 볼까?`;
 const LV_INDEX = Object.fromEntries(LEVELS.map((L,i)=>[L.id,i]));
+/* 대한검정회(한자급수자격검정) 기준: 8급 30자, 7급 50자(8급 30 + 신출 20). 나머지는 '도전 한자'로 */
+const KJ8='九金南男女東六母木門父北四三西水十五月二人日一子弟七土八兄火', KJ7='江口內年大目白山上小手外右入足左中靑出下';
+const KJ_HUN={'女':'여자','母':'어머니','父':'아버지','兄':'맏','上':'위'};
+CH.forEach(o=>{ o.lv=KJ8.includes(o.c)?'8':KJ7.includes(o.c)?'7-2':'7'; if(KJ_HUN[o.c]){ o.hun=KJ_HUN[o.c]; o.he=o.hun+' '+o.eum; } });
+CH.sort((a,b)=>LV_INDEX[a.lv]-LV_INDEX[b.lv]);
 
 /* ================= 저장 ================= */
 const KEY='hanja-quest-v1';
@@ -1476,7 +1485,39 @@ function quizW(){
 
 /* ================= 시험 연습 ================= */
 let E=null;
+/* 대한검정회 7급 기출 형식(25문제, 18개 이상 합격): 그림 1 · 훈음 7 · 한자 10 · 읽기 2 · 뜻 2 · 문장 속 읽기 2 · 한자로 쓰기 1 */
+const KJW=[['父母','부모','아버지와 어머니','우리 父母님은 나를 사랑하신다.'],['兄弟','형제','형과 아우','우리 兄弟는 사이가 좋다.'],['山水','산수','산과 물','이곳은 山水가 아름답다.'],
+  ['日月','일월','해와 달','하늘에 日月이 밝게 빛난다.'],['東西','동서','동쪽과 서쪽','길이 東西로 길게 뻗어 있다.'],['南北','남북','남쪽과 북쪽','강이 南北으로 흐른다.'],
+  ['上下','상하','위와 아래','상자를 上下로 흔들어 보았다.'],['左右','좌우','왼쪽과 오른쪽','길을 건널 때는 左右를 잘 살핀다.'],['出入','출입','나가고 들어옴','이 문으로 出入해 주세요.'],
+  ['手足','수족','손과 발','추워서 手足이 꽁꽁 얼었다.'],['江山','강산','강과 산','우리나라 江山은 아름답다.'],['土木','토목','흙과 나무','土木 공사로 다리를 놓았다.'],
+  ['大小','대소','크고 작음','상자의 大小를 비교해 보자.'],['內外','내외','안과 밖','집 內外를 깨끗이 청소했다.'],['男女','남녀','남자와 여자','男女 모두 함께 노래했다.'],
+  ['子女','자녀','아들과 딸','부모님은 子女를 사랑한다.'],['入口','입구','들어가는 곳','동물원 入口에서 만나자.'],['出口','출구','나가는 곳','出口는 오른쪽에 있다.'],
+  ['人口','인구','사람의 수','이 도시는 人口가 많다.'],['火山','화산','불을 뿜는 산','火山에서 연기가 나온다.'],['大門','대문','큰 문','大門을 활짝 열었다.'],
+  ['父子','부자','아버지와 아들','父子가 함께 낚시를 갔다.'],['母女','모녀','어머니와 딸','母女가 손을 잡고 걸었다.'],['子弟','자제','남의 아들을 높여 부르는 말','훌륭한 子弟를 두셨네요.'],
+  ['弟子','제자','스승에게 배우는 사람','선생님의 弟子가 되었다.'],['木手','목수','나무로 집이나 물건을 만드는 사람','木手 아저씨가 의자를 만들었다.'],['年中','연중','한 해 동안','이 가게는 年中 문을 연다.'],
+  ['外出','외출','밖에 나감','엄마는 外出 중이시다.'],['北西','북서','북쪽과 서쪽 사이','바람이 北西쪽에서 분다.'],['入山','입산','산에 들어감','겨울에는 入山을 막는다.'],
+  ['下山','하산','산에서 내려옴','해가 지기 전에 下山했다.'],['靑年','청년','젊은 사람','씩씩한 靑年이 도와주었다.'],['大人','대인','어른','大人은 표값이 더 비싸다.'],
+  ['小人','소인','어린이','小人 표 두 장 주세요.'],['水門','수문','물을 막거나 흐르게 하는 문','비가 많이 와서 水門을 열었다.'],['六月','유월','여섯째 달','六月에는 비가 많이 온다.'],
+  ['十月','시월','열째 달','十月에 소풍을 간다.'],['中兄','중형','둘째 형','우리 中兄은 야구를 참 잘한다.'],['女子','여자','여성','女子 친구와 함께 놀았다.'],['男子','남자','남성','男子 아이들이 축구를 한다.'],
+  ['東門','동문','동쪽 문','東門으로 들어가면 시장이 나온다.'],['足下','족하','발 아래','足下를 조심해서 걸어요.'],['白土','백토','흰 흙','白土로 그릇을 빚었다.'],['九月','구월','아홉째 달','九月이 되니 바람이 시원하다.']];
+const kjLevel=()=>S.level==='8'||S.level==='7-2';
+function kjExam(){
+  const P=CH.filter(o=>poolSet().has(o.c)), cs=P.map(o=>o.c), ps=poolSet(), W=KJW.filter(x=>[...x[0]].every(c=>ps.has(c))), qs=[];
+  const pc=pick(cs.filter(c=>BY[c].pic)), po=BY[pc];
+  qs.push({kind:'그림',chars:[pc],ask:'그림에 알맞은 한자를 고르시오.',html:`<div class="exampic">${po.pic}</div>`,optClass:'han',options:shuffle([pc,...sample(cs.filter(x=>x!==pc),3)]).map(c=>({label:c,correct:c===pc})),answer:`${pc} (${po.he})`,show:po.pic});
+  wsample(cs,7).forEach(c=>qs.push(qHun(c,P)));
+  wsample(cs,10).forEach(c=>qs.push(qFind(c,P)));
+  const ws=shuffle(W);
+  ws.slice(0,2).forEach(x=>qs.push(qRead({w:x[0],r:x[1]})));
+  ws.slice(2,4).forEach(x=>{ const opts=shuffle([x[2],...sample(W.filter(y=>y[2]!==x[2]).map(y=>y[2]),3)]); qs.push({kind:'어휘 뜻',chars:[...x[0]],ask:'어휘의 뜻으로 알맞은 것을 고르시오.',html:`<div class="bigword">${x[0]}</div>`,optClass:'',options:opts.map(t=>({label:t,correct:t===x[2]})),answer:x[2],show:x[0]}); });
+  ws.slice(4,6).forEach(x=>{ qs.push({kind:'문장 속 읽기',chars:[...x[0]],ask:'밑줄 친 어휘를 바르게 읽은 것을 고르시오.',html:`<div class="sent">${x[3].replace(x[0],`<u class="han">${x[0]}</u>`)}</div>`,optClass:'',options:readOpts({w:x[0],r:x[1]}),answer:x[1],show:x[0]}); });
+  { const x=ws[6]||ws[0], w=x[0], set=new Set([w]); if(w.length===2)set.add(w[1]+w[0]);
+    let g=0; while(set.size<4&&g++<60){ const a=[...w], k=Math.floor(Math.random()*a.length); a[k]=pick(cs); set.add(a.join('')); }
+    qs.push({kind:'한자로 쓰기',chars:[...w],ask:'밑줄 친 부분을 한자로 바르게 쓴 것을 고르시오.',html:`<div class="sent">${x[3].replace(w,`<u>${x[1]}</u>`)}</div>`,optClass:'han',options:shuffle([...set]).map(t=>({label:t,correct:t===w})),answer:w,show:x[1]}); }
+  return qs;
+}
 function startExam(){
+  if(kjLevel()){ E={qs:kjExam(),i:0,ans:[],lock:false,kj:true}; showE(); return; }
   const P=pool(), cs=P.map(o=>o.c), ws=poolWords(), ants=poolAnts(), qs=[];
   const is8=S.level==='8';
   const nRead=8, nHun=is8?8:7, nAnt=is8?0:1;
@@ -1502,15 +1543,15 @@ function answerExam(btn){
   setTimeout(()=>{ E.i++; E.i<E.qs.length?showE():endExam(); },350);
 }
 function endExam(){
-  const n=E.qs.length, ok=E.ans.filter(Boolean).length, score=Math.round(ok/n*100), pass=score>=70;
+  const n=E.qs.length, ok=E.ans.filter(Boolean).length, score=E.kj?ok*4:Math.round(ok/n*100), pass=E.kj?ok>=18:score>=70;
   const earned=Math.round(ok/2)+(pass?5:0); addStars(earned);
   S.exams.push({d:todayKey(),lv:S.level,score}); S.exams=S.exams.slice(-30); save();
   if(pass){sWin();confetti()} say(`${score}점!`,pass?'합격이야! 정말 잘했어!':'괜찮아, 틀린 것만 다시 보면 돼!');
   const wrong=E.qs.filter((q,i)=>!E.ans[i]);
   $('#examBody').innerHTML=`<div class="panel" style="text-align:center">
     <div class="stamp ${pass?'':'fail'}">${pass?'合格':'다시<br>도전'}</div>
-    <div class="result-title">${lvName()} 모의시험 ${score}점</div>
-    <p class="small">${n}문제 중 ${ok}개 맞음 · 70점 이상이면 합격 · ⭐ ${earned}개</p>
+    <div class="result-title">${E.kj?'대한검정회 ':''}${lvName()} 모의시험 ${score}점</div>
+    <p class="small">${n}문제 중 ${ok}개 맞음 · ${E.kj?'25문제 중 18개(72점) 이상이면 합격':'70점 이상이면 합격'} · ⭐ ${earned}개</p>
     ${wrong.length?`<div class="review">${wrong.map(q=>`<div><b>${q.show}</b>[${q.kind}] 정답: ${q.answer}</div>`).join('')}</div>`:'<p class="story">하나도 안 틀렸어요! 🎉</p>'}
     <div class="row"><button class="btn seal" data-go="exam">다시 풀기</button><button class="btn" data-go="home">처음으로</button></div></div>`;
 }
@@ -1684,6 +1725,25 @@ const EVO2={
   hyeongnim:['대장형님','모든 한자몬이 형님이라 부르는 대장 중의 대장이 되었어요.'],
   baeum:['대박사','한자를 넘어 세상 모든 글자를 아는 큰 박사가 되었어요. 책 속에서 살아요.'],
 };
+/* 대한검정회 7급 50자에 한자몬 50종이 하나씩: 시험에 안 나오는 한자의 한자몬은 시험 한자로 옮겨요 */
+Object.entries({
+  ssak:{c:'出'}, bangkok:{c:'內'},
+  apjang:{c:'足',n:'성큼발',evo:'길잡이발',s:'발걸음이 성큼성큼 빠른 친구예요. 늘 남보다 한 발 앞서 걸어요.',es:'숲길을 발로 다 밟아 본 길잡이가 되었어요.'},
+  ginmeori:{c:'上',n:'꼭대기',evo:'산꼭대기',s:'나무 꼭대기 위에 사는 숲 할아버지예요. 높은 곳에서 숲을 내려다봐요.',es:'산꼭대기 위까지 올라가 숲을 지키는 어른이 되었어요.'},
+  madi:{c:'下',n:'땅속이',evo:'굴파기',s:'아래로 아래로 땅을 파고 들어가는 모래 벌레예요.',es:'땅 아래에 커다란 굴을 파는 굴파기가 되었어요.'},
+  baeum:{c:'目',n:'눈동이',evo:'부엉눈',s:'눈이 아주 큰 친구예요. 멀리 있는 한자도 한눈에 읽어요.',es:'밤에도 잘 보는 부엉이 눈을 갖게 되었어요.'},
+  gyochi:{c:'口',n:'입큰이',evo:'노래입',s:'입이 커다래서 노래도 말도 제일 잘해요.',es:'입을 열면 숲이 춤추는 노래쟁이가 되었어요.'},
+  hakgyo:{c:'入',n:'쏙들이',evo:'숲들이',s:'어디든 쏙쏙 잘 들어가는 친구예요. 좁은 굴도 문제없어요.',es:'숲속 어디든 들어가 길을 아는 숲들이가 되었어요.'},
+  baekseong:{c:'男',n:'밭돌이',evo:'힘센돌이',s:'밭에서 힘써 일하는 씩씩한 친구예요.',es:'힘이 세져 바위도 번쩍 드는 힘센돌이가 되었어요.'},
+  manman:{c:'江',s:'큰 강에 사는 계곡의 용이에요. 강물을 타고 하늘로 올라가요.'},
+  cheolgap:{c:'右',s:'오른손에 창을 든 철갑 병사예요. 오른쪽에서 친구를 지켜요.'},
+  nara:{c:'左',n:'왼날개',evo:'좌청룡',s:'왼쪽을 지키는 날개 친구예요. 왼손으로 방패를 들어요.',es:'왼쪽을 지키는 푸른 용, 좌청룡이 되었어요.'},
+  hanbit:{c:'子',n:'아기빛',evo:'빛소년',s:'두 팔을 벌린 아기처럼 해맑게 빛나는 친구예요.',es:'빛을 품은 씩씩한 소년이 되었어요.'},
+  mawang:{c:'手',s:'커다란 검은 손으로 한자 나라를 움켜쥐려는 마왕이에요. 어둠의 성 꼭대기에 살아요.'},
+}).forEach(([id,v])=>{ if(HMON[id])Object.assign(HMON[id],v); });
+Object.assign(EVO2,{ginmeori:['하늘꼭대기','구름 위 하늘 꼭대기에 사는 신령이 되었어요.'],madi:['지하대룡','땅속 깊은 곳을 다스리는 용이 되었어요.'],baeum:['천리안','천 리 밖도 보는 눈을 가진 왕이 되었어요.'],
+  gyochi:['천둥목청','목소리 한 번에 천둥이 치는 왕이 되었어요.'],hakgyo:['천년숲들이','천 년 숲의 모든 길로 들어가는 숲의 주인이 되었어요.'],baekseong:['들판장사','온 들판을 일구는 장사가 되었어요.'],
+  nara:['청룡대왕','하늘 왼편을 다스리는 청룡대왕이 되었어요.'],hanbit:['빛의왕자','온 나라를 비추는 빛의 왕자가 되었어요.']});
 HMON_ORDER.forEach(id=>{ const M=HMON[id]; M.rar=HRAR[id]||1; if(EVO2[id]){ M.evo2=EVO2[id][0]; M.es2=EVO2[id][1]; } });
 const monRar=id=>MRAR[HMON[id].rar||1];
 const rarTag=id=>`<span class="mrtag" style="--mc:${monRar(id).c}">${monRar(id).n}</span>`;
@@ -2491,7 +2551,7 @@ const NIGHT_TINT={night:'rgba(14,22,70,.42)',dusk:'rgba(255,120,40,.16)',dawn:'r
 let WO=null, wKeyDir=null;
 const WDIR={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
 function renderWorld(){
-  if(S.level!=='8'){ S.level='8'; save(); loadVoices(); toast('탐험 지도는 8급 숲 왕국이에요'); }
+  if(S.level!=='7-2'&&S.level!=='8'){ S.level='7-2'; save(); loadVoices(); toast('탐험 지도는 7급 50자 범위예요'); }
   setAdv('8'); buildWorld();
   if(!S.world)S.world={x:WSTART.x,y:WSTART.y,dir:'down',picked:{day:today(),ids:[]},steps:0};
   if(!wWalkable(S.world.x,S.world.y)){ S.world.x=WSTART.x; S.world.y=WSTART.y; }
@@ -2816,7 +2876,7 @@ function kingGate(n){
 
 /* ================= 자유 사냥: 지도 순서와 상관없이 아무 때나 한자몬을 만나요 ================= */
 function huntGrounds(){
-  setAdv(S.level);
+  setAdv('8');
   const g=WORLDS.map((W,w)=>({k:'w'+w,name:W.name,bg:W.bg,open:unlocked(w,0)||(advLv().best||0)>=1,mons:[...W.mons,W.boss].map(monOf).filter(Boolean),w,
     hint:unlocked(w,0)?'':`${WORLDS[w-1].boss[1]}${josa(WORLDS[w-1].boss[1])} 이기면 열려요`})).filter(x=>x.mons.length);
   const wild=HMON_ORDER.filter(id=>HMON[id].wild), open=advProgress()>=1||(advLv().best||0)>=1;
@@ -3516,8 +3576,8 @@ const today=()=>ymd(new Date());
 const addDays=(s,n)=>{ const d=new Date(s+'T00:00:00'); d.setDate(d.getDate()+n); return ymd(d); };
 const daysBetween=(a,b)=>Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5);
 function exam(){
-  if(!S.exam)S.exam={date:'2026-11-28',level:'7'};
-  if(!S.exam.user&&S.exam.level!=='7'){ S.exam.level='7'; S.plan=null; }   // 11월 28일 시험은 7급 (부모님이 직접 바꾸면 그대로 둠)
+  if(!S.exam)S.exam={date:'2026-11-28',level:'7-2'};
+  if(!S.exam.kj){ S.exam.kj=1; S.exam.level='7-2'; S.plan=null; }   // 대한검정회 7급 (50자)   // 11월 28일 시험은 7급 (부모님이 직접 바꾸면 그대로 둠)
   return S.exam; }
 function srs(){
   if(!S.srs){ S.srs={}; Object.entries(S.stat).forEach(([c,s])=>{ if(BY[c]&&s.r>=2&&s.w===0)S.srs[c]={box:2,due:addDays(today(),1)}; }); }
@@ -3731,7 +3791,7 @@ function renderParent(){
       <div class="ptable">${P.map(o=>{const s=S.stat[o.c]||{r:0,w:0},t=s.r+s.w,acc=t?s.r/t:null;const cls=acc==null?'':acc>=.85?'good':acc>=.6?'mid':'bad';return `<div class="pc ${cls}"><span class="han">${o.c}</span>${o.he}<br><span>${t?`${s.r}/${t}`:'—'}${S.written[o.c]?' · ✍️':''}</span></div>`}).join('')}</div></div>
     <div class="panel"><h3 style="margin-top:0">시험 날짜와 복습 계획</h3>
       <div class="exrow"><input type="date" id="exDate" value="${exam().date}"><select id="exLv">${LEVELS.filter(L=>L.ready).map(L=>`<option value="${L.id}" ${L.id===exam().level?'selected':''}>${L.name}</option>`).join('')}</select><button class="btn grape" id="exSave">저장</button></div>
-      <p>${(()=>{ const st=stageInfo(), f=forecast(), pool=examPool().length; const lv=f>=150?'7급 전체':f>=100?'7급Ⅱ까지':f>=50?'8급까지':'8급 일부';
+      <p>${(()=>{ const st=stageInfo(), f=forecast(), pool=examPool().length; const lv=f>=50?'7급 50자 전체':f>=30?'8급 30자 전체':'8급 일부';
         return `지금 단계: <b>${st.name} 다지기</b> (익힘 ${st.mastered}/${st.total}, 80%를 넘으면 다음 급수가 열려요)<br>지금 속도라면 시험 전까지 약 <b>${f}자</b>를 배울 수 있어요 (${lv}${f<pool?`, 시험 범위 ${pool}자 중`:''}).`; })()}</p>
       <p class="small">시험까지 ${ddayText()} · 오늘 새 한자 ${dailyPlan().fresh.length}개 · 처음 5일은 하루 2개, 8급 동안은 최대 3개 · 시험 전 7일은 새 한자 없이 복습만 해요. 맞힌 한자는 1·3·7·14·30일 뒤에 다시 나오고, 틀리면 다음 날 다시 나와요.</p>
       <div class="kpis">${(()=>{ const R=srs(), pool=examPool(); const cnt=f=>pool.filter(f).length;
@@ -3853,6 +3913,7 @@ $('#modal').addEventListener('click',e=>{ if(e.target.id==='modal')closeModal();
 })();
 
 if(!LEVELS.find(L=>L.id===S.level&&L.ready))S.level='8';
+if(!S.kjInit){ S.kjInit=1; S.level='7-2'; S.plan=null; }   // 대한검정회 7급 범위로 시작
 applyPk(); pkPatchAdvs();
 try{ history.replaceState({scr:'home',d:0,base:true},''); history.pushState({scr:'home',d:0},''); }catch(e){}
 loadVoices(); renderTop(); go('home');
