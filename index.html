@@ -479,6 +479,16 @@ em.up,.sl em.up{color:#22A065;font-style:normal}.sl em.dn{color:#E8453C}
 .exampic{font-size:110px;line-height:1.2}
 .sent{font-size:clamp(20px,3.6vw,26px);line-height:1.7;padding:6px 4px;word-break:keep-all}
 .sent u{text-decoration-thickness:3px;text-underline-offset:5px;font-weight:700}
+.pkdex{background:linear-gradient(180deg,#E8453C 0 46px,#FFF8F6 46px);border:4px solid #B3261E;border-radius:18px;padding:0 14px 12px;text-align:left;margin:10px 0}
+.pkd-head{display:flex;align-items:center;gap:10px;height:46px;color:#fff;font-family:var(--f-display);flex-wrap:wrap}
+.pkd-head b{font-weight:400;font-size:18px;opacity:.9}
+.pkd-name{font-size:24px}
+.pkd-genus{font-family:var(--f-body);font-size:14px;background:rgba(255,255,255,.25);border-radius:99px;padding:1px 10px}
+.pkd-info{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px;font-size:15px;color:var(--ink2)}
+.pkd-info span{background:#fff;border:2px solid #F3C9C4;border-radius:99px;padding:2px 10px}
+.pkd-info .pkd-type{background:#1D2A48;color:#fff;border-color:#1D2A48}
+.pkd-text{font-size:18px;line-height:1.65;margin:8px 0;color:#2A2A35;word-break:keep-all}
+.pkd-han{font-size:15px;color:#B3261E;margin-top:6px}
 /* 한자 모험: 전투 */
 .field{position:relative;border-radius:30px;min-height:300px;background:linear-gradient(180deg,var(--w1),var(--w2));overflow:hidden;box-shadow:0 6px 0 rgba(29,42,72,.18)}
 .field.shake{animation:shake .4s}
@@ -2034,10 +2044,10 @@ function openMon(id,keepNav){
   const lv=monLv(id);
   openModal(`<div class="result-title">${monName(id)} ${lvTag(id)}</div>${elTag(id)}${rarTag(id)} <span class="dexhan"><span class="han" style="font-size:26px">${M.c}</span> ${o.he}</span><div style="margin:6px 0">${statLine(id)}</div>${chain}
     <div class="mastery" style="justify-content:center"><span class="small">Lv.${lv}</span><div class="meter sm" style="width:50%"><i style="width:${xpPct(id)}%"></i></div><span class="small">${lv>=20?'최고 레벨!':`Lv.${lv+1}까지 ${xpNext(lv)-monXp(id)}`}</span></div>
-    <div class="mstory"><b>📖 ${M.n} 이야기</b>${M.s||''}</div>
+    ${pkOn()&&PK[id]?pkDexHtml(id):`<div class="mstory"><b>📖 ${M.n} 이야기</b>${M.s||''}</div>`}
     ${evoInfoHtml(id)}
     <div class="row"><button class="btn ${pt?'leaf':'grape'}" data-partner="${id}">${pt?'✓ 파티 (빼기)':'🎒 파티에 넣기'}</button><button class="btn" data-nick="${id}">✏️ 별명</button><button class="btn sun" data-say2="${id}">🔊 듣기</button><button class="btn" data-close="1">닫기</button></div>`);
-  if(!keepNav)say(monName(id),o.he,M.s);
+  if(!keepNav)say(pkOn()&&PK[id]?[monName(id),...pkSayText(id)]:[monName(id),o.he,M.s]);
 }
 /* ---- 진화: 한자몬의 한자를 5번(2단계)·12번(3단계) 맞히면, 또는 진화의 돌로 ---- */
 function playEvo(id,how){
@@ -2446,8 +2456,8 @@ function evoInfoHtml(id){
   else { const req=evoReq(s), need=Math.min(req,r);
     h+=`<div class="evoway"><span class="wn">방법 ①</span><div><b style="display:inline">${M.c}</b>(${o.he}) <b style="display:inline">${req}번</b> 맞히기 — 퀴즈·모험·사냥 어디서든<div class="meter sm" style="margin-top:4px;width:100%"><i style="width:${need/req*100}%"></i></div><span class="small">${need} / ${req} · ${req-need}번 더</span></div></div>
       <div class="evoway"><span class="wn">방법 ②</span><div>💎 진화의 돌 1개 <span class="small">(가진 돌 ${stones}개)</span><div class="row" style="justify-content:flex-start;margin-top:6px">${stones?`<button class="btn grape dexbtn" data-evostone="${id}">✨ 지금 진화시키기</button>`:`<button class="btn dexbtn" data-go="shop">🏪 상점에서 사기 (⭐${PRICE.evostone})</button>`}</div></div></div></div>`; }
-  if(s>=2&&M.es)h+=`<div class="mstory"><b>✨ ${M.evo} 이야기</b>${M.es}</div>`;
-  if(s>=3&&M.es2)h+=`<div class="mstory"><b>🌟 ${M.evo2} 이야기</b>${M.es2}</div>`;
+  if(s>=2&&M.es&&!(pkOn()&&PK[id]))h+=`<div class="mstory"><b>✨ ${M.evo} 이야기</b>${M.es}</div>`;
+  if(s>=3&&M.es2&&!(pkOn()&&PK[id]))h+=`<div class="mstory"><b>🌟 ${M.evo2} 이야기</b>${M.es2}</div>`;
   return h;
 }
 function dexStageLine(id){ const M=HMON[id]; if(M.boss)return '<span class="small">전설 · 진화 없음</span>'; const s=monStage(id), mx=maxStage(id); if(s>=mx)return `<span class="small">🌟 ${s}단계 · 마지막 진화</span>`; const req=evoReq(s), need=Math.min(req,(S.stat[M.c]||{r:0}).r); return `<div class="meter sm"><i style="width:${need/req*100}%"></i></div><span class="small">${s}단계 · ${M.c} ${req-need}번 더 맞히면 ${s+1}단계${adv().items.evostone?' · 💎':''}</span>`; }
@@ -2891,6 +2901,55 @@ const PK={ppuri:[1,2,3],ssak:[152,153,154],jakkong:[187,188,189],sam:[252,253,25
   heukto:[74,75,76],kkoma:[66,67,68],byeo:[443,444,445],nemo:[246,247,248],baeum:[63,64,65],baekseong:[16,17,18],bangkok:[524,525,526],ottuk:[111,112,464],madi:[328,329,330],
   hayan:[81,82,462],munmun:[304,305,306],geumnyang:[403,404,405],cheolgap:[374,375,376],dokki:[599,600,601],gwanyeok:[179,180,181],sipja:[172,25,26],nara:[633,634,635],hyeongnim:[532,533,534],
   bakkat:[92,93,94],sankku:[383],manman:[382],daewang:[250],mawang:[150]};
+/* 포켓몬 모드에서만 나오는 인기 포켓몬 50종: [아이디, 진화 계열 번호, 한자, 속성, 등급, 나오는 땅] */
+const PK_EXTRA=[
+  ['p722',[722,723,724],'木','wood',2,'w0'],['p810',[810,811,812],'手','wood',2,'w0'],['p270',[270,271,272],'小','wood',1,'w0'],['p650',[650,651,652],'山','wood',1,'w0'],
+  ['p406',[406,315,407],'女','wood',1,'w0'],['p046',[46,47],'土','wood',1,'w0'],['p191',[191,192],'日','wood',1,'w0'],['p273',[273,274,275],'下','wood',1,'w0'],
+  ['p470',[133,470],'東','wood',3,'w0'],['p039',[174,39,40],'口','earth',2,'w0'],['p143',[446,143],'大','earth',3,'w0'],['p052',[52,53],'金','metal',1,'w0'],
+  ['p054',[54,55],'江','water',1,'w1'],['p130',[129,130],'水','water',2,'w1'],['p131',[131],'北','water',3,'w1'],['p194',[194,195],'入','water',1,'w1'],
+  ['p184',[298,183,184],'二','water',1,'w1'],['p728',[728,729,730],'月','water',2,'w1'],['p816',[816,817,818],'目','water',2,'w1'],['p418',[418,419],'足','water',1,'w1'],
+  ['p134',[133,134],'靑','water',3,'w1'],['p466',[239,125,466],'七','metal',2,'w1'],['p417',[417],'六','metal',1,'w1'],['p587',[587],'五','metal',2,'w1'],
+  ['p038',[37,38],'九','fire',2,'w2'],['p059',[58,59],'門','fire',2,'w2'],['p078',[77,78],'南','fire',1,'w2'],['p467',[240,126,467],'火','fire',2,'w2'],
+  ['p609',[607,608,609],'外','fire',2,'w2'],['p136',[133,136],'弟','fire',3,'w2'],['p105',[104,105],'母','earth',2,'w2'],['p057',[56,57],'兄','earth',1,'w2'],
+  ['p107',[236,107],'男','earth',1,'w2'],['p468',[175,176,468],'子','earth',2,'w2'],['p036',[173,35,36],'白','earth',1,'w2'],
+  ['p477',[355,356,477],'八','dark',2,'w3'],['p778',[778],'內','dark',3,'w3'],['p571',[570,571],'左','dark',2,'w3'],['p430',[198,430],'四','dark',1,'w3'],
+  ['p426',[425,426],'上','dark',1,'w3'],['p197',[133,197],'西','dark',3,'w3'],['p887',[885,886,887],'出','dark',3,'w3'],['p448',[447,448],'右','metal',3,'w3'],
+  ['p208',[95,208],'三','metal',2,'w3'],['p373',[371,372,373],'年','fire',3,'w3'],
+  ['p149',[147,148,149],'一','water',3,'wild'],['p612',[610,611,612],'人','metal',3,'wild'],['p151',[151],'中','dark',4,'wild'],['p249',[249],'十','water',4,'wild'],['p384',[384],'父','wood',4,'wild'],
+];
+const PK_TYPE={normal:'노말',fire:'불꽃',water:'물',grass:'풀',electric:'전기',ice:'얼음',fighting:'격투',poison:'독',ground:'땅',flying:'비행',psychic:'에스퍼',bug:'벌레',rock:'바위',ghost:'고스트',dragon:'드래곤',dark:'악',steel:'강철',fairy:'페어리'};
+const pkAllIds=()=>[...new Set([...Object.values(PK).flat(),...PK_EXTRA.flatMap(x=>x[1])])];
+/* 이름·분류·도감 설명(한국어)·타입·키·몸무게를 불러와요 */
+async function pkFetch(ids,onp){
+  const names={}, dexd={}; let done=0;
+  const get=async u=>{ for(let k=0;k<3;k++){ try{ const r=await fetch(u); if(r.ok)return await r.json(); }catch(e){} await sleep(700); } return null; };
+  const one=async pid=>{
+    const [sp,pm]=await Promise.all([get(`https://pokeapi.co/api/v2/pokemon-species/${pid}/`),get(`https://pokeapi.co/api/v2/pokemon/${pid}/`)]);
+    if(sp){ const ko=sp.names.find(x=>x.language.name==='ko'); names[pid]=ko?ko.name:sp.name;
+      const gn=sp.genera.find(x=>x.language.name==='ko');
+      const fl=[...new Set(sp.flavor_text_entries.filter(x=>x.language.name==='ko').map(x=>x.flavor_text.replace(/[\n\f\r]+/g,' ').replace(/\s+/g,' ').trim()))].reverse().slice(0,3);
+      dexd[pid]={g:gn?gn.genus:'',f:fl,h:pm?pm.height:0,w:pm?pm.weight:0,t:pm?pm.types.map(t=>PK_TYPE[t.type.name]||t.type.name):[]}; }
+    done++; if(onp)onp(done,ids.length); };
+  const q=[...ids]; await Promise.all(Array.from({length:8},async()=>{ while(q.length)await one(q.shift()); }));
+  return {names,dexd};
+}
+/* 예전에 포켓몬 모드를 켠 기기는 새 포켓몬·도감 정보를 조용히 받아 와요 */
+async function pkTopUp(){
+  if(!pkOn())return; const miss=pkAllIds().filter(pid=>!S.pkNames[pid]||!(S.pkDex&&S.pkDex[pid]));
+  if(!miss.length||pkTopUp.busy)return; pkTopUp.busy=true; toast('📕 새 포켓몬 도감을 받는 중…');
+  const r=await pkFetch(miss); Object.assign(S.pkNames,r.names); S.pkDex=Object.assign(S.pkDex||{},r.dexd); save();
+  toast('📕 새 포켓몬이 도감에 들어왔어요!'); setTimeout(()=>location.reload(),1200);
+}
+/* 포켓몬 도감 화면 */
+function pkDexHtml(id){
+  const M=HMON[id], st=Math.max(1,monStage(id)), pid=pkId(id,st), D=(S.pkDex||{})[pid]||{f:[],t:[]}, nm=stageName(id,st);
+  const text=D.f.length?D.f.slice(0,2).map(t=>`<p class="pkd-text">${esc(t)}</p>`).join(''):`<p class="pkd-text">${esc(nm)}${josaIG(nm)} 아직 도감 설명이 없는 새로운 포켓몬이에요.</p>`;
+  return `<div class="pkdex"><div class="pkd-head"><b>No.${String(pid).padStart(4,'0')}</b><span class="pkd-name">${esc(nm)}</span>${D.g?`<span class="pkd-genus">${esc(D.g)}</span>`:''}</div>
+    <div class="pkd-info">${D.t.map(t=>`<span class="pkd-type">${t}</span>`).join('')}${D.h?`<span>키 ${(D.h/10).toFixed(1)}m</span>`:''}${D.w?`<span>몸무게 ${(D.w/10).toFixed(1)}kg</span>`:''}</div>
+    ${text}<div class="pkd-han">✨ <span class="han">${M.c}</span> ${BY[M.c].he}의 힘을 가진 포켓몬! <b>${M.c}</b>를 맞히면 진화해요.</div></div>`;
+}
+function pkSayText(id){ const st=Math.max(1,monStage(id)), D=(S.pkDex||{})[pkId(id,st)]; return D&&D.f&&D.f[0]?[D.g||'',D.f[0]]:[]; }
+
 const pkOn=()=>!!(S.pk&&S.pkNames);
 const pkId=(id,stage)=>{ const a=PK[id]; return a?a[Math.min(a.length,Math.max(1,stage||1))-1]:null; };
 const pkImg=(pid,shiny)=>`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${shiny?'shiny/':''}${pid}.png`;
@@ -2900,22 +2959,22 @@ function pkSVG(id,o){
 }
 function applyPk(){
   if(!pkOn())return; const N=S.pkNames;
+  PK_EXTRA.forEach(([id,dex,c,el,rar,zone])=>{ if(HMON[id])return; PK[id]=dex;
+    HMON[id]={n:'포켓몬',evo:dex[1]?'포켓몬':undefined,evo2:dex[2]?'포켓몬':undefined,c,el,rar,zone,wild:zone==='wild',pkOnly:true,shape:'round',ears:'round',tail:'none',extra:'none',s:''};
+    HMON_ORDER.push(id); });
   HMON_ORDER.forEach(id=>{ const a=PK[id]; if(!a)return; const M=HMON[id]; if(!M.hm)M.hm={n:M.n,evo:M.evo,evo2:M.evo2};
     if(N[a[0]])M.n=N[a[0]]; if(M.evo&&a[1]&&N[a[1]])M.evo=N[a[1]]; if(M.evo2&&a[2]&&N[a[2]])M.evo2=N[a[2]]; });
 }
 function pkPatchAdvs(){ if(!pkOn())return; Object.values(ADVS).forEach(A=>A.worlds.forEach(W=>[...W.mons,W.boss].forEach(m=>{ const id=monOf(m); if(id)m[1]=HMON[id].n; }))); }
 async function pkEnable(btn){
-  const ids=[...new Set(Object.values(PK).flat())], names={}; let done=0;
-  const one=async pid=>{ for(let k=0;k<3;k++){ try{ const r=await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pid}/`); if(r.ok){ const j=await r.json(); const ko=j.names.find(x=>x.language.name==='ko'); names[pid]=ko?ko.name:j.name; return; } }catch(e){} await sleep(600); } };
-  const q=[...ids]; const workers=Array.from({length:6},async()=>{ while(q.length){ const pid=q.shift(); await one(pid); done++; if(btn)btn.textContent=`불러오는 중… ${done} / ${ids.length}`; } });
-  await Promise.all(workers);
-  if(Object.keys(names).length<ids.length*.9){ toast('포켓몬 정보를 다 못 불러왔어요. 인터넷을 확인하고 다시 눌러 주세요'); if(btn)btn.textContent='다시 시도'; return; }
-  S.pk=true; S.pkNames=names; save(); toast('포켓몬 모드를 켰어요!'); setTimeout(()=>location.reload(),700);
+  const ids=pkAllIds(), r=await pkFetch(ids,(d,n)=>{ if(btn)btn.textContent=`포켓몬 도감 불러오는 중… ${d} / ${n}`; });
+  if(Object.keys(r.names).length<ids.length*.9){ toast('포켓몬 정보를 다 못 불러왔어요. 인터넷을 확인하고 다시 눌러 주세요'); if(btn){ btn.textContent='다시 시도'; btn.disabled=false; } return; }
+  S.pk=true; S.pkNames=r.names; S.pkDex=r.dexd; save(); toast('포켓몬 모드를 켰어요!'); setTimeout(()=>location.reload(),700);
 }
 function pkDisable(){ S.pk=false; save(); toast('한자몬 모드로 돌아갔어요'); setTimeout(()=>location.reload(),700); }
 function pkPanel(){
   return `<div class="panel"><h3 style="margin-top:0">🎮 우리 집 포켓몬 모드 ${pkOn()?'(켜짐)':''}</h3>
-    <p class="small">이 기기에서만 켜져요. 켜면 한자몬 대신 속성이 같은 <b>포켓몬</b>(이름·공식 그림)이 나오고, 한자·속성·진화·능력치는 그대로예요.
+    <p class="small">이 기기에서만 켜져요. 켜면 한자몬 대신 속성이 같은 <b>포켓몬 100종</b>(이름·공식 그림·게임 도감 설명)이 나오고, 한자·속성·진화·능력치는 그대로예요.
     그림과 이름은 공개 포켓몬 데이터베이스(PokeAPI)에서 불러와서 인터넷이 필요해요. 포켓몬은 닌텐도·게임프리크의 캐릭터라 우리 집에서만 즐겨 주세요.</p>
     <div class="row" style="justify-content:flex-start">${pkOn()?'<button class="btn" id="pkOff">한자몬으로 돌아가기</button>':'<button class="btn grape" id="pkOn">포켓몬 모드 켜기</button>'}</div></div>`;
 }
@@ -4080,7 +4139,7 @@ $('#modal').addEventListener('click',e=>{ if(e.target.id==='modal')closeModal();
 
 if(!LEVELS.find(L=>L.id===S.level&&L.ready))S.level='8';
 if(!S.kjInit){ S.kjInit=1; S.level='7-2'; S.plan=null; }   // 대한검정회 7급 범위로 시작
-applyPk(); pkPatchAdvs();
+applyPk(); pkPatchAdvs(); setTimeout(pkTopUp,2500);
 try{ history.replaceState({scr:'home',d:0,base:true},''); history.pushState({scr:'home',d:0},''); }catch(e){}
 loadVoices(); renderTop(); go('home');
 if(syncCode()){ syncNow().then(()=>{ if(!S.name)askName(true); }); } else if(!location.hash.startsWith('#join-')&&!S.name)askName(true);
